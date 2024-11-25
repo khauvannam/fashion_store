@@ -26,7 +26,6 @@ class ProductVariant extends Model
      * Set the attribute values as Value Objects.
      *
      * @param AttributeValue[] $attributeValues
-     * @return void
      */
     public function setAttributeValues(array $attributeValues): void
     {
@@ -39,20 +38,26 @@ class ProductVariant extends Model
         );
     }
 
-    /**
-     * Get the attribute values as Value Objects.
-     *
-     * @return AttributeValue[]
-     */
-    public function getAttributeValues(): array
+    public function getAttributeValues(string $attributeName): AttributeValue|false|array|null
     {
-        return array_map(
+        $attributeValues = array_map(
             fn($value) => new AttributeValue(
                 new Attribute($value['attribute']),
                 $value['value']
             ),
             $this->attribute_values
         );
+        if (empty($attributeName)) {
+
+            return $attributeValues;
+        }
+
+        $filtered = array_filter($attributeValues, function ($attributeValue) use ($attributeName) {
+            return $attributeValue->attribute()->name() === $attributeName;
+        });
+
+        return reset($filtered) ?: null;
     }
+
 }
 
