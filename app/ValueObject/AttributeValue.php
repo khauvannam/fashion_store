@@ -5,6 +5,7 @@ namespace App\ValueObject;
 class AttributeValue
 {
     private Attribute $attribute;
+
     private string $value;
 
     public function __construct(Attribute $attribute, string $value)
@@ -25,6 +26,6 @@ class AttributeValue
 
     public function __toString(): string
     {
-        return $this->attribute->name() . ': ' . $this->value;
+        return $this->attribute->name().': '.$this->value;
     }
 }

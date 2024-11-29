@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductFactory extends Factory
@@ -13,7 +14,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
+            'name' => $this->faker->name(),
             'price' => $this->faker->randomFloat(2, 500, 5000),
             'discountPercent' => $this->faker->numberBetween(0, 50),
             'description' => $this->faker->sentence(50),
@@ -25,53 +26,62 @@ class ProductFactory extends Factory
         ];
     }
 
-    public function withVariations(array $attributesAndValues): self
-    {
-        return $this->afterCreating(function (Product $product) use ($attributesAndValues) {
-            $variations = $this->generateVariations($attributesAndValues);
 
-            foreach ($variations as $variationAttributes) {
-                $product->variants()->create([
-                    'attributes' => json_encode($variationAttributes),
-                    'quantity' => $this->faker->numberBetween(10, 100),
-                    'price_override' => $this->faker->optional()->randomFloat(2, 5, 50),
+    public function withVariations(array $attributes): self
+    {
+        return $this->afterCreating(function (Product $product) use ($attributes) {
+            // Get all combinations of attributes (Cartesian product)
+            $combinations = $this->getAttributeCombinations($attributes);
+
+            foreach ($combinations as $combination) {
+                // Build the attribute_values structure
+                $attributeValues = array_map(
+                    fn($attributeName, $value) => [
+                        'attribute' => $attributeName,
+                        'value' => $value,
+                    ],
+                    array_keys($combination),
+                    $combination
+                );
+
+                // Create a ProductVariant for each combination
+                ProductVariant::factory()->create([
+                    'product_id' => $product->id,
+                    'attribute_values' => $attributeValues,
+                    'price_override' => fake()->randomFloat(2, 500, 5000),
+                    'quantity' => fake()->numberBetween(50, 1000),
                 ]);
             }
         });
     }
 
     /**
-     * Generate all combinations of attributes and values.
+     * Generate all possible combinations of attributes.
+     *
+     * @param array $attributes
+     * @return array
      */
-    private function generateVariations(array $attributesAndValues): array
+    private function getAttributeCombinations(array $attributes): array
     {
-        $keys = array_keys($attributesAndValues);
-        $values = array_values($attributesAndValues);
+        // Use array_reduce to calculate the Cartesian product
+        $combinations = array_reduce(array_keys($attributes), function ($carry, $attribute) use ($attributes) {
+            $values = $attributes[$attribute];
 
-        // Generate all combinations of attributes
-        $combinations = $this->combinations($values);
+            if (empty($carry)) {
+                return array_map(fn($value) => [$attribute => $value], $values);
+            }
 
-        // Map combinations back to attribute keys
-        return array_map(function ($combination) use ($keys) {
-            return array_combine($keys, $combination);
-        }, $combinations);
-    }
-
-    /**
-     * Generate all combinations of input arrays (Cartesian Product).
-     */
-    private function combinations(array $arrays): array
-    {
-        $result = [[]];
-        foreach ($arrays as $array) {
-            $append = [];
-            foreach ($result as $product) {
-                foreach ($array as $item) {
-                    $append[] = array_merge($product, [$item]);
+            $newCombinations = [];
+            foreach ($carry as $combination) {
+                foreach ($values as $value) {
+                    $newCombinations[] = $combination + [$attribute => $value];
                 }
             }
-            $result = $append;
-        }
-        return $result;
+
+            return $newCombinations;
+        }, []);
+
+        return $combinations;
     }
+
 }

@@ -1,0 +1,16 @@
+services:
+  database:
+    image: mysql:9.0
+    volumes:
+      - fashion_project:/var/lib/mysql
+    ports:
+      - '2611:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fashion_database
+      MYSQL_USER: nam
+      MYSQL_PASSWORD: Ex@mple12345
+
+volumes:
+  fashion_project:
+

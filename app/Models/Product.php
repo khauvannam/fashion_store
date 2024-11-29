@@ -12,6 +12,7 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'price', 'discountPercent', 'description', 'imageUrls', 'category_id'];
+
     protected $casts = ['imageUrls' => 'array'];
 
     public function variants(): HasMany
@@ -23,5 +24,4 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
-
 }

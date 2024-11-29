@@ -2,7 +2,4 @@
 
 namespace App\Models;
 
-class BasketItem
-{
-
-}
+class BasketItem {}
