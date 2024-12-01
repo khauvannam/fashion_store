@@ -63,8 +63,7 @@ class ProductFactory extends Factory
      */
     private function getAttributeCombinations(array $attributes): array
     {
-        // Use array_reduce to calculate the Cartesian product
-        $combinations = array_reduce(array_keys($attributes), function ($carry, $attribute) use ($attributes) {
+        return array_reduce(array_keys($attributes), function ($carry, $attribute) use ($attributes) {
             $values = $attributes[$attribute];
 
             if (empty($carry)) {
@@ -80,8 +79,6 @@ class ProductFactory extends Factory
 
             return $newCombinations;
         }, []);
-
-        return $combinations;
     }
 
 }
