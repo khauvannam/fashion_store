@@ -11,6 +11,7 @@ class Category extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     protected $fillable = ['name', 'description', 'parent_id'];
 
     public function parent(): BelongsTo

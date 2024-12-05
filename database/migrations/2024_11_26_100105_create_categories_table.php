@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,7 +15,6 @@ return new class extends Migration
             $table->string('name');  // 'name' field
             $table->text('description')->nullable();  // 'description' field
             $table->foreignId('parent_id')->nullable()->constrained('categories');  // 'parent_id' field, references categories
-            $table->timestamps();  // 'created_at' and 'updated_at' timestamps
         });
     }
 

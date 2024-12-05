@@ -11,7 +11,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'price', 'discountPercent', 'description', 'imageUrls', 'category_id'];
+    protected $fillable = ['name', 'price', 'discount_percent', 'description', 'imageUrls', 'category_id', 'collection'];
 
     protected $casts = ['imageUrls' => 'array'];
 
@@ -24,4 +24,21 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class);
+    }
+
+    public function calculateAverageRating(): float|null
+    {
+        $average = $this->reviews()->avg('rating');
+        return $average ? round($average, 1) : null;
+    }
+
+    public function CountAllReviews(): int
+    {
+        return $this->reviews()->count();
+    }
+
 }
