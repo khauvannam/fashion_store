@@ -18,4 +18,9 @@ class CategoryService
     {
         return $this->repository->show($id);
     }
+
+    public function showAll(int $limit, int $offset): array
+    {
+        return $this->repository->showAll($limit, $offset);
+    }
 }
