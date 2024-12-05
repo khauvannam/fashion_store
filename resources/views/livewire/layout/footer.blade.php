@@ -6,7 +6,7 @@ new class extends Component {
 }
 
 ?>
-<footer class="bg-white border-t">
+<footer class="bg-white border-t pt-6">
     <!-- Top Section -->
     <div class="flex flex-col md:flex-row justify-between items-center md:items-start space-y-8 md:space-y-0 container mx-auto">
         <!-- Logo and Newsletter -->

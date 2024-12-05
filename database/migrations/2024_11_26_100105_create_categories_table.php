@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();  // Automatically creates an auto-incrementing 'id' field
             $table->string('name');  // 'name' field
             $table->text('description')->nullable();  // 'description' field
+            $table->string('img_url');
             $table->foreignId('parent_id')->nullable()->constrained('categories');  // 'parent_id' field, references categories
         });
     }

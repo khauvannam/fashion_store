@@ -12,7 +12,7 @@ class Category extends Model
     use HasFactory;
 
     public $timestamps = false;
-    protected $fillable = ['name', 'description', 'parent_id'];
+    protected $fillable = ['name', 'description',  'img_url', 'parent_id'];
 
     public function parent(): BelongsTo
     {

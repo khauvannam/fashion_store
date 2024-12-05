@@ -9,7 +9,6 @@ class CategoryRepository
     public function show($id): Category
     {
         return Category::findOrFail($id);
-
     }
 
     public function store(array $data): bool
@@ -39,7 +38,6 @@ class CategoryRepository
 
     public function showAll(int $limit = 0, int $offset = 4): array
     {
-        return Category::offset($offset)->limit($limit)->get();
+        return Category::offset($offset)->limit($limit)->get()->toArray();
     }
-
 }

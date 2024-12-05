@@ -1,10 +1,16 @@
 <?php
 
-
+use App\Services\CategoryService;
 use Livewire\Volt\Component;
 
 new class extends Component {
     public $isVisible = false;
+    public array $categories = [];
+
+    public function mount(CategoryService $service): void
+    {
+        $this->categories = $service->showAll(5,0);
+    }
 
     public function toggleMenu()
     {
@@ -34,11 +40,9 @@ new class extends Component {
 
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-6">
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900">Men</a>
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900">Women</a>
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900">Kids</a>
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900">New & Featured</a>
-                <a href="#" class="text-sm font-medium text-gray-600 hover:text-gray-900">Gift</a>
+                @foreach($categories as $category)
+                    <a href="{{ route('categoryByID', ['id' => $category['id']]) }}" class="text-sm font-medium text-gray-600 hover:text-gray-900">{{ $category['name']}}</a>
+                @endforeach
             </nav>
 
             <!-- Logo -->
@@ -48,7 +52,7 @@ new class extends Component {
 
             <!-- Right Icons -->
             <div class="flex space-x-4 md:space-x-6 items-center">
-                <div class="hidden md:block w-48">
+                <div class="hidden md:block w-64">
                     <div class="flex items-center">
                         <input
                                 type="text"
