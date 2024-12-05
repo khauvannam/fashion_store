@@ -9,7 +9,6 @@ class CategoryRepository
     public function show($id): Category
     {
         return Category::findOrFail($id);
-
     }
 
     public function store(array $data): bool
