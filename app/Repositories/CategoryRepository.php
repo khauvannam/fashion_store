@@ -38,7 +38,6 @@ class CategoryRepository
 
     public function showAll(int $limit = 0, int $offset = 4): array
     {
-        return Category::offset($offset)->limit($limit)->get();
+        return Category::offset($offset)->limit($limit)->get()->toArray();
     }
-
 }

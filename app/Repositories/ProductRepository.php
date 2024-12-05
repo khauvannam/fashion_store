@@ -37,16 +37,18 @@ class ProductRepository
     }
 
 
-    public function showAll(bool $orderBy, int $offset = 0, int $limit = 10): array
+    public function showAll(bool $orderBy, bool $bestSeller, int $offset = 0, int $limit = 10): array
     {
         // Retrieve products with pagination using the offset and limit parameters
-        $productsQuery = Product::offset($offset)
-            ->limit($limit)
-            ->with('variants'); // Ensure the variants are loaded
+        $productsQuery = Product::offset($offset * $limit)
+            ->limit($limit);
 
         // Apply ordering if the $orderBy flag is true
         if ($orderBy) {
             $productsQuery->orderBy('created_at', 'desc'); // You can adjust the column and order as needed
+        }
+        if ($bestSeller) {
+            $productsQuery->orderBy('units_sold', 'desc');
         }
 
         $products = $productsQuery->get();
@@ -104,6 +106,4 @@ class ProductRepository
 
         return $products->toArray();
     }
-
-
 }

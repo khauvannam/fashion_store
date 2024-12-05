@@ -34,14 +34,13 @@ class ProductService
         return $this->repository->destroy($id);
     }
 
-    public function showAll(bool $orderBy, int $offset, int $limit): array
+    public function showAll(bool $orderBy, bool $bestSeller, int $offset, int $limit): array
     {
-        return $this->repository->showAll($orderBy, $offset, $limit);
+        return $this->repository->showAll($orderBy, $bestSeller, $offset, $limit);
     }
 
     public function showAllByFilter(int $categoryId, string $collection, ?string $orderBy, bool $bestSeller, int $offset, int $limit): array
     {
         return $this->repository->showAllByFilter($categoryId, $collection, $orderBy, $bestSeller, $offset, $limit);
     }
-
 }
