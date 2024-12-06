@@ -23,4 +23,8 @@ class CategoryService
     {
         return $this->repository->showAll($limit, $offset);
     }
+    public function showAllSubCategories($id): array
+    {
+        return $this->repository->showAllSubCategories($id);
+    }
 }

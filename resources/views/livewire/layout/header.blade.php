@@ -37,7 +37,6 @@ new class extends Component {
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-6 w-5/12">
                 @foreach($categories as $category)
-
                     <a href="{{ route('collections', ['id' => $category['id']]) }}"
                        class="text-sm font-medium text-gray-600 hover:text-gray-900">{{ $category['name']}}</a>
                 @endforeach
@@ -92,7 +91,7 @@ new class extends Component {
                     </svg>
                 </button>
                 <button aria-label="Login" class="text-gray-600 hover:text-gray-900">
-                    Login
+                    <a href="/login"> Login</a>
                 </button>
             </div>
         </div>

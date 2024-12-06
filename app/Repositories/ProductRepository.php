@@ -63,15 +63,11 @@ class ProductRepository
     }
 
 
-    public function showAllByFilter(int $categoryId, string $collection, ?string $orderBy, bool $bestSeller = false, int $offset = 0, int $limit = 10): array
+    public function showAllByFilter(int $categoryId, ?string $orderBy, bool $bestSeller = false, int $offset = 0, int $limit = 10): array
     {
         // Start building the query
         $query = Product::where('category_id', $categoryId);
 
-        // Filter by collection if needed
-        if (!empty($collection)) {
-            $query->where('collection', $collection);
-        }
 
         // Optionally filter by best_seller (products sold > 1000)
         if ($bestSeller) {

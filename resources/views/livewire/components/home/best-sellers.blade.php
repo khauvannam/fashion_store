@@ -4,6 +4,7 @@ use App\Services\ProductService;
 use Livewire\Volt\Component;
 
 new class extends Component {
+
     public array $products = [];
 
     public function mount(ProductService $service): void

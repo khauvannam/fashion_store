@@ -39,8 +39,8 @@ class ProductService
         return $this->repository->showAll($orderBy, $bestSeller, $offset, $limit);
     }
 
-    public function showAllByFilter(int $categoryId, string $collection, ?string $orderBy, bool $bestSeller, int $offset, int $limit): array
+    public function showAllByFilter(int $categoryId, ?string $orderBy, bool $bestSeller, int $offset, int $limit): array
     {
-        return $this->repository->showAllByFilter($categoryId, $collection, $orderBy, $bestSeller, $offset, $limit);
+        return $this->repository->showAllByFilter($categoryId, $orderBy, $bestSeller, $offset, $limit);
     }
 }
