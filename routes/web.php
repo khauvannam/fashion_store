@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.home')->name('home');
-Route::view('/category/{id}', 'pages.productsByCategoryId')->name('categoryByID');
+Route::view('/collection/{id}', 'pages.collection')->name('collection');
 
 Route::view('dashboard', 'pages.dashboard')
     ->middleware(['auth', 'verified'])

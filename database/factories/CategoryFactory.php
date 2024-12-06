@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CategoryFactory extends Factory
 {
-    protected $model = Category::class;
+    private const COLLECTIONS = ['tshirt', 'jacket', 'pants', 'hoodies', 'short'];
 
     public function definition(): array
     {
@@ -16,5 +16,17 @@ class CategoryFactory extends Factory
             'description' => $this->faker->sentence(),
             'img_url' => 'https://picsum.photos/640/480?random=' . $this->faker->unique()->numberBetween(1, 1000),
         ];
+    }
+
+    public function withChildren(): self
+    {
+        return $this->afterCreating(function (Category $category) {
+            foreach (self::COLLECTIONS as $collection) {
+                Category::factory()->create([
+                    'name' => $collection,
+                    'parent_id' => $category->id,
+                ]);
+            }
+        });
     }
 }

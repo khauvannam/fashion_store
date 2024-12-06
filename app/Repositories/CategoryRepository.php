@@ -38,6 +38,10 @@ class CategoryRepository
 
     public function showAll(int $limit = 0, int $offset = 4): array
     {
-        return Category::offset($offset)->limit($limit)->get()->toArray();
+        return Category::whereNull('parent_id')
+            ->offset($offset)
+            ->limit($limit)
+            ->get()
+            ->toArray();
     }
 }

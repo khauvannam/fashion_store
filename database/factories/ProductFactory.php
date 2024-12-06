@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ProductFactory extends Factory
 {
-    protected $model = Product::class;
-    private const COLLECTIONS = ['tshirt', 'jacket', 'pants', 'hoodies', 'short'];
 
     public function definition(): array
     {
@@ -26,7 +24,6 @@ class ProductFactory extends Factory
                 'https://picsum.photos/640/480?random=' . $this->faker->unique()->numberBetween(1, 1000),
                 'https://picsum.photos/640/480?random=' . $this->faker->unique()->numberBetween(1001, 2000),
             ],
-            'collection' => $this->faker->randomElement(self::COLLECTIONS),
             'units_sold' => $this->faker->numberBetween(900, 1100),
             'category_id' => Category::factory(),
         ];
