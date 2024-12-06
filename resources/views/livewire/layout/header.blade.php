@@ -100,7 +100,7 @@ new class extends Component {
         <!-- Mobile Navigation Menu -->
 
         <nav id="mobileMenu"
-             class="md:hidden space-y-2 px-4 py-2 border-y absolute bg-white w-full transition-all duration-300"
+             class="md:hidden space-y-2 px-4 py-2 border-y absolute z-50 bg-white w-full transition-all duration-300"
              x-show="showMenu"
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0"
@@ -110,11 +110,10 @@ new class extends Component {
              x-transition:leave-end="opacity-0"
              x-cloak>
             <div class="container mx-auto flex flex-col">
-                <a href="#" class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900">Men</a>
-                <a href="#" class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900">Women</a>
-                <a href="#" class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900">Kids</a>
-                <a href="#" class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900">New & Featured</a>
-                <a href="#" class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900">Gift</a>
+                @foreach($categories as $category)
+                    <a href="{{ route('collection', ['id' => $category['id']]) }}"
+                       class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900">{{$category['name']}}</a>
+                @endforeach
             </div>
         </nav>
 
