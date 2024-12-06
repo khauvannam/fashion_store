@@ -12,7 +12,7 @@
         <!-- Button Group -->
         <div class="flex space-x-4 mt-6">
             @foreach ($subCategories as $item)
-                <button class="px-4 py-2 rounded-full border border-gray-400 text-gray-800 font-medium">
+                <button class="px-4 py-2 rounded-full border border-gray-400 text-gray-800 font-medium w-[150px]">
                     <a href="{{ route('collections', ['id' => $item['parent_id'], 'collection' => $item['id']]) }}" class="capitalize">{{$item['name']}}</a>
                 </button>
             @endforeach
