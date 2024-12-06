@@ -2,28 +2,24 @@
 
 namespace App\View\Pages;
 
+use App\Models\Category;
 use App\Services\CategoryService;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Collection;
-use Livewire\Volt\Component;
+use Livewire\Component;
 
 class Collections extends Component
 {
     public string $id;
-    public Collection $products;
-    public Collection $collection;
+    public string $product = '123';
+    public Category $category;
 
     public function mount(string $id, CategoryService $service): void
     {
+        $this->category = $service->show($id);
         $this->id = $id;
-        $this->products = $service->show($id)->products()->get();
-        $this->collection = $service->show($id)->children()->get();
     }
 
-    public function render(): View|Factory|Application
+    public function render()
     {
-        return view('pages.collections');
+        return view('pages.collections')->layout('layouts.app');
     }
 }

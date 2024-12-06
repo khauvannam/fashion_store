@@ -1,3 +1,6 @@
-<x-app-layout>
+<div class="">
+    <p>{{$product}}</p>
     <p>{{$id}}</p>
-</x-app-layout>
+    <p>{{$category->name}}</p>
+
+</div>
