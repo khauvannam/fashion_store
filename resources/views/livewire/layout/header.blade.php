@@ -4,17 +4,12 @@ use App\Services\CategoryService;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public bool $isVisible = false;
+
     public array $categories = [];
 
     public function mount(CategoryService $service): void
     {
         $this->categories = $service->showAll(5, 0);
-    }
-
-    public function toggleMenu(): void
-    {
-        $this->isVisible = !$this->isVisible;
     }
 
 }; ?>

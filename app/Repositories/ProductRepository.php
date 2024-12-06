@@ -39,7 +39,6 @@ class ProductRepository
 
     public function showAll(bool $orderBy, bool $bestSeller, int $offset = 0, int $limit = 10): array
     {
-        // Retrieve products with pagination using the offset and limit parameters
         $productsQuery = Product::offset($offset * $limit)
             ->limit($limit);
 
