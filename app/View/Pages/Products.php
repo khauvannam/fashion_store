@@ -10,14 +10,15 @@ use Livewire\Component;
 class Products extends Component
 {
     public Category $category;
+    public ?int $id = null;
     public array $products = [];
-    public array $filters = [
-        'id' => null,
-        'collection' => '',
-        'search' => '',
-    ];
+    public string $collection = '';
+    public string $search = '';
+
     protected array $queryString = [
-        'filters'
+        'id' => '',
+        'collection' => ['except' => ''],
+        'search' => ['except' => ''],
     ];
 
     public function mount(CategoryService $categoryService, ProductService $productService): void
@@ -25,11 +26,10 @@ class Products extends Component
 
         $this->loadProducts($productService);
 
-        if ($this->filters['id']) {
-            $this->category = $categoryService->show($this->filters['id']);
+        if ($this->id) {
+            $this->category = $categoryService->show((int)$this->id);
             return;
         }
-
         $this->category = Category::default();
     }
 
@@ -46,9 +46,9 @@ class Products extends Component
     private function loadProducts(ProductService $productService): void
     {
         $this->products = $productService->showAllByFilter(
-            $this->filters['id'],
-            $this->filters['collection'],
-            $this->filters['search'],
+            $this->id,
+            $this->collection,
+            $this->search,
             null
         );
     }

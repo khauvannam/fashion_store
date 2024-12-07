@@ -14,7 +14,7 @@ new class extends Component {
 
 }; ?>
 
-<div class="fixed z-50 w-full">
+<div>
 
     <!-- Promotion Bar -->
     <div class="bg-black text-white text-sm py-2 text-center">
@@ -38,7 +38,7 @@ new class extends Component {
             <nav class="hidden md:flex space-x-6 w-5/12">
                 @foreach($categories as $category)
                     <x-nav-link
-                        :href="route('products', ['filters' =>['id'=>$category['id']] ])"
+                        :href="route('products', ['id' => $category['id']])"
                         :active="request()->routeIs('products') && request('id') == $category['id']"
                         class="text-sm font-medium text-gray-600 hover:text-gray-900">
                         {{ $category['name'] }}
