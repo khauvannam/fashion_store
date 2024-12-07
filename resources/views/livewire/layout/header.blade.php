@@ -37,8 +37,14 @@ new class extends Component {
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-6 w-5/12">
                 @foreach($categories as $category)
-                    <a href="{{ route('products', ['id' => $category['id']]) }}"
-                       class="text-sm font-medium text-gray-600 hover:text-gray-900">{{ $category['name']}}</a>
+
+                    <x-nav-link
+                        :href="route('products', ['id' => $category['id']])"
+                        :active="request()->routeIs('products') && request('id') == $category['id']"
+                        class="text-sm font-medium text-gray-600 hover:text-gray-900">
+                        {{ $category['name'] }}
+                    </x-nav-link>
+
                 @endforeach
             </nav>
 

@@ -94,7 +94,7 @@ class ProductRepository
                 break;
         }
 
-// Use $query to fetch the filtered products
+        // Use $query to fetch the filtered products
         $products = $query->offset($offset)
             ->limit($limit)
             ->with('variants')

@@ -12,7 +12,7 @@ class Products extends Component
     public string $id;
     public Category $category;
     public array $products;
-    public string $collection;
+    public string $collection = '';
 
     protected array $queryString = ['collection' => ['except' => '']];
 
