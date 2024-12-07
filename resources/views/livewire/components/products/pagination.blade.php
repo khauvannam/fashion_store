@@ -1,8 +1,6 @@
 <?php
 
-
 use Livewire\Volt\Component;
-
 
 new class extends Component {
     public int $totalPages;
@@ -15,8 +13,10 @@ new class extends Component {
         $this->getPagination();
     }
 
-    public function setPage(int $page): void
+    public function setPage(string $page): void
     {
+        // fix empty string
+        $page = (int) $page == 0 ? 1 : $page;
         if ($this->currentPage == $page) return;
         $this->currentPage = $page;
         $this->getPagination();
@@ -65,13 +65,17 @@ new class extends Component {
         @click=" scrollToId('product-container')"
         wire:click="setPage({{ 1 }})"
         class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md  ">
-        First
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m17 16-4-4 4-4m-6 8-4-4 4-4"/>
+          </svg>
+
     </button>
     @foreach($pagination as $pag)
         <button
-            @click=" scrollToId('product-container')"
-            wire:click="setPage({{ $pag }})"
-            class="px-4 py-2  text-gray-800 rounded-md  {{ $pag == $currentPage ? 'bg-black text-white' : 'hover:bg-gray-300' }} bg-gray-200">
+            @click="scrollToId('product-container')"
+            wire:click="setPage({{ $pag = 0 ? 1 : $pag }})"
+            class="px-4 py-2 text-gray-800 rounded-md {{ $pag == $currentPage ? 'bg-black text-white' : ' bg-gray-200 hover:bg-gray-300'  }} "
+            {{ $pag < 0 ? 'disabled' : '' }}>
             {{ $pag > 0 ? $pag : '...' }}
         </button>
     @endforeach
@@ -79,9 +83,28 @@ new class extends Component {
         @click=" scrollToId('product-container')"
         wire:click="setPage({{ $totalPages }})"
         class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md  ">
-        Last
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 16 4-4-4-4m6 8 4-4-4-4"/>
+          </svg>
+
+
     </button>
+    <div class="flex items-center space-x-4">
+        <label for="page" class="text-gray-700">Đến trang:</label>
+        <input
+            id="page"
+            type="number"
+            min="1"
+            max="{{ $totalPages }}"
+            wire:model="page"
+            wire:change="setPage($event.target.value)"
+            class="px-4 py-2 border rounded-md focus:ring-0 focus:ring-transparent no-spinner"
+            placeholder=""
+        />
+        <span class="text-gray-500">/ {{ $totalPages }} pages</span>
+    </div>
 </div>
+
 
 <script defer>
     function paginationScroll() {
