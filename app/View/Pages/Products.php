@@ -11,24 +11,35 @@ class Products extends Component
 {
     public Category $category;
     public array $products = [];
-    public array $filters = [
-        'id' => null,
-        'collection' => '',
-        'search' => '',
-    ];
+    public int $totalPages = 0;
+    public int $totalItems = 0;
+    public int $itemsPerPage = 12;
+    public ?int $id = null;
+    public string $collection = '';
+    public string $search = '';
+    public int $offset = 0;
+
     protected array $queryString = [
-        'filters'
+        'id' => '',
+        'collection' => ['except' => ''],
+        'search' => ['except' => ''],
+        'offset' => ['except' => 0],
     ];
+
+    protected $listeners = ['pageChanged' => 'handlePageChanged'];
+    public function handlePageChanged(int $page): void
+    {
+        $this->offset = $page;
+    }
 
     public function mount(CategoryService $categoryService, ProductService $productService): void
     {
         $this->loadProducts($productService);
 
-        if ($this->filters['id']) {
-            $this->category = $categoryService->show($this->filters['id']);
+        if ($this->id) {
+            $this->category = $categoryService->show((int)$this->id);
             return;
         }
-
         $this->category = Category::default();
     }
 
@@ -44,12 +55,18 @@ class Products extends Component
 
     private function loadProducts(ProductService $productService): void
     {
-        $this->products = $productService->showAllByFilter(
-            $this->filters['id'],
-            $this->filters['collection'],
-            $this->filters['search'],
-            null
+
+        // Load products with the given filters
+        [$this->totalItems, $this->products] = $productService->showAllByFilter(
+            $this->id,
+            $this->collection,
+            $this->search,
+            null,
+            false,
+            $this->offset,
         );
+        // Calculate the total number of pages
+        $this->totalPages = (int) ceil($this->totalItems / $this->itemsPerPage);
     }
 
     public function render()

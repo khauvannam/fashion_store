@@ -38,11 +38,12 @@ new class extends Component {
             <nav class="hidden md:flex space-x-6 w-5/12">
                 @foreach($categories as $category)
                     <x-nav-link
-                        :href="route('products', ['filters' => ['id' => $category['id']] ])"
-                        :active="request()->routeIs('products') && request()->has('filters') && (request('filters')['id'] ?? null) == $category['id']"
+                        :href="route('products', ['id' => $category['id']])"
+                        :active="request()->routeIs('products') && request('id') == $category['id']"
                         class="text-sm font-medium text-gray-600 hover:text-gray-900">
                         {{ $category['name'] }}
                     </x-nav-link>
+
                 @endforeach
             </nav>
 
@@ -55,23 +56,24 @@ new class extends Component {
             <div class="flex space-x-4 md:space-x-6 items-center w-5/12 justify-end">
                 <div class="hidden md:block">
                     <div class="flex items-center">
-                        <form action="{{ route('products', ['filters' => request()->has('filters') ? request('filters') : [] ]) }}" method="GET">
-                            @if(request()->has('filters') && request('filters')['id'])
-                                <input type="hidden" name="id" value="{{ request('filters')['id'] }}"/>
+                        <form action="{{ route('products', ['id' => request('id') && '']) }}" method="GET">
+
+                            @if(request('id'))
+                                <input type="hidden" name="id" value="{{ request('id') }}"/>
                             @endif
-                        
-                            @if(request()->has('filters') && request('filters')['collection'])
-                                <input type="hidden" name="collection" value="{{ request('filters')['collection'] }}"/>
+
+                            @if(request('collection'))
+                                <input type="hidden" name="collection" value="{{ request('collection') }}"/>
                             @endif
-                        
+
                             <input
                                 type="text"
                                 name="search"
                                 placeholder="Type to search..."
-                                value="{{ request('filters')['search'] ?? '' }}"
+                                value="{{ request('search') }}"
                             />
+                            <input type="hidden" name="offset" value="0"/>
                         </form>
-                        
                     </div>
                 </div>
                 <button aria-label="Search" class="text-gray-600 hover:text-gray-900">

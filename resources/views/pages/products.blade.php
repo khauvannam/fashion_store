@@ -9,6 +9,8 @@
         @endforeach
     </div>
     {{-- Pagination --}}
-    <livewire:components.products.pagination :$product />
+    {{-- @if($totalPages > 1) --}}
+        <livewire:components.products.pagination :$totalPages/>
+    {{-- @endif --}}
 
 </div>
