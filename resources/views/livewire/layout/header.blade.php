@@ -14,7 +14,7 @@ new class extends Component {
 
 }; ?>
 
-<div>
+<div class="fixed z-50 w-full">
 
     <!-- Promotion Bar -->
     <div class="bg-black text-white text-sm py-2 text-center">

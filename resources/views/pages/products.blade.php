@@ -1,4 +1,4 @@
-<div class="container mx-auto">
+<div class="container mx-auto pt-[150px]">
     {{-- title --}}
     <div class="flex flex-col items-center justify-center py-10 bg-white">
         <!-- Heading Section -->
@@ -11,11 +11,13 @@
         <!-- Button Group -->
         <div class="flex space-x-4 mt-6">
             @foreach( $category->collections as $item)
-                <a href="{{ route('products', ['id' => $id, 'collection' => $item]) }}"
-                   class="px-4 py-2 rounded-full border border-gray-400 text-gray-800 font-medium w-[150px]"
-                   wire:navigate>
-                    <p class="capitalize text-center">{{$item}}</p>
-                </a>
+                <x-button-active
+                    :href="route('products', ['id' => $id, 'collection' => $item])"
+                    :active="request()->routeIs('products') && request('collection') == $item"
+                    class="border border-gray-400 w-[150px]"
+                    wire:navigate>
+                    <p class="capitalize text-center">{{ $item }}</p>
+                </x-button-active>
             @endforeach
             <button
                 class="px-4 py-2 rounded-full border border-gray-400 text-gray-800 font-medium flex items-center space-x-2">
