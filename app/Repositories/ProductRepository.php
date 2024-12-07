@@ -6,6 +6,7 @@ use App\Models\Product;
 
 class ProductRepository
 {
+
     public function show(int $id): ?Product
     {
         return Product::with('variants')->findOrFail($id);
@@ -37,7 +38,7 @@ class ProductRepository
     }
 
 
-    public function showAll(bool $orderBy, bool $bestSeller, int $offset = 0, int $limit = 10): array
+    public function showAll(bool $orderBy, bool $bestSeller, int $offset = 0, int $limit = 12): array
     {
         $productsQuery = Product::offset($offset * $limit)
             ->limit($limit);
@@ -62,16 +63,16 @@ class ProductRepository
         return $productsArray->toArray();
     }
 
+
     public function showAllByFilter(
-        ?int    $categoryId,
-        ?string $collection,
-        ?string $search,
-        ?string $orderBy,
-        bool    $bestSeller,
-        int     $offset,
-        int     $limit
-    ): array
-    {
+        ?int    $categoryId,          // Category ID, nullable
+        ?string $collection,       // Collection name, nullable
+        ?string $search,           // Search keyword, nullable
+        ?string $orderBy,          // Order criteria, nullable
+        bool    $bestSeller,          // Indicates if filtering for best sellers
+        int     $offset,               // Offset for pagination
+        int     $limit                 // Items per page
+    ): array {
         $query = Product::query()
             ->when($categoryId, fn($q) => $q->where('category_id', $categoryId))
             ->when($collection, fn($q) => $q->where('collection', $collection))
@@ -102,5 +103,4 @@ class ProductRepository
             1 => $products->toArray(), // Paginated product array
         ];
     }
-
 }

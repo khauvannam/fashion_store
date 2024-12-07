@@ -8,4 +8,10 @@
             @livewire('components.reusable.product-card', ['product' => $product], key($product['id']))
         @endforeach
     </div>
+    {{-- Pagination --}}
+
+    @if($totalPages > 1)
+        <livewire:components.products.pagination :$totalPages/>
+    @endif
+
 </div>

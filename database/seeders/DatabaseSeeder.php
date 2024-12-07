@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder
         Product::factory()->withVariations([
             'Size' => ['S', 'M', 'XL', '2XL'],
             'Color' => ['#000000', '#00205c', '#ffffff'],
-        ])->count(20)->create();
+        ])->count(100)->create();
     }
 }

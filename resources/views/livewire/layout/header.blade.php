@@ -14,7 +14,7 @@ new class extends Component {
 
 }; ?>
 
-<div>
+<div class="fixed z-50 w-full">
 
     <!-- Promotion Bar -->
     <div class="bg-black text-white text-sm py-2 text-center">
@@ -72,6 +72,7 @@ new class extends Component {
                                 placeholder="Type to search..."
                                 value="{{ request('search') }}"
                             />
+                            <input type="hidden" name="offset" value="0"/>
                         </form>
                     </div>
                 </div>
