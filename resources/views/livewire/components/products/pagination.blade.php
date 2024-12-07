@@ -71,7 +71,7 @@ new class extends Component {
         <button
             @click=" scrollToId('product-container')"
             wire:click="setPage({{ $pag }})"
-            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md  {{ $pag == $currentPage ? 'bg-blue-500 text-white' : 'hover:bg-gray-300' }} ">
+            class="px-4 py-2  text-gray-800 rounded-md  {{ $pag == $currentPage ? 'bg-black text-white' : 'hover:bg-gray-300' }} bg-gray-200">
             {{ $pag > 0 ? $pag : '...' }}
         </button>
     @endforeach
