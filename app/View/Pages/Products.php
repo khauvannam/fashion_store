@@ -12,8 +12,9 @@ class Products extends Component
     // Models
     public Category $category;
     public array $products = [];
-
+    public int $totalItems = 0;
     // Url params
+
     public ?int $id = null;
     public string $collection = '';
     public string $search = '';
@@ -48,11 +49,11 @@ class Products extends Component
 
     private function loadProducts(ProductService $productService): void
     {
-        $this->products = $productService->showAllByFilter(
+
+        [$this->totalItems, $this->products] = $productService->showAllByFilter(
             $this->id,
             $this->collection,
-            $this->search,
-            null
+            $this->search
         );
     }
 

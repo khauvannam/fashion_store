@@ -62,50 +62,45 @@ class ProductRepository
         return $productsArray->toArray();
     }
 
-
-    public function showAllByFilter($categoryId, $collection, $search, $orderBy, $bestSeller, $offset, $limit): array
+    public function showAllByFilter(
+        ?int    $categoryId,
+        ?string $collection,
+        ?string $search,
+        ?string $orderBy,
+        bool    $bestSeller,
+        int     $offset,
+        int     $limit
+    ): array
     {
-        $query = Product::query();
+        $query = Product::query()
+            ->when($categoryId, fn($q) => $q->where('category_id', $categoryId))
+            ->when($collection, fn($q) => $q->where('collection', $collection))
+            ->when($search, fn($q) => $q->where('name', 'like', '%' . $search . '%'))
+            ->when($bestSeller, fn($q) => $q->where('units_sold', '>', 1000));
 
-        if ($categoryId !== null) {
-            $query->where('category_id', $categoryId);
-        }
+        // Clone the query to calculate the total count before applying pagination
+        $totalProducts = (clone $query)->count();
 
-        if (!empty($collection)) {
-            $query->where('collection', $collection);
-        }
-        if (!empty($search)) {
-            $query->where('name', 'like', '%' . $search . '%');
-        }
-
-        if ($bestSeller) {
-            $query->where('units_sold', '>', 1000); // Assuming 'units_sold' is the column tracking total sales
-        }
-
-        switch ($orderBy) {
-            case 'price':
-                $query->orderBy('price', 'desc');
-                break;
-            case 'new_arrival':
-                $query->orderBy('created_at', 'desc');
-                break;
-            case 'rating':
-                $query->orderBy('average_rating', 'desc');
-                break;
-            case 'discount_percent':
-                $query->orderBy('discountPercent', 'desc');
-                break;
-            default:
-                $query->orderBy('created_at', 'desc'); // Default sorting if no valid 'orderBy' is provided
-                break;
-        }
-
-        // Use $query to fetch the filtered products
-        $products = $query->offset($offset)
-            ->limit($limit)
-            ->with('variants')
+        // Apply sorting and limit/offset for pagination
+        $products = $query
+            ->orderBy(
+                match ($orderBy) {
+                    'price' => 'price',
+                    'rating' => 'average_rating',
+                    'discount_percent' => 'discountPercent',
+                    default => 'created_at',
+                },
+                'desc'
+            )
+            ->with('variants') // Include related variants
+            ->skip($offset)    // Offset for the query
+            ->take($limit)     // Limit the number of items retrieved
             ->get();
 
-        return $products->toArray();
+        return [
+            0 => $totalProducts,         // Total number of items
+            1 => $products->toArray(), // Paginated product array
+        ];
     }
+
 }
