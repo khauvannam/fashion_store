@@ -9,7 +9,7 @@ new class extends Component {
 
     public function mount(CategoryService $service): void
     {
-        $this->categories = $service->showAll(5, 0);
+        $this->categories = $service->showAll(6, 0);
     }
 
 }; ?>
@@ -37,7 +37,7 @@ new class extends Component {
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-6 w-5/12">
                 @foreach($categories as $category)
-                    <a href="{{ route('collections', ['id' => $category['id']]) }}"
+                    <a href="{{ route('products', ['id' => $category['id']]) }}" wire:navigate
                        class="text-sm font-medium text-gray-600 hover:text-gray-900">{{ $category['name']}}</a>
                 @endforeach
             </nav>
@@ -49,13 +49,19 @@ new class extends Component {
 
             <!-- Right Icons -->
             <div class="flex space-x-4 md:space-x-6 items-center w-5/12 justify-end">
-                <div class="hidden md:block w-64">
+                <div class="hidden md:block">
                     <div class="flex items-center">
+                        <form action="{{ route('products', ['id' => request('id')]) }}" method="GET">
+                            @if(request('collection'))
+                            <input type="hidden" name="collection" value="{{ request('collection') }}" />
+                            @endif
                         <input
                             type="text"
-                            class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
+                            name="search"
                             placeholder="Type to search..."
+                            value="{{ request('search') }}"
                         />
+                        </form>
                     </div>
                 </div>
                 <button aria-label="Search" class="text-gray-600 hover:text-gray-900">
@@ -91,7 +97,7 @@ new class extends Component {
                     </svg>
                 </button>
                 <button aria-label="Login" class="text-gray-600 hover:text-gray-900">
-                    <a href="/login"> Login</a>
+                    <a href="/login" wire:navigate> Login</a>
                 </button>
             </div>
         </div>
@@ -110,7 +116,7 @@ new class extends Component {
              x-cloak>
             <div class="container mx-auto flex flex-col">
                 @foreach($categories as $category)
-                    <a href="{{ route('collections', ['id' => $category['id']]) }}"
+                    <a href="{{ route('products', ['id' => $category['id']]) }}"
                        class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900">{{$category['name']}}</a>
                 @endforeach
             </div>

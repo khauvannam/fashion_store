@@ -11,9 +11,9 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'price', 'discount_percent', 'units_sold', 'description', 'imageUrls', 'category_id'];
+    protected $fillable = ['name', 'price', 'discount_percent', 'units_sold', 'description', 'collection', 'image_urls', 'category_id'];
 
-    protected $casts = ['imageUrls' => 'array'];
+    protected $casts = ['image_urls' => 'array'];
 
     public function variants(): HasMany
     {

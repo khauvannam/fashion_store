@@ -17,8 +17,8 @@ return new class extends Migration {
             $table->decimal('discount_percent', 5)->nullable();  // 'discountPercent' field, nullable
             $table->integer('units_sold')->default(0);  // 'unitsSold' field, default value of 0
             $table->text('description')->nullable();  // 'description' field, nullable
-
-            $table->json('imageUrls')->nullable();  // 'imageUrls' field, stored as a JSON array
+            $table->string('collection')->nullable();  // 'name' field
+            $table->json('image_urls');  // 'imageUrls' field, stored as a JSON array
             $table->foreignId('category_id')->constrained('categories');  // 'category_id' field, references categories
             $table->timestamps();  // 'created_at' and 'updated_at' timestamps
         });

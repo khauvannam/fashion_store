@@ -63,18 +63,22 @@ class ProductRepository
     }
 
 
-    public function showAllByFilter(int $categoryId, ?string $orderBy, bool $bestSeller = false, int $offset = 0, int $limit = 10): array
+    public function showAllByFilter($categoryId, $collection, $search, $orderBy, $bestSeller, $offset, $limit): array
     {
-        // Start building the query
+
         $query = Product::where('category_id', $categoryId);
 
+        if (!empty($collection)) {
+            $query->where('collection', $collection);
+        }
+        if (!empty($search)) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
 
-        // Optionally filter by best_seller (products sold > 1000)
         if ($bestSeller) {
             $query->where('units_sold', '>', 1000); // Assuming 'units_sold' is the column tracking total sales
         }
 
-        // Apply sorting based on the 'orderBy' parameter
         switch ($orderBy) {
             case 'price':
                 $query->orderBy('price', 'desc');
@@ -93,10 +97,10 @@ class ProductRepository
                 break;
         }
 
-        // Execute the query and get the results
-        $products = Product::offset($offset)
+        // Use $query to fetch the filtered products
+        $products = $query->offset($offset)
             ->limit($limit)
-            ->with('variants') // Ensure the variants are loaded
+            ->with('variants')
             ->get();
 
         return $products->toArray();

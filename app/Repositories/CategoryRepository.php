@@ -22,7 +22,7 @@ class CategoryRepository
     public function update($id, array $data): bool
     {
         // Find the category by ID or fail with a 404 response
-        $category = Category::findOrFail($id);
+        $category = $this->show($id);
 
         // Fill the category with the provided data
         $category->fill($data);
@@ -38,8 +38,7 @@ class CategoryRepository
 
     public function showAll(int $limit = 0, int $offset = 4): array
     {
-        return Category::whereNull('parent_id')
-            ->offset($offset)
+        return Category::offset($offset)
             ->limit($limit)
             ->get()
             ->toArray();

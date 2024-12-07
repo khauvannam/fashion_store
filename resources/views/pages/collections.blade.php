@@ -1,4 +1,3 @@
-
 <div class="container mx-auto">
 {{-- title --}}
     <div class="flex flex-col items-center justify-center py-10 bg-white">
@@ -11,9 +10,10 @@
       
         <!-- Button Group -->
         <div class="flex space-x-4 mt-6">
-            @foreach ($subCategories as $item)
+           @foreach( $category->collections as $item)
+           
                 <button class="px-4 py-2 rounded-full border border-gray-400 text-gray-800 font-medium w-[150px]">
-                    <a href="{{ route('collections', ['id' => $item['parent_id'], 'collection' => $item['id']]) }}" class="capitalize">{{$item['name']}}</a>
+                    <a href="{{ route('products', ['id' => $id, 'collection' => $item]) }}" class="capitalize" wire:navigate>{{$item}}</a>
                 </button>
             @endforeach
           <button class="px-4 py-2 rounded-full border border-gray-400 text-gray-800 font-medium flex items-center space-x-2">

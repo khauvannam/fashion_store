@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('name');  // 'name' field
             $table->text('description')->nullable();  // 'description' field
             $table->string('img_url');
-            $table->foreignId('parent_id')->nullable()->constrained('categories');  // 'parent_id' field, references categories
+            $table->json('collections')->nullable();
         });
     }
 
