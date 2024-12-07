@@ -72,17 +72,16 @@ class ProductRepository
         bool    $bestSeller,          // Indicates if filtering for best sellers
         int     $offset,               // Offset for pagination
         int     $limit                 // Items per page
-    ): array {
+    ): array
+    {
         $query = Product::query()
             ->when($categoryId, fn($q) => $q->where('category_id', $categoryId))
             ->when($collection, fn($q) => $q->where('collection', $collection))
             ->when($search, fn($q) => $q->where('name', 'like', '%' . $search . '%'))
             ->when($bestSeller, fn($q) => $q->where('units_sold', '>', 1000));
 
-        // Clone the query to calculate the total count before applying pagination
         $totalProducts = (clone $query)->count();
 
-        // Apply sorting and limit/offset for pagination
         $products = $query
             ->orderBy(
                 match ($orderBy) {
@@ -93,14 +92,15 @@ class ProductRepository
                 },
                 'desc'
             )
-            ->with('variants') // Include related variants
-            ->skip($offset)    // Offset for the query
-            ->take($limit)     // Limit the number of items retrieved
+            ->with('variants')
+            ->skip($offset)
+            ->take($limit)
             ->get();
 
         return [
-            0 => $totalProducts,         // Total number of items
-            1 => $products->toArray(), // Paginated product array
+            0 => $totalProducts,
+            1 => $products->toArray(),
+            2 => $limit
         ];
     }
 }

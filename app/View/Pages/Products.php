@@ -16,9 +16,11 @@ class Products extends Component
     // Models
     public Category $category;
     public array $products = [];
-    // Url Params
+    public int $limit = 0;
     public int $totalPages = 0;
     public int $totalItems = 0;
+    // Url Params
+
     public ?int $id = null;
     public string $collection = '';
     public string $search = '';
@@ -65,16 +67,15 @@ class Products extends Component
     private function loadProducts(ProductService $productService): void
     {
 
-        // Load products with the given filters
-        [$this->totalItems, $this->products] = $productService->showAllByFilter(
+        [$this->totalItems, $this->products, $this->limit] = $productService->showAllByFilter(
             $this->id,
             $this->collection,
             $this->search,
-            offset: $this->currentPage * count($this->products),
+            offset: $this->currentPage * $this->limit
         );
 
-        if (count($this->products) > 0) {
-            $this->totalPages = (int)ceil($this->totalItems / count($this->products));
+        if ($this->totalItems > 0) {
+            $this->totalPages = (int)ceil($this->totalItems / $this->limit);
         }
 
     }
