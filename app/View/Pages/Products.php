@@ -23,11 +23,14 @@ class Products extends Component
 
     public function mount(CategoryService $categoryService, ProductService $productService): void
     {
-        $this->category = Category::default();
+
+        $this->loadProducts($productService);
+
         if ($this->id) {
             $this->category = $categoryService->show((int)$this->id);
+            return;
         }
-        $this->loadProducts($productService);
+        $this->category = Category::default();
     }
 
     public function updatedCollection(): void
