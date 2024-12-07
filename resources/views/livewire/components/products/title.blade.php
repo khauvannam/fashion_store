@@ -20,7 +20,7 @@ new class extends Component {
     <div class="flex space-x-4 mt-6">
         @foreach( $category->collections as $item)
             <x-button-active
-                :href="route('products', ['id' => $id, 'collection' => $item])"
+                :href="route('products', ['id' => $category->id, 'collection' => $item])"
                 :active="request()->routeIs('products') && request('collection') == $item"
                 class="border border-gray-400 w-[150px]"
                 wire:navigate>

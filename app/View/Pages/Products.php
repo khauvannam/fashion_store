@@ -9,9 +9,12 @@ use Livewire\Component;
 
 class Products extends Component
 {
+    // Models
     public Category $category;
-    public ?int $id = null;
     public array $products = [];
+
+    // Url params
+    public ?int $id = null;
     public string $collection = '';
     public string $search = '';
 
