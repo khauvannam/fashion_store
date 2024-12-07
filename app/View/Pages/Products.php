@@ -11,22 +11,25 @@ class Products extends Component
 {
     public Category $category;
     public array $products = [];
-    public $filters = [
-        'id' => '',
+    public array $filters = [
+        'id' => null,
         'collection' => '',
         'search' => '',
-        'offset' => 0,
     ];
-
-    protected array $queryString = ['filters'];
+    protected array $queryString = [
+        'filters'
+    ];
 
     public function mount(CategoryService $categoryService, ProductService $productService): void
     {
-        $this->category = Category::default();
-        if ($this->filter['id']) {
-            $this->category = $categoryService->show((int)$this->filter['id']);
-        }
         $this->loadProducts($productService);
+
+        if ($this->filters['id']) {
+            $this->category = $categoryService->show($this->filters['id']);
+            return;
+        }
+
+        $this->category = Category::default();
     }
 
     public function updatedCollection(): void
@@ -42,10 +45,10 @@ class Products extends Component
     private function loadProducts(ProductService $productService): void
     {
         $this->products = $productService->showAllByFilter(
-            $this->filter['id'],
-            $this->filter['collection'],
-            $this->filter['search'],
-            null,
+            $this->filters['id'],
+            $this->filters['collection'],
+            $this->filters['search'],
+            null
         );
     }
 
