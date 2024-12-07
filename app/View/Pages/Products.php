@@ -77,7 +77,6 @@ class Products extends Component
         if ($this->totalItems > 0) {
             $this->totalPages = (int)ceil($this->totalItems / $this->limit);
         }
-
     }
 
     #[Layout('layouts.app')]
