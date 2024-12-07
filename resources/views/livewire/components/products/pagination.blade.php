@@ -17,7 +17,7 @@ new class extends Component {
     {
         // fix empty string
         $page = (int) $page == 0 ? 1 : $page;
-        if ($this->currentPage == $page) return;  
+        if ($this->currentPage == $page || $page > $this->totalPages) return;  
         $this->currentPage = $page;
         $this->getPagination();
         $this->dispatch('page-updated', currentPage: $this->currentPage - 1)->to('pages.products');
@@ -95,8 +95,8 @@ new class extends Component {
             id="page"
             type="number"
             min="1"
+            value="1"
             max="{{ $totalPages }}"
-            wire:model="page"
             wire:change="setPage($event.target.value)"
             class="px-4 py-2 border rounded-md focus:ring-0 focus:ring-transparent no-spinner"
             placeholder=""

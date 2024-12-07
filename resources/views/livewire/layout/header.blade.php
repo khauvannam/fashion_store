@@ -2,14 +2,23 @@
 
 use App\Services\CategoryService;
 use Livewire\Volt\Component;
+use Livewire\Attributes\On;
 
 new class extends Component {
+
 
     public array $categories = [];
 
     public function mount(CategoryService $service): void
     {
         $this->categories = $service->showAll(6, 0);
+    }
+    
+    public $isVisible = false; 
+    #[On('search-toggled')]
+    public function toggleVisibility()
+    {
+        $this->isVisible = !$this->isVisible;
     }
 
 }; ?>
@@ -52,46 +61,31 @@ new class extends Component {
                 TULOS
             </a>
 
+            @if($isVisible)
+                <livewire:components.reusable.search-input :$isVisible/>
+            @endif
             <!-- Right Icons -->
             <div class="flex space-x-4 md:space-x-6 items-center w-5/12 justify-end">
-                <div class="hidden md:block">
-                    <div class="flex items-center">
-                        <form action="{{ route('products', ['id' => request('id') && '']) }}" method="GET">
-
-                            @if(request('id'))
-                                <input type="hidden" name="id" value="{{ request('id') }}"/>
-                            @endif
-
-                            @if(request('collection'))
-                                <input type="hidden" name="collection" value="{{ request('collection') }}"/>
-                            @endif
-
-                            <input
-                                type="text"
-                                name="search"
-                                placeholder="Type to search..."
-                                value="{{ request('search') }}"
-                            />
-                            <input type="hidden" name="offset" value="0"/>
-                        </form>
-                    </div>
-                </div>
-                <button aria-label="Search" class="text-gray-600 hover:text-gray-900">
-                    <svg
-                        class="w-6 h-6"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M21 21l-3.5-3.5M17 10a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                    </svg>
-                </button>
+                <button 
+                aria-label="Search" 
+                class="text-gray-600 hover:text-gray-900"
+                wire:click="toggleVisibility"
+            >
+                <svg
+                    class="w-6 h-6"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-3.5-3.5M17 10a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                </svg>
+            </button>
                 <button aria-label="Cart" class="text-gray-600 hover:text-gray-900">
                     <svg
                         class="w-6 h-6"
