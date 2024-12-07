@@ -1,6 +1,12 @@
 <div class="">
-    <p>{{$product}}</p>
     <p>{{$id}}</p>
-    <p>{{$category->name}}</p>
+    @foreach( $category->collections as $item)
+        <a href="{{ route('products', ['id' => $id, 'collection' => $item]) }}"
+           class="capitalize">{{$item}}</a>
+    @endforeach
+
+    @foreach($products as $product)
+        <p>{{$product['name']}}</p>
+    @endforeach
 
 </div>

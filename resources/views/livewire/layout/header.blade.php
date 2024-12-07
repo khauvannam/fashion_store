@@ -37,7 +37,7 @@ new class extends Component {
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-6 w-5/12">
                 @foreach($categories as $category)
-                    <a href="{{ route('collections', ['id' => $category['id']]) }}"
+                    <a href="{{ route('products', ['id' => $category['id']]) }}"
                        class="text-sm font-medium text-gray-600 hover:text-gray-900">{{ $category['name']}}</a>
                 @endforeach
             </nav>
@@ -91,7 +91,7 @@ new class extends Component {
                     </svg>
                 </button>
                 <button aria-label="Login" class="text-gray-600 hover:text-gray-900">
-                    <a href="/login"> Login</a>
+                    <a href="/login" wire:navigate> Login</a>
                 </button>
             </div>
         </div>
@@ -110,7 +110,7 @@ new class extends Component {
              x-cloak>
             <div class="container mx-auto flex flex-col">
                 @foreach($categories as $category)
-                    <a href="{{ route('collections', ['id' => $category['id']]) }}"
+                    <a href="{{ route('products', ['id' => $category['id']]) }}"
                        class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900">{{$category['name']}}</a>
                 @endforeach
             </div>
