@@ -63,13 +63,19 @@ class ProductRepository
     }
 
 
-    public function showAllByFilter($categoryId, $collection, $orderBy, $bestSeller, $offset, $limit): array
+    public function showAllByFilter($categoryId, $collection, $search, $orderBy, $bestSeller, $offset, $limit): array
     {
+        $query = Product::query();
 
-        $query = Product::where('category_id', $categoryId);
+        if ($categoryId !== null) {
+            $query->where('category_id', $categoryId);
+        }
 
         if (!empty($collection)) {
             $query->where('collection', $collection);
+        }
+        if (!empty($search)) {
+            $query->where('name', 'like', '%' . $search . '%');
         }
 
         if ($bestSeller) {
@@ -101,6 +107,5 @@ class ProductRepository
             ->get();
 
         return $products->toArray();
-
     }
 }

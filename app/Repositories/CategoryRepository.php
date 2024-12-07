@@ -43,4 +43,10 @@ class CategoryRepository
             ->get()
             ->toArray();
     }
+    public function showAllSubCategories($id): array
+    {
+        return Category::where('parent_id', $id)
+            ->get()
+            ->toArray();
+    }
 }

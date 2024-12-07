@@ -9,7 +9,7 @@ new class extends Component {
 
     public function mount(CategoryService $service): void
     {
-        $this->categories = $service->showAll(5, 0);
+        $this->categories = $service->showAll(6, 0);
     }
 
 }; ?>
@@ -37,7 +37,6 @@ new class extends Component {
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-6 w-5/12">
                 @foreach($categories as $category)
-
                     <x-nav-link
                         :href="route('products', ['id' => $category['id']])"
                         :active="request()->routeIs('products') && request('id') == $category['id']"
@@ -55,13 +54,25 @@ new class extends Component {
 
             <!-- Right Icons -->
             <div class="flex space-x-4 md:space-x-6 items-center w-5/12 justify-end">
-                <div class="hidden md:block w-64">
+                <div class="hidden md:block">
                     <div class="flex items-center">
-                        <input
-                            type="text"
-                            class="w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
-                            placeholder="Type to search..."
-                        />
+                        <form action="{{ route('products', ['id' => request('id') && '']) }}" method="GET">
+
+                            @if(request('id'))
+                                <input type="hidden" name="id" value="{{ request('id') }}"/>
+                            @endif
+
+                            @if(request('collection'))
+                                <input type="hidden" name="collection" value="{{ request('collection') }}"/>
+                            @endif
+
+                            <input
+                                type="text"
+                                name="search"
+                                placeholder="Type to search..."
+                                value="{{ request('search') }}"
+                            />
+                        </form>
                     </div>
                 </div>
                 <button aria-label="Search" class="text-gray-600 hover:text-gray-900">

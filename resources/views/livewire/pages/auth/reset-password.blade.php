@@ -68,39 +68,45 @@ new #[Layout('layouts.guest')] class extends Component {
     }
 }; ?>
 
-<div>
-    <form wire:submit="resetPassword">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')"/>
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required
-                          autofocus autocomplete="username"/>
-            <x-input-error :messages="$errors->get('email')" class="mt-2"/>
+<div class="container mx-auto my-6 flex justify-center items-center">
+    <div class="w-5/12">
+        <div class="py-6 border-b-gray-300 border-b">
+            <h3 class="font-medium text-2xl mb-2">Đặt lại mật khẩu</h3>
+            <p>Nhập email và mật khẩu mới để đặt lại mật khẩu của bạn.</p>
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')"/>
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password" name="password"
-                          required autocomplete="new-password"/>
-            <x-input-error :messages="$errors->get('password')" class="mt-2"/>
-        </div>
+        <form wire:submit="resetPassword" class="my-6">
+            <!-- Email Address -->
+            <div>
+                <x-input-label for="email" :value="__('Email')"/>
+                <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required
+                              autofocus autocomplete="username"/>
+                <x-input-error :messages="$errors->get('email')" class="mt-2"/>
+            </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')"/>
+            <!-- Password -->
+            <div class="mt-4">
+                <x-input-label for="password" :value="__('Mật khẩu mới')"/>
+                <x-text-input wire:model="password" id="password" class="block mt-1 w-full" type="password"
+                              name="password"
+                              required autocomplete="new-password"/>
+                <x-input-error :messages="$errors->get('password')" class="mt-2"/>
+            </div>
 
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                          type="password"
-                          name="password_confirmation" required autocomplete="new-password"/>
+            <!-- Confirm Password -->
+            <div class="mt-4">
+                <x-input-label for="password_confirmation" :value="__('Xác nhận mật khẩu')"/>
+                <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
+                              type="password"
+                              name="password_confirmation" required autocomplete="new-password"/>
+                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2"/>
+            </div>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2"/>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
+            <div class="flex items-center justify-end mt-4">
+                <x-primary-button>
+                    {{ __('Đặt lại mật khẩu') }}
+                </x-primary-button>
+            </div>
+        </form>
+    </div>
 </div>

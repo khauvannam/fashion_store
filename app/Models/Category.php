@@ -19,4 +19,14 @@ class Category extends Model
     {
         return $this->hasMany(Product::class, 'category_id');
     }
+
+    public static function default(): self
+    {
+        return new self([
+            'name' => 'All',
+            'description' => 'Khám phá tất cả sản phẩm',
+            'img_url' => '',
+            'collections' => ["tshirt", "jacket", "pants", "hoodies", "short"]
+        ]);
+    }
 }
