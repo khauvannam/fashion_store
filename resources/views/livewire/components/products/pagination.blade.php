@@ -13,9 +13,11 @@ new class extends Component {
         $this->getPagination();
     }
 
-    public function setPage(int $page): void
+    public function setPage(string $page): void
     {
-        if ($this->currentPage == $page) return;
+        // fix empty string
+        $page = (int) $page == 0 ? 1 : $page;
+        if ($this->currentPage == $page) return;  
         $this->currentPage = $page;
         $this->getPagination();
         $this->dispatch('page-updated', currentPage: $this->currentPage - 1)->to('pages.products');
@@ -71,8 +73,8 @@ new class extends Component {
     @foreach($pagination as $pag)
         <button
             @click="scrollToId('product-container')"
-            wire:click="setPage({{ $pag }})"
-            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md {{ $pag == $currentPage ? 'bg-blue-500 text-white' : 'hover:bg-gray-300' }} "
+            wire:click="setPage({{ $pag = 0 ? 1 : $pag }})"
+            class="px-4 py-2 text-gray-800 rounded-md {{ $pag == $currentPage ? 'bg-black text-white' : ' bg-gray-200 hover:bg-gray-300'  }} "
             {{ $pag < 0 ? 'disabled' : '' }}>
             {{ $pag > 0 ? $pag : '...' }}
         </button>
@@ -87,6 +89,20 @@ new class extends Component {
           
                   
     </button>
+    <div class="flex items-center space-x-4">
+        <label for="page" class="text-gray-700">Đến trang:</label>
+        <input
+            id="page"
+            type="number"
+            min="1"
+            max="{{ $totalPages }}"
+            wire:model="page"
+            wire:change="setPage($event.target.value)"
+            class="px-4 py-2 border rounded-md focus:ring-0 focus:ring-transparent no-spinner"
+            placeholder=""
+        />
+        <span class="text-gray-500">/ {{ $totalPages }} pages</span>
+    </div>
 </div>
 
 
