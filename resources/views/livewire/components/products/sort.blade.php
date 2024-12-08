@@ -41,7 +41,7 @@ new class extends Component {
 
 <div class="bg-white text-black w-80 p-6 rounded-lg space-y-4">
     <!-- Sort Options -->
-    <div x-data="{ sortData: false }" class="border border-gray-700 p-4 rounded-lg">
+    <div x-data="{ sortData: @js($sortData) !== null }" class="border border-gray-700 p-4 rounded-lg">
         <div class="flex justify-between items-center">
             <h1 class="text-sm font-medium">Xắp xếp theo</h1>
             <button @click="sortData = !sortData" class="text-lg font-bold">+</button>
@@ -49,22 +49,22 @@ new class extends Component {
         <div x-show="sortData" class="mt-2 space-y-2 text-sm" x-transition>
             <p class="border border-gray-700 px-3 py-1 rounded-lg cursor-pointer hover:bg-gray-700"
                :class="{'bg-gray-700 text-white': @js($sortData) === 'newest'}"
-               wire:click="$set('sortData', 'newest')">Sản phẩm mới</p>
+               wire:click="$set('sortData', @js($sortData) === 'newest' ? null : 'newest')">Sản phẩm mới</p>
             <p class="border border-gray-700 px-3 py-1 rounded-lg cursor-pointer hover:bg-gray-700"
                :class="{'bg-gray-700 text-white': @js($sortData) === 'bestSeller'}"
-               wire:click="$set('sortData', 'bestSeller')">Bán chạy nhất</p>
+               wire:click="$set('sortData', @js($sortData) === 'bestSeller' ? null : 'bestSeller')">Bán chạy nhất</p>
             <p class="border border-gray-700 px-3 py-1 rounded-lg cursor-pointer hover:bg-gray-700"
                :class="{'bg-gray-700 text-white': @js($sortData) === 'priceDesc'}"
-               wire:click="$set('sortData', 'priceDesc')">Giá giảm dần</p>
+               wire:click="$set('sortData', @js($sortData) === 'priceDesc' ? null : 'priceDesc')">Giá giảm dần</p>
             <p class="border border-gray-700 px-3 py-1 rounded-lg cursor-pointer hover:bg-gray-700"
                :class="{'bg-gray-700 text-white': @js($sortData) === 'priceAsc'}"
-               wire:click="$set('sortData', 'priceAsc')">Giá tăng dần</p>
+               wire:click="$set('sortData', @js($sortData) === 'priceAsc' ? null : 'priceAsc')">Giá tăng dần</p>
         </div>
     </div>
     
 
     <!-- Size Filter -->
-    <div x-data="{ sortSize: false }" class="border border-gray-700 p-4 rounded-lg">
+    <div x-data="{ sortSize: @js($sortSize) !== null }" class="border border-gray-700 p-4 rounded-lg">
         <div class="flex justify-between items-center">
             <h1 class="text-sm font-medium">Size</h1>
             <button @click="sortSize = !sortSize" class="text-lg font-bold">+</button>
@@ -72,16 +72,16 @@ new class extends Component {
         <div x-show="sortSize" class="mt-2 flex flex-wrap gap-2 text-sm" x-transition>
             <div class="border border-gray-700 px-3 py-1 rounded-lg cursor-pointer hover:bg-gray-700"
                  :class="{'bg-gray-700 text-white': @js($sortSize) === 'S'}"
-                 wire:click="$set('sortSize', 'S')">S</div>
+                 wire:click="$set('sortSize', @js($sortSize) === 'S' ? null : 'S')">S</div>
             <div class="border border-gray-700 px-3 py-1 rounded-lg cursor-pointer hover:bg-gray-700"
                  :class="{'bg-gray-700 text-white': @js($sortSize) === 'M'}"
-                 wire:click="$set('sortSize', 'M')">M</div>
+                 wire:click="$set('sortSize', @js($sortSize) === 'M' ? null : 'M')">M</div>
             <div class="border border-gray-700 px-3 py-1 rounded-lg cursor-pointer hover:bg-gray-700"
                  :class="{'bg-gray-700 text-white': @js($sortSize) === 'L'}"
-                 wire:click="$set('sortSize', 'L')">L</div>
+                 wire:click="$set('sortSize', @js($sortSize) === 'L' ? null : 'L')">L</div>
             <div class="border border-gray-700 px-3 py-1 rounded-lg cursor-pointer hover:bg-gray-700"
                  :class="{'bg-gray-700 text-white': @js($sortSize) === 'XL'}"
-                 wire:click="$set('sortSize', 'XL')">XL</div>
+                 wire:click="$set('sortSize', @js($sortSize) === 'XL' ? null : 'XL')">XL</div>
         </div>
     </div>
 
