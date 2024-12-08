@@ -16,14 +16,9 @@ new class extends Component {
     public function setPage(string $page): void
     {
         // fix empty string
-
         $page = (int)$page == 0 ? 1 : $page;
-
-        // Guard clause
         if ($this->currentPage == $page || $page > $this->totalPages) return;
-
         $this->currentPage = $page;
-
         $this->getPagination();
         $this->dispatch('page-updated', currentPage: $this->currentPage - 1)->to('pages.products');
     }
@@ -69,9 +64,8 @@ new class extends Component {
     <button
         @click=" scrollToId('product-container')"
         wire:click="setPage({{ 1 }})"
-        {{$totalPages < 10 ? 'disabled' : ''}}
-        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 ">
-        <svg class="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md  ">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
              width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m17 16-4-4 4-4m-6 8-4-4 4-4"/>
@@ -90,13 +84,14 @@ new class extends Component {
     <button
         @click=" scrollToId('product-container')"
         wire:click="setPage({{ $totalPages }})"
-        {{$totalPages < 10 ? 'disabled' : ''}}
-        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 ">
-        <svg class="w-6 h-6 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md  ">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
              width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m7 16 4-4-4-4m6 8 4-4-4-4"/>
         </svg>
+
+
     </button>
     <div class="flex items-center space-x-4">
         <label for="page" class="text-gray-700">Đến trang:</label>
@@ -126,8 +121,6 @@ new class extends Component {
                         behavior: 'smooth', // Smooth scrolling
                         block: 'start', // Align the element to the top of the viewport
                     });
-                } else {
-                    console.warn(`Element with class "${id}" not found.`);
                 }
             }
         };

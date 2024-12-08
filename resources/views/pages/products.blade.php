@@ -11,7 +11,7 @@
     {{-- Pagination --}}
 
     @if($totalPages > 1)
-        <livewire:components.products.pagination :$totalPages/>
+        <livewire:components.reusable.pagination :$totalPages/>
     @endif
 
 </div>

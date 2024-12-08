@@ -12,6 +12,7 @@ new class extends Component {
         $this->categories = $service->showAll(6, 0);
     }
 
+
 }; ?>
 
 <div class="fixed z-50 w-full">
@@ -22,7 +23,7 @@ new class extends Component {
     </div>
 
     <!-- Navigation Bar -->
-    <header class="bg-white border-b" x-data="{ showMenu: false }">
+    <header class="bg-white border-b" x-data="{ showMenu: false, visibility: false }">
         <div class="flex justify-between items-center py-4 container mx-auto relative">
 
             <!-- Mobile Menu Button -->
@@ -51,32 +52,17 @@ new class extends Component {
             <a href="/" class="text-xl md:text-2xl font-bold text-black">
                 TULOS
             </a>
+            <!-- Search Input -->
+
+            <livewire:components.reusable.search-input/>
 
             <!-- Right Icons -->
             <div class="flex space-x-4 md:space-x-6 items-center w-5/12 justify-end">
-                <div class="hidden md:block">
-                    <div class="flex items-center">
-                        <form action="{{ route('products', ['id' => request('id') && '']) }}" method="GET">
-
-                            @if(request('id'))
-                                <input type="hidden" name="id" value="{{ request('id') }}"/>
-                            @endif
-
-                            @if(request('collection'))
-                                <input type="hidden" name="collection" value="{{ request('collection') }}"/>
-                            @endif
-
-                            <input
-                                type="text"
-                                name="search"
-                                placeholder="Type to search..."
-                                value="{{ request('search') }}"
-                            />
-                            <input type="hidden" name="offset" value="0"/>
-                        </form>
-                    </div>
-                </div>
-                <button aria-label="Search" class="text-gray-600 hover:text-gray-900">
+                <button
+                    aria-label="Search"
+                    class="text-gray-600 hover:text-gray-900"
+                    @click="visibility = ! visibility"
+                >
                     <svg
                         class="w-6 h-6"
                         xmlns="http://www.w3.org/2000/svg"
