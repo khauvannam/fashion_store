@@ -25,11 +25,15 @@ class Products extends Component
     public string $collection = '';
     public string $search = '';
     public int $currentPage = 0;
+    public string $sortData = '';
+    public int $price = 0;
 
     protected array $queryString = [
         'id' => '',
         'collection' => ['except' => ''],
         'search' => ['except' => ''],
+        'sortData' => ['except' => ''],
+        'price' => ['except' => 0],
     ];
 
     protected $listeners = [
@@ -71,6 +75,8 @@ class Products extends Component
             $this->id,
             $this->collection,
             $this->search,
+            $this->sortData,
+            (float)$this->price,
             offset: $this->currentPage * $this->limit
         );
 

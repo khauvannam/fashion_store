@@ -1,17 +1,29 @@
 <?php
 
 use Livewire\Volt\Component;
+use App\Services\ProductService;
 
 new class extends component {
     public string $search = '';
-    public array $products = [];
+    public array $products = [0 => 0, 1 => [], 2 => 0];
+
+    public function setSearch($search): void
+    {
+        if(strlen($search) < 2) {$this->products = [0 => 0, 1 => [], 2 => 0] ; return;};
+        $this->search = $search;
+        $this->getProducts(app(ProductService::class));
+    }
+    public function getProducts(ProductService $productService): void
+    {
+        $this->products = $productService->showAllByFilter(null, '', $this->search, limit: 5);
+    }
 
 }
 
 ?>
 
 <div
-    class="absolute top-[80px] bg-white/90 shadow-xl backdrop-blur-sm rounded-2xl p-6 w-full z-50 flex flex-col gap-4 transition-all duration-300  border border-white"
+    class="absolute top-[70px] bg-white/90 shadow-xl backdrop-blur-sm rounded-2xl p-6 w-full z-50 flex flex-col gap-4 transition-all duration-300  border border-white"
     x-show="visibility"
     x-cloak
     @click.away="visibility = false"
@@ -25,7 +37,7 @@ new class extends component {
     <div class="flex items-center gap-4 ">
         <!-- Form -->
         <form action="{{ route('products') }}" method="GET"
-              class="flex flex-1 items-center gap-4 bg-transparent">
+              class="flex flex-1 items-center gap-4 bg-transparent border-0 border-b border-gray-500">
             <!-- Hidden Fields -->
             @if(request('id'))
                 <input type="hidden" name="id" value="{{ request('id') }}"/>
@@ -37,11 +49,14 @@ new class extends component {
 
             <!-- Search Input -->
             <input
+                x-init="$watch('visibility', value => { if (!value) { $wire.setSearch(''); } })"
                 type="text"
                 name="search"
                 placeholder="Search for products..."
-                value="!visibility ? '' : @event.target.value"
-                class="bg-transparent w-full border-none placeholder:text-black text-gray-500 rounded-lg py-2 px-4 focus:outline-none focus:ring-0 focus:ring-transparent focus:border-transparent"
+                wire:model="search"
+                wire:input.debounce.500ms="setSearch($event.target.value)"
+                x-bind:value="visibility ? $event.target.value : ''"
+                class="bg-transparent w-full border-none placeholder:text-gray-500 text-black rounded-lg py-2 px-4 focus:outline-none focus:ring-0 focus:ring-transparent focus:border-transparent"
             />
         </form>
 
@@ -58,8 +73,15 @@ new class extends component {
             </svg>
         </button>
     </div>
-    @if(count($products) > 0)
-
-
+    @if($products[0] > 0)
+        <div class="flex justify-between mt-3">
+            <h1 class="font-bold text-base">Sản phẩm tìm được: {{$products[0]}}</h1>
+            <a href="{{ route('products', ['search' => $search]) }}" class="text-sm underline">Xem tất cả</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+            @foreach ($products[1] as $product)
+                @livewire('components.reusable.product-card', ['product' => $product], key($product['id']))
+            @endforeach
+        </div>
     @endif
 </div>
