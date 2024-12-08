@@ -69,6 +69,7 @@ class ProductRepository
         ?string $collection,       // Collection name, nullable
         ?string $search,           // Search keyword, nullable
         ?string $orderBy,          // Order criteria, nullable
+        ?string $priceRange,       // Price range, nullable
         bool    $bestSeller,          // Indicates if filtering for best sellers
         int     $offset,               // Offset for pagination
         int     $limit                 // Items per page
@@ -77,21 +78,35 @@ class ProductRepository
             ->when($categoryId, fn($q) => $q->where('category_id', $categoryId))
             ->when($collection, fn($q) => $q->where('collection', $collection))
             ->when($search, fn($q) => $q->where('name', 'like', '%' . $search . '%'))
-            ->when($bestSeller, fn($q) => $q->where('units_sold', '>', 1000));
+            ->when($bestSeller, fn($q) => $q->where('units_sold', '>', 1000))
+            ->when($priceRange, function ($q, $priceRange) {
+                // Extract min price from the priceRange string
+                $minPrice = (float)$priceRange;
+
+                // Retrieve the maximum price from the database
+                $maxPrice = Product::max('price');
+
+                // Add where conditions for price range
+                $q->when($minPrice !== '', fn($q) => $q->where('price', '>=', $minPrice))
+                    ->when($maxPrice !== '', fn($q) => $q->where('price', '<=', $maxPrice));
+            });
 
         $totalProducts = (clone $query)->count();
 
         if ($orderBy !== null) {
-            $query
-                ->orderBy(
-                    match ($orderBy) {
-                        'price' => 'price',
-                        'rating' => 'average_rating',
-                        'discount_percent' => 'discountPercent',
-                        default => 'created_at',
-                    },
-                    'desc'
-                );
+            // Extract the sorting field and direction from the input
+            [$field, $direction] = match ($orderBy) {
+                'priceDesc' => ['price', 'desc'],
+                'priceAsc' => ['price', 'asc'],
+                'newest' => ['created_at', 'desc'],
+                'bestSeller' => ['units_sold', 'desc'],
+                'rating' => ['average_rating', 'desc'],
+                'discount_percent' => ['discountPercent', 'desc'],
+                default => ['created_at', 'desc'],
+            };
+
+            // Apply the ordering to the query
+            $query->orderBy($field, $direction);
         }
 
         $products = $query

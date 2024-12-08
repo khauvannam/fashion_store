@@ -1,13 +1,18 @@
 <div class="container mx-auto pt-[150px]">
 
     <livewire:components.products.title :$category/>
-    <livewire:components.products.sort/>
+
 
     {{-- Product --}}
-    <div id="product-container" class="my-[100px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach ($products as $product)
-            @livewire('components.reusable.product-card', ['product' => $product], key($product['id']))
-        @endforeach
+    <div class="flex my-[100px] ">
+        <div class="w-3/12">
+        <livewire:components.products.sort/>
+        </div>
+        <div id="product-container" class="w-7/12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach ($products as $product)
+                @livewire('components.reusable.product-card', ['product' => $product], key($product['id']))
+            @endforeach
+        </div>
     </div>
     {{-- Pagination --}}
 
