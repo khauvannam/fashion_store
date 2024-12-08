@@ -40,7 +40,7 @@ new class extends component {
                 type="text"
                 name="search"
                 placeholder="Search for products..."
-                value="{{ request('search') }}"
+                value="!visibility ? '' : @event.target.value"
                 class="bg-transparent w-full border-none placeholder:text-black text-gray-500 rounded-lg py-2 px-4 focus:outline-none focus:ring-0 focus:ring-transparent focus:border-transparent"
             />
         </form>

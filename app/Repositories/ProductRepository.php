@@ -82,16 +82,20 @@ class ProductRepository
 
         $totalProducts = (clone $query)->count();
 
+        if ($orderBy !== null) {
+            $query
+                ->orderBy(
+                    match ($orderBy) {
+                        'price' => 'price',
+                        'rating' => 'average_rating',
+                        'discount_percent' => 'discountPercent',
+                        default => 'created_at',
+                    },
+                    'desc'
+                );
+        }
+
         $products = $query
-            ->orderBy(
-                match ($orderBy) {
-                    'price' => 'price',
-                    'rating' => 'average_rating',
-                    'discount_percent' => 'discountPercent',
-                    default => 'created_at',
-                },
-                'desc'
-            )
             ->with('variants')
             ->skip($offset)
             ->take($limit)
