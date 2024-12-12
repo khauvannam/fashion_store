@@ -37,6 +37,12 @@ new class extends Component {
 
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-6 w-5/12">
+                <x-nav-link
+                    :href="route('products')"
+                    :active="request()->routeIs('products')"
+                    class="text-sm font-medium text-gray-600 hover:text-gray-900">
+                    All Products
+                </x-nav-link>
                 @foreach($categories as $category)
                     <x-nav-link
                         :href="route('products', ['id' => $category['id']])"

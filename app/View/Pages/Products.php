@@ -29,7 +29,7 @@ class Products extends Component
 
     public int $totalPages = 0;
 
-    public array $filters = ['sortData' => '', 'sortSize' => '', 'price' => 0];
+    public array $filters = ['sortData' => '', 'sortSize' => '', 'price' => 0, 'sortColor' => ''];
 
     protected function queryString(): array
     {
@@ -50,6 +50,17 @@ class Products extends Component
     public function updateCollection(string $collection): void
     {
         $this->collection = $collection;
+        $this->loadProducts(app(ProductService::class));
+    }
+
+    #[On('updated-filters')]
+    public function updateFilters(array $filters): void
+    {
+        foreach ($filters as $key => $value) {
+            if (array_key_exists($key, $this->filters)) {
+                $this->filters[$key] = $value;
+            }
+        }
         $this->loadProducts(app(ProductService::class));
     }
 
@@ -86,10 +97,11 @@ class Products extends Component
             $this->collection,
             $this->search,
             $this->filters['sortData'],
-            (float)$this->filters['sortSize'],
+            (float)$this->filters['price'],
+            $this->filters['sortSize'],
+            $this->filters['sortColor'],
             offset: ($this->currentPage - 1) * $this->limit
         );
-
         if ($this->totalItems > 0) {
             $this->totalPages = (int)ceil($this->totalItems / $this->limit);
         }
