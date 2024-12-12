@@ -5,7 +5,7 @@
     {{-- Product --}}
     <div class="flex justify-between my-10">
         <div class="w-3/12">
-            <div class="">{{$currentPage}}</div>
+            <div class=""><livewire:components.products.sort/></div>
         </div>
         <div id="product-container" class="w-[70%] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach ($products as $product)

@@ -4,13 +4,12 @@ use Livewire\Volt\Component;
 
 new class extends Component {
     public array $filters = ['sortData' => '', 'sortSize' => '', 'price' => ''];
-
 };
 ?>
 
 <div class="bg-white text-black w-80 p-6 rounded-lg space-y-4">
     <!-- Sort Options -->
-    <div x-data="{ sortData: true }" class="border border-gray-700 p-4 rounded-lg">
+    <div x-data="{ sortData: false }" class="border border-gray-700 p-4 rounded-lg">
         <div class="flex justify-between items-center">
             <h1 class="text-sm font-medium">Xắp xếp theo</h1>
             <button @click="sortData = !sortData" class="text-lg font-bold">+</button>
@@ -61,7 +60,7 @@ new class extends Component {
     </div>
 
     <!-- Price Filter -->
-    <div x-data="{ price: @js($price) || 0 }" class="border border-gray-700 p-4 rounded-lg">
+    <div x-data="{ price: 0 }" class="border border-gray-700 p-4 rounded-lg">
         <h1 class="text-sm font-medium">Price</h1>
         <div class="flex items-center justify-between mt-4">
             <input
