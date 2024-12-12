@@ -73,13 +73,14 @@ class ProductRepository
         bool    $bestSeller,          // Indicates if filtering for best sellers
         int     $offset,               // Offset for pagination
         int     $limit                 // Items per page
-    ): array {
+    ): array
+    {
         $query = Product::query()
             ->when($categoryId, fn($q) => $q->where('category_id', $categoryId))
             ->when($collection, fn($q) => $q->where('collection', $collection))
             ->when($search, fn($q) => $q->where('name', 'like', '%' . $search . '%'))
             ->when($bestSeller, fn($q) => $q->where('units_sold', '>', 1000))
-            ->when($priceRange, function ($q, $priceRange) {
+            ->when(function ($q, $priceRange) {
                 // Extract min price from the priceRange string
                 $minPrice = (float)$priceRange;
 
@@ -87,9 +88,9 @@ class ProductRepository
                 $maxPrice = Product::max('price');
 
                 // Add where conditions for price range
-                $q->when($minPrice !== '', fn($q) => $q->where('price', '>=', $minPrice))
+                $q->when($minPrice !== 0.0, fn($q) => $q->where('price', '>=', $minPrice))
                     ->when($maxPrice !== '', fn($q) => $q->where('price', '<=', $maxPrice));
-            });
+            }, callback: $priceRange);
 
         $totalProducts = (clone $query)->count();
 
@@ -109,7 +110,6 @@ class ProductRepository
         }
 
         $products = $query
-            ->with('variants')
             ->skip($offset)
             ->take($limit)
             ->get();

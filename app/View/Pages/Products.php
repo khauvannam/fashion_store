@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Products extends Component
@@ -16,46 +17,27 @@ class Products extends Component
     // Models
     public Category $category;
     public array $products = [];
-    public int $limit = 0;
-    public int $totalPages = 0;
+    public int $limit = 12;
     public int $totalItems = 0;
     // Url Params
 
     public ?int $id = null;
     public string $collection = '';
     public string $search = '';
-    public int $currentPage = 0;
-    public string $sortData = '';
-    public int $price = 0;
+    public int $currentPage = 1;
+    public array $pagination = [];
 
-    protected array $queryString = [
-        'id' => '',
-        'collection' => ['except' => ''],
-        'search' => ['except' => ''],
-        'sortData' => ['except' => ''],
-        'price' => ['except' => 0],
-    ];
+    public int $totalPages = 0;
 
-    protected $listeners = [
-        'page-updated' => 'updateProducts'
-    ];
+    public array $filters = ['sortData' => '', 'sortSize' => '', 'price' => 0];
 
-    public function updateProducts($currentPage): void
+    protected function queryString(): array
     {
-        $this->currentPage = $currentPage;
-
-        $this->loadProducts(app(ProductService::class));
-    }
-
-    public function mount(CategoryService $categoryService, ProductService $productService): void
-    {
-        $this->loadProducts($productService);
-
-        if ($this->id) {
-            $this->category = $categoryService->show((int)$this->id);
-            return;
-        }
-        $this->category = Category::default();
+        return [
+            'id' => '',
+            'collection' => ['except' => ''],
+            'search' => ['except' => ''],
+        ];
     }
 
     public function updatedCollection(): void
@@ -68,21 +50,79 @@ class Products extends Component
         $this->loadProducts(app(ProductService::class));
     }
 
+    #[On('updated-current-page')]
+    public function updateCurrentPage($currentPage): void
+    {
+        if (empty($currentPage) || !is_numeric($currentPage) || $currentPage < 1 || $this->totalPages < $currentPage) {
+            $this->currentPage = 1;
+            return;
+        }
+        $this->currentPage = $currentPage;
+        $this->getPagination();
+        $this->loadProducts(app(ProductService::class));
+    }
+
+    public function mount(CategoryService $categoryService, ProductService $productService): void
+    {
+        $this->loadProducts($productService);
+        $this->getPagination();
+        if ($this->id) {
+            $this->category = $categoryService->show((int)$this->id);
+            return;
+        }
+        $this->category = Category::default();
+    }
+
+
     private function loadProducts(ProductService $productService): void
     {
-
         [$this->totalItems, $this->products, $this->limit] = $productService->showAllByFilter(
             $this->id,
             $this->collection,
             $this->search,
-            $this->sortData,
-            (float)$this->price,
-            offset: $this->currentPage * $this->limit
+            $this->filters['sortData'],
+            (float)$this->filters['sortSize'],
+            offset: ($this->currentPage - 1) * $this->limit
         );
 
         if ($this->totalItems > 0) {
             $this->totalPages = (int)ceil($this->totalItems / $this->limit);
         }
+    }
+
+    public function getPagination(): void
+    {
+        $pagination = [];
+        // Add the first three pages or all if totalPages <= 3
+        for ($i = 1; $i <= min(3, $this->totalPages); $i++) {
+            $pagination[] = $i;
+        }
+
+        // Add "..." if the currentPage is beyond 4
+        if ($this->currentPage > 4) {
+            $pagination[] = -1; // Represent "..." placeholder
+        }
+
+        // Middle range around the currentPage
+        $start = max(4, $this->currentPage - 1);
+        $end = min($this->currentPage + 1, $this->totalPages - 3);
+
+        for ($i = $start; $i <= $end; $i++) {
+            $pagination[] = $i;
+        }
+
+        // Add "..." if there are pages beyond the visible range
+        if ($this->currentPage < $this->totalPages - 3) {
+            $pagination[] = -1; // Represent "..." placeholder
+        }
+
+        // Add the last three pages or more if the total pages are fewer
+        for ($i = max($this->totalPages - 2, 4); $i <= $this->totalPages; $i++) {
+            $pagination[] = $i;
+
+        }
+        $this->pagination = $pagination;
+
     }
 
     #[Layout('layouts.app')]

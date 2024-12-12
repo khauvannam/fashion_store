@@ -1,9 +1,11 @@
 <?php
 
+use Livewire\Attributes\Reactive;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public $product;
+    #[Reactive]
+    public array $product;
 
 
 }
