@@ -46,7 +46,7 @@ class Products extends Component
     }
 
 
-    #[On('change-collection')]
+    #[On('updated-collection')]
     public function updateCollection(string $collection): void
     {
         $this->collection = $collection;

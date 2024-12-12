@@ -24,7 +24,7 @@ new class extends Component {
     <div class="flex space-x-4 mt-6">
         @foreach( $category['collections'] as $item)
             <x-button-active
-                wire:click="$dispatch('changeCollection',{ collection: '{{ $item }}' } )"
+                wire:click="$dispatch('updated-collection',{ collection: '{{ $item }}' } )"
                 :active="$collection == $item"
                 class="border border-gray-400 w-[150px]"
                 wire:navigate>

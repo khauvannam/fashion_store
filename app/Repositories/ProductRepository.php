@@ -9,6 +9,7 @@ class ProductRepository
 
     public function show(int $id): ?Product
     {
+
         return Product::with('variants')->findOrFail($id);
     }
 

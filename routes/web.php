@@ -2,6 +2,7 @@
 
 use App\View\Pages\Products;
 use Illuminate\Support\Facades\Route;
+use Livewire\Volt\Volt;
 
 Route::view('', 'pages.home')->name('home');
 
@@ -14,5 +15,7 @@ Route::view('dashboard', 'pages.dashboard')
 Route::view('profile', 'pages.profile')
     ->middleware(['auth'])
     ->name('profile');
+
+Volt::route('product', 'pages.detail')->name('product');
 
 require __DIR__ . '/auth.php';
