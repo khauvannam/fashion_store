@@ -66,13 +66,15 @@ class ProductRepository
 
     public function showAllByFilter(
         ?int    $categoryId,          // Category ID, nullable
-        ?string $collection,       // Collection name, nullable
-        ?string $search,           // Search keyword, nullable
-        ?string $orderBy,          // Order criteria, nullable
-        ?string $priceRange,       // Price range, nullable
-        bool    $bestSeller,          // Indicates if filtering for best sellers
-        int     $offset,               // Offset for pagination
-        int     $limit                 // Items per page
+        ?string $collection,          // Collection name, nullable
+        ?string $search,              // Search keyword, nullable
+        ?string $orderBy,             // Order criteria, nullable
+        ?string $priceRange,          // Price range, nullable
+        ?string $size,                // Size filter, nullable
+        ?string $color,               // Color filter, nullable
+        bool    $bestSeller,          // Indicates if filtering for bst sellers
+        int     $offset,              // Offset for pagination
+        int     $limit                // Items per page
     ): array
     {
         $query = Product::query()
@@ -80,32 +82,34 @@ class ProductRepository
             ->when($collection, fn($q) => $q->where('collection', $collection))
             ->when($search, fn($q) => $q->where('name', 'like', '%' . $search . '%'))
             ->when($bestSeller, fn($q) => $q->where('units_sold', '>', 1000))
-            ->when($priceRange, function($q) use ($priceRange){
-                // Extract min price from the priceRange string
-                $minPrice = (float)$priceRange;
-
-                // Retrieve the maximum price from the database
-                $maxPrice = Product::max('price');
-
-                // Add where conditions for price range
-                $q->when($minPrice !== 0.0, fn($q) => $q->where('price', '>=', $minPrice))
-                    ->when($maxPrice !== '', fn($q) => $q->where('price', '<=', $maxPrice));
+            ->when($priceRange, function ($q) use ($priceRange) {
+                [$minPrice, $maxPrice] = explode('-', $priceRange) + [0, null];
+                $q->when($minPrice !== null, fn($q) => $q->where('price', '>=', (float)$minPrice))
+                    ->when($maxPrice !== null, fn($q) => $q->where('price', '<=', (float)$maxPrice));
+            })
+            ->when($size, function ($q) use ($size) {
+                $q->whereHas('variants', function ($variantQuery) use ($size) {
+                    $variantQuery->whereJsonContains('attribute_values', [['attribute' => 'Size', 'value' => $size]]);
+                });
+            })
+            ->when($color, function ($q) use ($color) {
+                $q->whereHas('variants', function ($variantQuery) use ($color) {
+                    $variantQuery->whereJsonContains('attribute_values', [['attribute' => 'Color', 'value' => $color]]);
+                });
             });
 
         $totalProducts = (clone $query)->count();
 
         if ($orderBy !== null) {
-            // Extract the sorting field and direction from the input
             [$field, $direction] = match ($orderBy) {
                 'priceDesc' => ['price', 'desc'],
                 'priceAsc' => ['price', 'asc'],
                 'bestSeller' => ['units_sold', 'desc'],
                 'rating' => ['average_rating', 'desc'],
-                'discount_percent' => ['discountPercent', 'desc'],
+                'discount_percent' => ['discount_percent', 'desc'],
                 default => ['created_at', 'desc'],
             };
 
-            // Apply the ordering to the query
             $query->orderBy($field, $direction);
         }
 

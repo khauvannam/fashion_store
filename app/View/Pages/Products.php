@@ -15,7 +15,7 @@ use Livewire\Component;
 class Products extends Component
 {
     // Models
-    public Category $category;
+    public array $category;
     public array $products = [];
     public int $limit = 12;
     public int $totalItems = 0;
@@ -29,29 +29,43 @@ class Products extends Component
 
     public int $totalPages = 0;
 
-    public array $filters = ['sortData' => '', 'sortSize' => '', 'price' => 0];
+    public array $filters = ['sortData' => '', 'sortSize' => '', 'price' => 0, 'sortColor' => ''];
 
     protected function queryString(): array
     {
         return [
             'id' => '',
-            'collection' => ['except' => ''],
             'search' => ['except' => ''],
         ];
     }
 
-    public function updatedCollection(): void
-    {
-        $this->loadProducts(app(ProductService::class));
-    }
 
     public function updatedSearch(): void
     {
         $this->loadProducts(app(ProductService::class));
     }
 
+
+    #[On('updated-collection')]
+    public function updateCollection(string $collection): void
+    {
+        $this->collection = $collection;
+        $this->loadProducts(app(ProductService::class));
+    }
+
+    #[On('updated-filters')]
+    public function updateFilters(array $filters): void
+    {
+        foreach ($filters as $key => $value) {
+            if (array_key_exists($key, $this->filters)) {
+                $this->filters[$key] = $value;
+            }
+        }
+        $this->loadProducts(app(ProductService::class));
+    }
+
     #[On('updated-current-page')]
-    public function updateCurrentPage($currentPage): void
+    public function updateCurrentPage(string|int $currentPage): void
     {
         if (empty($currentPage) || !is_numeric($currentPage) || $currentPage < 1 || $this->totalPages < $currentPage) {
             $this->currentPage = 1;
@@ -65,12 +79,14 @@ class Products extends Component
     public function mount(CategoryService $categoryService, ProductService $productService): void
     {
         $this->loadProducts($productService);
+
         $this->getPagination();
         if ($this->id) {
-            $this->category = $categoryService->show((int)$this->id);
+            $this->category = $categoryService->show((int)$this->id)->toArray();
             return;
         }
-        $this->category = Category::default();
+
+        $this->category = Category::default()->toArray();
     }
 
 
@@ -81,10 +97,11 @@ class Products extends Component
             $this->collection,
             $this->search,
             $this->filters['sortData'],
-            (float)$this->filters['sortSize'],
+            (float)$this->filters['price'],
+            $this->filters['sortSize'],
+            $this->filters['sortColor'],
             offset: ($this->currentPage - 1) * $this->limit
         );
-
         if ($this->totalItems > 0) {
             $this->totalPages = (int)ceil($this->totalItems / $this->limit);
         }
