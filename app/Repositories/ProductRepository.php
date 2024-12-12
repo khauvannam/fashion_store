@@ -99,7 +99,12 @@ class ProductRepository
                 });
             });
 
-        $totalProducts = (clone $query)->count();
+        $totalProducts = (clone $query)->count('id');
+
+        if ($totalProducts === 0) {
+            return [0, [], $limit];
+        }
+
 
         if ($orderBy !== null) {
             [$field, $direction] = match ($orderBy) {
@@ -114,15 +119,18 @@ class ProductRepository
             $query->orderBy($field, $direction);
         }
 
+        $offset = max(0, $offset); // Ensure offset is not negative
+        $limit = max(1, min($limit, 100)); // Ensure limit is between 1 and 100
+
         $products = $query
             ->skip($offset)
             ->take($limit)
             ->get();
 
         return [
-            0 => $totalProducts,
-            1 => $products->toArray(),
-            2 => $limit
+            $totalProducts,
+            $products->toArray(),
+            $limit
         ];
     }
 }

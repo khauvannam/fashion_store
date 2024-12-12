@@ -1,13 +1,13 @@
 <div class="">
-    {{$id}}
     <h1>{{ $product['name'] }}</h1>
     <p>{{ $product['description'] }}</p>
 
     <div class="product-image">
-        @if ($currentVariant && isset($currentVariant['image_url']))
-            <img src="{{ $currentVariant['image_url'] }}" alt="{{ $product['name'] }}" class="img-fluid">
+        @if ($currentVariant['image_override'] !== null)
+            <img src="{{ $currentVariant['image_override'] }}" alt="{{ $product['name'] }}" class="img-fluid">
         @else
-            <img src="{{ $product['image_urls'][0] ?? 'default-image.jpg' }}" alt="{{ $product['name'] }}"
+            <img onerror="this.src='https://picsum.photos/640/480?image=625'" src="{{ $product['image'] }}"
+                 alt="{{ $product['name'] }}"
                  class="img-fluid">
         @endif
     </div>
@@ -35,6 +35,15 @@
         @endforeach
     </div>
 
+    <div class="flex">
+        @foreach($product['variants'] as $variant)
+            @if($variant['image_override'] !== null)
+                <div class="cursor-pointer" wire:click="updateVariantThroughImage('{{$variant['image_override']}}')">
+                    <img src="{{$variant['image_override']}}" alt="" class="w-[100px]">
+                </div>
+            @endif
+        @endforeach
+    </div>
 
     <div class="product-info">
         @if ($currentVariant)

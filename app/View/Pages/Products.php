@@ -62,6 +62,7 @@ class Products extends Component
             }
         }
         $this->loadProducts(app(ProductService::class));
+        $this->getPagination();
     }
 
     #[On('updated-current-page')]
@@ -85,7 +86,6 @@ class Products extends Component
             $this->category = $categoryService->show((int)$this->id)->toArray();
             return;
         }
-
         $this->category = Category::default()->toArray();
     }
 
@@ -104,7 +104,9 @@ class Products extends Component
         );
         if ($this->totalItems > 0) {
             $this->totalPages = (int)ceil($this->totalItems / $this->limit);
+            return;
         }
+        $this->totalPages = 0;
     }
 
     public function getPagination(): void

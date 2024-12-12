@@ -76,7 +76,7 @@ new class extends Component {
     </div>
 
     <!-- Price Filter -->
-    <div x-data="{ price: @entangle('filters.price') }" class="border border-gray-700 p-4 rounded-lg">
+    <div class="border border-gray-700 p-4 rounded-lg">
         <h1 class="text-sm font-medium">Price</h1>
         <div class="flex items-center justify-between mt-4">
             <input
@@ -85,12 +85,14 @@ new class extends Component {
                 max="10000"
                 step="1"
                 class="w-full"
-                x-model="price"
-                wire:change="$dispatch('updated-filters', { filters: { price: price } })"
+                wire:model="filters.price"
+                wire:input="$dispatch('updated-filters', { filters: { price: $event.target.value } })"
             >
         </div>
         <div class="flex justify-between text-sm mt-2">
-            <span x-text="`${price} $`"></span>
+            <span>
+                {{$filters['price']}}$
+            </span>
             <span>10000$</span>
         </div>
     </div>

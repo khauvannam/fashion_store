@@ -58,6 +58,15 @@ class Detail extends Component
         }
     }
 
+    public function updateVariantThroughImage(string $imageUrl): void
+    {
+        foreach ($this->product['variants'] as $variant) {
+            if ($variant['image_override'] === $imageUrl) {
+                $this->currentVariant = $variant;
+            }
+        }
+    }
+
     public function updateVariantThoroughAttribute(string $attribute, string $value): void
     {
         $this->selectedAttributes[$attribute] = $value;
