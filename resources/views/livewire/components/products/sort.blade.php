@@ -42,7 +42,6 @@ new class extends Component {
         </div>
     </div>
 
-
     <!-- Color Filter -->
     <div x-data="{ showColors: false }" class="border border-gray-700 p-4 rounded-lg">
         <div class="flex justify-between items-center">
