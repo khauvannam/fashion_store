@@ -2,10 +2,14 @@
 
 
 use App\Models\Category;
+use Livewire\Attributes\Reactive;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public Category $category;
+    public array $category;
+
+    #[Reactive]
+    public string $collection = '';
 };
 ?>
 <div class="flex flex-col items-center justify-center py-10 bg-white">
@@ -18,10 +22,10 @@ new class extends Component {
 
     <!-- Button Group -->
     <div class="flex space-x-4 mt-6">
-        @foreach( $category->collections as $item)
+        @foreach( $category['collections'] as $item)
             <x-button-active
-                :href="route('products', ['id' => $category->id, 'collection' => $item])"
-                :active="request()->routeIs('products') && request('collection') == $item"
+                wire:click="$dispatch('changeCollection',{ collection: '{{ $item }}' } )"
+                :active="$collection == $item"
                 class="border border-gray-400 w-[150px]"
                 wire:navigate>
                 <p class="capitalize text-center">{{ $item }}</p>

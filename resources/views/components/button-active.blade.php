@@ -6,6 +6,6 @@
                 : 'px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium leading-5 rounded-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition duration-150 ease-in-out';
 @endphp
 
-<a  {{ $attributes->merge(['class' => $classes]) }}>
+<button {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
-</a>
+</button>

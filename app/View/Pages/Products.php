@@ -15,7 +15,7 @@ use Livewire\Component;
 class Products extends Component
 {
     // Models
-    public Category $category;
+    public array $category;
     public array $products = [];
     public int $limit = 12;
     public int $totalItems = 0;
@@ -35,23 +35,26 @@ class Products extends Component
     {
         return [
             'id' => '',
-            'collection' => ['except' => ''],
             'search' => ['except' => ''],
         ];
     }
 
-    public function updatedCollection(): void
-    {
-        $this->loadProducts(app(ProductService::class));
-    }
 
     public function updatedSearch(): void
     {
         $this->loadProducts(app(ProductService::class));
     }
 
+
+    #[On('change-collection')]
+    public function updateCollection(string $collection): void
+    {
+        $this->collection = $collection;
+        $this->loadProducts(app(ProductService::class));
+    }
+
     #[On('updated-current-page')]
-    public function updateCurrentPage($currentPage): void
+    public function updateCurrentPage(string|int $currentPage): void
     {
         if (empty($currentPage) || !is_numeric($currentPage) || $currentPage < 1 || $this->totalPages < $currentPage) {
             $this->currentPage = 1;
@@ -65,12 +68,14 @@ class Products extends Component
     public function mount(CategoryService $categoryService, ProductService $productService): void
     {
         $this->loadProducts($productService);
+
         $this->getPagination();
         if ($this->id) {
-            $this->category = $categoryService->show((int)$this->id);
+            $this->category = $categoryService->show((int)$this->id)->toArray();
             return;
         }
-        $this->category = Category::default();
+
+        $this->category = Category::default()->toArray();
     }
 
 

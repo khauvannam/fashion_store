@@ -70,7 +70,7 @@ class ProductRepository
         ?string $search,           // Search keyword, nullable
         ?string $orderBy,          // Order criteria, nullable
         ?string $priceRange,       // Price range, nullable
-        bool    $bestSeller,          // Indicates if filtering for best sellers
+        bool    $bestSeller,          // Indicates if filtering for bestsellers
         int     $offset,               // Offset for pagination
         int     $limit                 // Items per page
     ): array
@@ -80,7 +80,7 @@ class ProductRepository
             ->when($collection, fn($q) => $q->where('collection', $collection))
             ->when($search, fn($q) => $q->where('name', 'like', '%' . $search . '%'))
             ->when($bestSeller, fn($q) => $q->where('units_sold', '>', 1000))
-            ->when(function ($q, $priceRange) {
+            ->when($priceRange, function ($q) use ($priceRange) {
                 // Extract min price from the priceRange string
                 $minPrice = (float)$priceRange;
 
@@ -90,7 +90,7 @@ class ProductRepository
                 // Add where conditions for price range
                 $q->when($minPrice !== 0.0, fn($q) => $q->where('price', '>=', $minPrice))
                     ->when($maxPrice !== '', fn($q) => $q->where('price', '<=', $maxPrice));
-            }, callback: $priceRange);
+            });
 
         $totalProducts = (clone $query)->count();
 
