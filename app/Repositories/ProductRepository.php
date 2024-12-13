@@ -106,7 +106,7 @@ class ProductRepository
         }
 
 
-        if ($orderBy !== null) {
+        if (!empty($orderBy) && $orderBy !== '') {
             [$field, $direction] = match ($orderBy) {
                 'priceDesc' => ['price', 'desc'],
                 'priceAsc' => ['price', 'asc'],

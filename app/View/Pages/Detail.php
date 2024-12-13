@@ -24,7 +24,7 @@ class Detail extends Component
 
     protected function queryString(): array
     {
-        return ['id'];
+        return ['id' => ['except' => '']];
     }
 
     public function mount(ProductService $service): void

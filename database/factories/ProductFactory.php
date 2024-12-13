@@ -47,7 +47,7 @@ class ProductFactory extends Factory
                 );
 
                 // Create a ProductVariant for each combination
-                ProductVariant::factory()->create([
+                ProductVariant::create([
                     'product_id' => $product->id,
                     'attribute_values' => $attributeValues,
                     'price_override' => fake()->randomFloat(2, 500, 5000),
@@ -98,7 +98,7 @@ class ProductFactory extends Factory
         $reviewCount = fake()->numberBetween(1, 10);
 
         for ($i = 0; $i < $reviewCount; $i++) {
-            ProductReview::factory()->create([
+            ProductReview::create([
                 'product_id' => $product->id,
                 'rating' => fake()->numberBetween(1, 5), // Random rating between 1 and 5
                 'review' => fake()->sentence(10), // Random review content

@@ -29,7 +29,7 @@ class Products extends Component
 
     public int $totalPages = 0;
 
-    public array $filters = ['sortData' => '', 'sortSize' => '', 'price' => 0, 'sortColor' => ''];
+    public array $filters = ['sortData' => null, 'sortSize' => null, 'price' => 0, 'sortColor' => 0];
 
     protected function queryString(): array
     {

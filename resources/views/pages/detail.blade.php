@@ -12,7 +12,6 @@
         @endif
     </div>
 
-
     <div class="product-attributes">
         @foreach ($variants as $attribute => $values)
             <div class="attribute-group">
