@@ -22,7 +22,7 @@
                          bis_skin_checked="1">
                         <div class="max-w-md text-center" bis_skin_checked="1">
                             <h2 class="mb-8 font-extrabold text-9xl dark:text-gray-400">
-                                <span class="sr-only">Error</span>404
+                                <span class="sr-only">Error</span>OOPS
                             </h2>
                             <p class="text-2xl font-semibold md:text-3xl">Sorry, we couldn't find any products yet.</p>
                         </div>
@@ -35,7 +35,6 @@
     {{-- Pagination --}}
 
     @if($totalPages > 1)
-
         <livewire:components.reusable.pagination :$totalPages :$pagination :$currentPage/>
     @endif
 

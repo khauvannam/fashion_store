@@ -19,7 +19,7 @@ new class extends Component {
     <div class="product-info p-4">
         <h3 class="product-title text-lg font-semibold text-gray-800 truncate">{{ $product['name'] }}</h3>
         <p class="product-description text-sm text-gray-600 mt-2 line-clamp-1">
-            {{ $product['description'] }}
+            {{ $product['short_description'] }}
         </p>
         <p class="text-base text-black mt-3">Sold: {{ $product['units_sold']}}</p>
         <p class="product-price text-lg font-bold text-black mt-4">

@@ -49,7 +49,7 @@ new class extends Component {
             </nav>
 
             <!-- Logo -->
-            <a href="/" class="text-xl md:text-2xl font-bold text-black">
+            <a href="/" class="text-xl md:text-2xl font-bold text-black" wire:navigate>
                 TULOS
             </a>
             <!-- Search Input -->
@@ -115,7 +115,8 @@ new class extends Component {
             <div class="container mx-auto flex flex-col">
                 @foreach($categories as $category)
                     <a href="{{ route('products', ['id' => $category['id']]) }}"
-                       class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900">{{$category['name']}}</a>
+                       class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900"
+                       wire:navigate>{{$category['name']}}</a>
                 @endforeach
             </div>
         </nav>

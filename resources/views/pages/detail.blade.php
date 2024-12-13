@@ -1,6 +1,6 @@
 <div class="p-4 space-y-6 ">
     <div class="flex flex-col md:flex-row gap-8 my-[150px]">
-        <!-- Hình ảnh sản phẩm -->
+
         <div class="product-image flex-shrink-0 w-full md:w-1/2">
             @if ($currentVariant['image_override'] !== null)
                 <img onerror="this.src='https://picsum.photos/640/480?image=625'"
@@ -14,7 +14,6 @@
                      class="img-fluid w-full h-auto object-cover rounded">
             @endif
 
-            <!-- Biến thể hình ảnh -->
             <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-4 mt-4">
                 @foreach($product['variants'] as $variant)
                     @if($variant['image_override'] !== null)
@@ -30,7 +29,6 @@
             </div>
         </div>
 
-        <!-- Nội dung sản phẩm -->
         <div class="product-content w-full md:w-1/2 space-y-6">
             <h1 class="text-2xl font-bold text-gray-800">{{ $product['name'] }}</h1>
             <p class="text-gray-600">{{ $product['description'] }}</p>
@@ -62,8 +60,15 @@
                 @endforeach
             </div>
 
-            <div x-data="{ quantity: 1, price: {{ $currentVariant['price_override'] ?? $product['price'] }} }" class="product-content w-full md:w-1/2 space-y-6">
-                <!-- Input chọn số lượng -->
+
+            <div
+                x-data="{
+        quantity: 1,
+        price: {{ $currentVariant['price_override'] ?? $product['price'] }},
+        discount: {{ $product['discount_percent'] }} }"
+                class="product-content w-full md:w-1/2 space-y-6">
+
+                <!-- Quantity Selector -->
                 <div class="quantity-selector flex items-center space-x-4">
                     <label for="quantity" class="text-gray-700 font-semibold">Số lượng:</label>
                     <input id="quantity"
@@ -74,12 +79,13 @@
                            class="w-16 px-2 py-1 border border-gray-300 rounded focus:ring focus:ring-blue-200">
                 </div>
 
-                <!-- Giá -->
+                <!-- Product Info -->
                 <div class="product-info space-y-2">
                     @if ($currentVariant)
                         <p class="text-gray-700">
                             <strong class="font-semibold">Price:</strong>
-                            <span x-text="(price * quantity).toFixed(2)"></span> <!-- Hiển thị giá thay đổi -->
+                            <span x-text="('$' + ((price * (1 - discount / 100)) * quantity).toFixed(2))"></span>
+                            <!-- Interactive price display -->
                         </p>
                         <p class="text-gray-700">
                             <strong class="font-semibold">Quantity available:</strong> {{ $currentVariant['quantity'] }}
@@ -89,8 +95,6 @@
             </div>
 
 
-
-            <!-- Nút hành động -->
             <div class="action-buttons flex space-x-4 mt-6">
                 <button
                     class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow transition">
