@@ -97,6 +97,24 @@ class Detail extends Component
         $this->currentVariant = null; // No matching variant
     }
 
+//    public function addToCart(): void
+//    {
+//        if (auth()->check()) {
+//            // User is logged in; handle add-to-cart logic via backend
+//            if ($this->currentVariant) {
+//                session()->push('cart.items', [
+//                    'product_id' => $this->product['id'],
+//                    'variant_id' => $this->currentVariant['id'],
+//                    'quantity' => 1,
+//                ]);
+//        } else {
+//            // Dispatch to cart.js with product and variant details
+//            $this->dispatchBrowserEvent('addToCart', [
+//                'product_id' => $this->product['id'],
+//                'variant_id' => $this->currentVariant['id'] ?? null,
+//            ]);
+//        }
+//    }
     #[Layout('layouts.app')]
     public function render(): View|Factory|Application
     {
