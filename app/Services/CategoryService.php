@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Category\Category;
+use App\Models\Categories\Category;
 use App\Repositories\CategoryRepository;
 
 class CategoryService

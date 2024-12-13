@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category\Category;
+use App\Models\Categories\Category;
 use App\Models\Products\Product;
 use App\Models\Users\User;
 use Illuminate\Database\Seeder;

@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Products;
 
-use App\Models\Category\Category;
+use App\Models\Categories\Category;
 use App\Models\Products\Product;
 use App\Models\Products\ProductReview;
 use App\Models\Products\ProductVariant;

@@ -2,7 +2,7 @@
 
 namespace App\Models\Products;
 
-use App\Models\Category\Category;
+use App\Models\Categories\Category;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

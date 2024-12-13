@@ -1,12 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Products;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ProductVariantFactory extends Factory
+class ProductReviewFactory extends Factory
 {
-
     public function definition(): array
     {
         return [];

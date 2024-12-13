@@ -2,11 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Models\Category\Category;
+use App\Models\Categories\Category;
+use LaravelIdea\Helper\App\Models\Category\_IH_Category_C;
 
 class CategoryRepository
 {
-    public function show($id): Category
+    public function show($id): Category|array|_IH_Category_C
     {
         return Category::findOrFail($id);
     }
