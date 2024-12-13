@@ -2,19 +2,24 @@
 
 namespace App\Repositories;
 
-use App\Models\Product;
+use App\Models\Products\Product;
 
 class ProductRepository
 {
 
     public function show(int $id): ?Product
     {
-
         return Product::with('variants')->findOrFail($id);
     }
 
     public function store(array $data): bool
     {
+        $name = $data['name'];
+
+        if (product::where('name', $name)->exists()) {
+            return false;
+        }
+
         $product = new Product();
         $product->fill($data);
         return $product->save();
@@ -81,7 +86,10 @@ class ProductRepository
         $query = Product::query()
             ->when($categoryId, fn($q) => $q->where('category_id', $categoryId))
             ->when($collection, fn($q) => $q->where('collection', $collection))
-            ->when($search, fn($q) => $q->where('name', 'like', '%' . $search . '%'))
+            ->when($search, fn($q) => $q->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('sku', 'like', '%' . $search . '%');
+            }))
             ->when($bestSeller, fn($q) => $q->where('units_sold', '>', 1000))
             ->when($priceRange, function ($q) use ($priceRange) {
                 [$minPrice, $maxPrice] = explode('-', $priceRange) + [0, null];

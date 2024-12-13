@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();  // Automatically creates an auto-incrementing 'id' field
-            $table->foreignId('product_id')->constrained('products');  // 'product_id' field, references products
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');  // 'product_id' field, references products
             $table->decimal('price_override', 10, 2)->nullable();  // 'price_override' field, nullable
             $table->string('image_override')->nullable();
             $table->integer('quantity')->default(0);  // 'quantity' field with default 0

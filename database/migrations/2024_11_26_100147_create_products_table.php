@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();  // Automatically creates an auto-incrementing 'id' field
-            $table->string('name');  // 'name' field
+            $table->string('name')->unique();  // 'name' field
             $table->decimal('price', 10);  // 'price' field, 10 digits with 2 decimal places
             $table->decimal('discount_percent', 5)->nullable();  // 'discountPercent' field, nullable
             $table->integer('units_sold')->default(0);  // 'unitsSold' field, default value of 0
@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->text('size_info')->nullable();
             $table->text('shipping_info')->nullable();
             $table->string('image');
+            $table->string('sku', 40)->unique(); // 50 characters is a reasonable max length
             $table->string('collection')->nullable();  // 'name' field
             $table->foreignId('category_id')->constrained('categories');  // 'category_id' field, references categories
             $table->timestamps();  // 'created_at' and 'updated_at' timestamps
@@ -28,6 +29,7 @@ return new class extends Migration {
             // index
             $table->index('name');
             $table->index('collection');
+            $table->index('sku');
             $table->index('discount_percent');
         });
 

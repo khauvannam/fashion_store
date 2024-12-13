@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\ProductReview;
-use App\Models\ProductVariant;
-use App\Models\User;
+use App\Models\Category\Category;
+use App\Models\Products\Product;
+use App\Models\Products\ProductReview;
+use App\Models\Products\ProductVariant;
+use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 
@@ -18,7 +18,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => $this->faker->unique()->name(),
             'price' => $this->faker->randomFloat(2, 500, 5000),
             'discount_percent' => $this->faker->numberBetween(0, 50),
             'description' => $this->faker->sentence(100),

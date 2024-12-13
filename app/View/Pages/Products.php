@@ -2,7 +2,7 @@
 
 namespace App\View\Pages;
 
-use App\Models\Category;
+use App\Models\Category\Category;
 use App\Services\CategoryService;
 use App\Services\ProductService;
 use Illuminate\Contracts\View\Factory;

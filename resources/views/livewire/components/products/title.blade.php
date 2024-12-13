@@ -1,7 +1,6 @@
 <?php
 
 
-use App\Models\Category;
 use Livewire\Attributes\Reactive;
 use Livewire\Volt\Component;
 

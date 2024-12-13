@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Products;
 
 use App\ValueObject\Attribute;
 use App\ValueObject\AttributeValue;
@@ -13,7 +13,6 @@ class ProductVariant extends Model
     use HasFactory;
 
     protected $fillable = ['product_id', 'image_override', 'price_override', 'quantity', 'attribute_values'];
-
 
     protected $casts = [
         'attribute_values' => 'array'
