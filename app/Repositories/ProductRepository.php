@@ -9,7 +9,7 @@ class ProductRepository
 
     public function show(int $id): ?Product
     {
-        return Product::with('variants')->findOrFail($id);
+        return Product::with('variants', 'reviews')->findOrFail($id);
     }
 
     public function store(array $data): bool

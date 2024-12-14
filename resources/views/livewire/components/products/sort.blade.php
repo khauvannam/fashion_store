@@ -27,12 +27,12 @@ new class extends Component {
 <div class="bg-white text-black w-80 p-6 rounded-lg space-y-4">
     <!-- Sort Options -->
 
-    <div x-data="{ sortData: null }" class="border-2 border-gray-700 p-4 rounded-lg">
+    <div x-data="{ sortData: null, visible: false }" class="border-2 border-gray-700 p-4 rounded-lg">
         <div class="flex justify-between items-center">
             <h1 class="text-sm font-medium">Sắp xếp theo</h1>
-            <button @click="sortData = !sortData" class="text-lg font-bold">+</button>
+            <button @click="visible = !visible" class="text-lg font-bold">+</button>
         </div>
-        <div x-show="sortData !== null " class="mt-2 space-y-2 text-sm" x-transition>
+        <div x-show="visible" class="mt-2 space-y-2 text-sm" x-transition>
             @foreach (self::DATA as $key => $label)
                 <label
                     class="flex items-center space-x-2 py-1 rounded-lg cursor-pointer">

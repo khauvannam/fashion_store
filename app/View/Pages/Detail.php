@@ -15,6 +15,8 @@ class Detail extends Component
     public array $product = [];
     public array $variants = [];
     public array $selectedAttributes = [];
+
+    public array $reviews = [];
     public ?array $currentVariant = null;
 
     protected array $queryString = ['id'];
@@ -33,6 +35,7 @@ class Detail extends Component
         $this->processVariants();
         $this->initializeDefaultAttributes();
         $this->setCurrentVariant();
+        $this->reviews = $this->product['reviews'];
     }
 
     private function processVariants(): void
