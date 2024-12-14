@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->string('image');
             $table->string('sku', 40)->unique(); // 50 characters is a reasonable max length
             $table->string('collection')->nullable();  // 'name' field
+            $table->float('avg_rating')->nullable()->default(null);
             $table->foreignId('category_id')->constrained('categories');  // 'category_id' field, references categories
             $table->timestamps();  // 'created_at' and 'updated_at' timestamps
 
