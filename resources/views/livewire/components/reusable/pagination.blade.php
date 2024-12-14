@@ -32,8 +32,8 @@ new class extends Component {
         <button
             @click="scrollToId('product-container')"
             wire:click="$dispatch('updated-current-page', { currentPage: {{ $pag <= 0 ? 1 : $pag }} })"
-            class="px-4 py-2 text-gray-800 rounded-md {{ $pag == $currentPage ? 'bg-black text-white' : ' bg-gray-200 hover:bg-gray-300'  }} "
-            {{ $pag < 0 ? 'disabled' : '' }}>
+            class="px-4 py-2 text-gray-800 rounded-md {{ $pag == $currentPage ? 'bg-black text-white' : ' bg-gray-200 hover:bg-gray-300' }} "
+            {{ $pag < 0 || $pag === $currentPage ? 'disabled' : '' }}>
             {{ $pag > 0 ? $pag : '...' }}
         </button>
     @endforeach

@@ -86,7 +86,7 @@ new class extends Component {
             @foreach (self::COLOR as $key => $label)
                 <div
                     wire:click='$dispatch("updated-filters", { filters: { sortColor: "{{ $key }}" } })'
-                    class="w-6 h-6 {{ $label === 'black' || $label === 'white' ? 'bg-' . $label : 'bg-[' . $label . ']' }} rounded-full border border-gray-700 cursor-pointer
+                    class="w-6 h-6 {{ $label === 'black' || $label === 'white' ? 'bg-' . $label : 'bg-[#' . ltrim($label, '#') . ']' }} rounded-full border border-gray-700 cursor-pointer
             {{ $filters['sortColor'] === $key ? 'border-2' : '' }}">
                 </div>
             @endforeach
