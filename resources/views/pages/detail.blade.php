@@ -100,8 +100,8 @@
                     class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded shadow transition">
                     Mua ngay
                 </button>
-                <button
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow transition">
+                <button wire:click="addToCart"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow transition">
                     Thêm vào giỏ
                 </button>
             </div>
@@ -109,3 +109,36 @@
 
     </div>
 </div>
+
+
+<script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('addToCart', ([event]) => {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Check if the item already exists in the cart
+            let existingItemIndex = cart.findIndex(item => item.id === event.id && item.variant === event.variant);
+
+            console.log(existingItemIndex);
+            if (existingItemIndex !== -1) {
+                // If found, increment the quantity
+                cart[existingItemIndex].quantity += event.quantity;
+
+            } else {
+                // If not found, add a new item to the cart
+                cart.push({
+                    id: event.id,
+                    name: event.name,
+                    variant: event.variant,
+                    quantity: event.quantity,
+                    price: event.price
+                });
+            }
+
+            // Save the updated cart back to local storage
+            let cartJson = JSON.stringify(cart);
+            localStorage.setItem('cart', JSON.stringify(cart));
+        });
+    });
+</script>
+
