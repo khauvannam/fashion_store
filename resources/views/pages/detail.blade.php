@@ -119,7 +119,6 @@
             // Check if the item already exists in the cart
             let existingItemIndex = cart.findIndex(item => item.id === event.id && item.variant === event.variant);
 
-            console.log(existingItemIndex);
             if (existingItemIndex !== -1) {
                 // If found, increment the quantity
                 cart[existingItemIndex].quantity += event.quantity;
@@ -136,7 +135,6 @@
             }
 
             // Save the updated cart back to local storage
-            let cartJson = JSON.stringify(cart);
             localStorage.setItem('cart', JSON.stringify(cart));
         });
     });

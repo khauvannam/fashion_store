@@ -20,19 +20,19 @@ new class extends Component {
         'XL' => 'Large',
         '2XL' => 'Extra Large',
     ];
-    public const COLOR = ['#000000' => 'black', '#ffffff' => 'white', '#00205c' => '#00205c'];
+    public const COLOR = ['#000000', '#ffffff', '#00205c'];
 };
 ?>
 
 <div class="bg-white text-black w-80 p-6 rounded-lg space-y-4">
     <!-- Sort Options -->
 
-    <div x-data="{ sortData: null }" class="border-2 border-gray-700 p-4 rounded-lg">
+    <div x-data="{ visible: false, sortData: '' }" class="border-2 border-gray-700 p-4 rounded-lg">
         <div class="flex justify-between items-center">
             <h1 class="text-sm font-medium">Sắp xếp theo</h1>
-            <button @click="sortData = !sortData" class="text-lg font-bold">+</button>
+            <button @click="visible = ! visible " class="text-lg font-bold">+</button>
         </div>
-        <div x-show="sortData !== null " class="mt-2 space-y-2 text-sm" x-transition>
+        <div x-show="visible" class="mt-2 space-y-2 text-sm" x-transition>
             @foreach (self::DATA as $key => $label)
                 <label
                     class="flex items-center space-x-2 py-1 rounded-lg cursor-pointer">
@@ -83,35 +83,36 @@ new class extends Component {
             <button @click="showColors =  ! showColors" class="text-lg font-bold">+</button>
         </div>
         <div x-show="showColors" class="mt-2 flex gap-2" x-transition>
-            @foreach (self::COLOR as $key => $label)
+            @foreach (self::COLOR as $color)
                 <div
-                    wire:click='$dispatch("updated-filters", { filters: { sortColor: "{{ $key }}" } })'
-                    class="w-6 h-6 {{ $label === 'black' || $label === 'white' ? 'bg-' . $label : 'bg-[#' . ltrim($label, '#') . ']' }} rounded-full border border-gray-700 cursor-pointer
-            {{ $filters['sortColor'] === $key ? 'border-2' : '' }}">
-                </div>
-            @endforeach
+                    wire:click='$dispatch("updated-filters", { filters: { sortColor: "{{ $color }}" } })'
+                    class="w-6 h-6 rounded-full border border-gray-700 cursor-pointer"
+                    style=" background-color: {{ e($color) }};"
+                {{ $filters['sortColor'] === $color ? 'border-2' : '' }}">
         </div>
+        @endforeach
     </div>
+</div>
 
-    <!-- Price Filter -->
-    <div class="border-2 border-gray-700 p-4 rounded-lg">
-        <h1 class="text-sm font-medium">Price</h1>
-        <div class="flex items-center justify-between mt-4">
-            <input
-                type="range"
-                min="0"
-                max="10000"
-                step="1"
-                class="w-full"
-                wire:model="filters.price"
-                wire:input="$dispatch('updated-filters', { filters: { price: $event.target.value } })"
-            >
-        </div>
-        <div class="flex justify-between text-sm mt-2">
+<!-- Price Filter -->
+<div class="border-2 border-gray-700 p-4 rounded-lg">
+    <h1 class="text-sm font-medium">Price</h1>
+    <div class="flex items-center justify-between mt-4">
+        <input
+            type="range"
+            min="0"
+            max="10000"
+            step="1"
+            class="w-full"
+            wire:model="filters.price"
+            wire:input="$dispatch('updated-filters', { filters: { price: $event.target.value } })"
+        >
+    </div>
+    <div class="flex justify-between text-sm mt-2">
             <span>
                 {{$filters['price']}}$
             </span>
-            <span>10000$</span>
-        </div>
+        <span>10000$</span>
     </div>
+</div>
 </div>
