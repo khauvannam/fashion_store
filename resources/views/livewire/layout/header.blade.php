@@ -38,12 +38,14 @@ new class extends Component {
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-6 w-5/12">
                 @foreach($categories as $category)
-                    <x-nav-link
-                        :href="route('products', ['id' => $category['id']])"
-                        :active="request()->routeIs('products') && request('id') == $category['id']"
-                        class="text-sm font-medium text-gray-600 hover:text-gray-900">
-                        {{ $category['name'] }}
-                    </x-nav-link>
+                    <div class="" wire:key="menu_{{ $category['id'] }}">
+                        <x-nav-link
+                            :href="route('products', ['id' => $category['id']])"
+                            :active="request()->routeIs('products') && request('id') == $category['id']"
+                            class="text-sm font-medium text-gray-600 hover:text-gray-900">
+                            {{ $category['name'] }}
+                        </x-nav-link>
+                    </div>
 
                 @endforeach
             </nav>
@@ -114,9 +116,11 @@ new class extends Component {
              x-cloak>
             <div class="container mx-auto flex flex-col">
                 @foreach($categories as $category)
-                    <a href="{{ route('products', ['id' => $category['id']]) }}"
-                       class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900"
-                       wire:navigate>{{$category['name']}}</a>
+                    <div class="" wire:key="mobile_{{ $category['id'] }}">
+                        <a href="{{ route('products', ['id' => $category['id']]) }}"
+                           class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900"
+                           wire:navigate>{{$category['name']}}</a>
+                    </div>
                 @endforeach
             </div>
         </nav>

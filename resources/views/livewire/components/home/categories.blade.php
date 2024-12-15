@@ -8,7 +8,7 @@ new class extends Component {
 
     public function mount(CategoryService $service): void
     {
-        $this->categories = $service->showAll(3,0);
+        $this->categories = $service->showAll(3, 0);
     }
 }
 ?>
