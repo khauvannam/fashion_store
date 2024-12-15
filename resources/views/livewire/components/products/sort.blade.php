@@ -41,7 +41,6 @@ new class extends Component {
                         <span>{{ $label }}</span>
                     </label>
                 </div>
-                <div class=""></div>
             @endforeach
         </div>
     </div>

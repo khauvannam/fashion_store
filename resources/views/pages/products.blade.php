@@ -1,4 +1,4 @@
-<div class="container mx-auto pt-[150px]">
+<div class="container mx-auto pt-[150px]" id="product-container">
     <livewire:components.products.title :$category :$collection/>
     {{-- Product --}}
     <div class="flex justify-between my-10">
@@ -11,9 +11,7 @@
             @if(count($products) > 0)
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($products as $product)
-                        <div class="">
-                            <livewire:components.reusable.product-card :$product :key="'product_'. $product['id']"/>
-                        </div>
+                        <livewire:components.reusable.product-card :$product :key="'product_'. $product['id']"/>
                     @endforeach
                 </div>
             @else
