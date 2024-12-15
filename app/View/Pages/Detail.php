@@ -13,6 +13,7 @@ class Detail extends Component
 {
     public ?int $id;
     public array $product = [];
+    public array $productRelated = [];
     public array $variants = [];
     public array $selectedAttributes = [];
 
@@ -32,6 +33,7 @@ class Detail extends Component
     public function mount(ProductService $service): void
     {
         $this->product = $service->show($this->id)->toArray();
+        $this->productRelated = $service->showAllByFilter($this->product['category_id'], $this->product['collection']);
         $this->processVariants();
         $this->initializeDefaultAttributes();
         $this->setCurrentVariant();

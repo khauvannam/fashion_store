@@ -1,3 +1,4 @@
+
 <div class="p-4 space-y-6 ">
     <div class="flex mt-[150px] gap-3">
         <a href="/" class="hover:underline">Trang chủ</a>
@@ -47,7 +48,7 @@
                     @endif
                 </div>
                 <div class="flex items-center justify-between text-sm">
-                    <span><strong>SKU:</strong> {{$product['sku']}}</span>
+                    <span class="text-gray-500"><strong class="text-black">SKU:</strong> {{$product['sku']}}</span>
                     <span class="text-gray-500">Hiện tại còn <span
                             class="underline">{{$currentVariant['quantity']}}</span> sản phẩm</span>
                 </div>
@@ -58,7 +59,7 @@
                      <path stroke="currentColor" stroke-width="2"
                         d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z"/>
                     </svg>
-                    <p >{{count($reviews)}} Reviews</p>
+                    <p >({{count($reviews)}} Reviews)</p>
                 </span>
             </div>
             <div>
@@ -75,8 +76,8 @@
                                     <button
                                         wire:click="updateVariantThoroughAttribute('{{ $attribute }}', '{{ $value }}')"
                                         class="variant-button py-2 px-4 rounded border border-gray-300 text-sm
-                                       {{ $selectedAttributes[$attribute] === $value ? 'bg-blue-500 text-white border border-gray-800' : 'bg-white text-gray-700' }}
-                                       transition hover:bg-blue-400 hover:text-white"
+                                       {{ $selectedAttributes[$attribute] === $value ? 'bg-black text-white  border border-gray-800' : 'bg-white text-gray-700' }}
+                                       transition "
                                         @if ($attribute === 'Color')
                                             style="background-color: {{ $value }}; padding: 20px; border-radius: 50%"
                                         @endif>
@@ -91,7 +92,8 @@
                 @endforeach
             </div>
 
-            <div class="action-buttons flex mt-6">
+
+            <div class="action-buttons flex mt-5">
                 <button wire:click="addToCart"
                         class="bg-black hover:border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded shadow  w-full">
                     Thêm vào giỏ
@@ -99,30 +101,49 @@
                 </button>
             </div>
 
-            <div x-data="{description: false}" class="border border-gray-600">
+
+            <div x-data="{description: false}">
+                <hr class="border border-black"/>
                 <div class="flex justify-between items-center p-3">
                     <h1 class="text-sm font-medium text-gray-800">Mô tả sản phẩm</h1>
-                    <button @click="description = !description" class="text-lg font-bold">+</button>
+                    <button
+                        @click="description = !description"
+                        class="text-lg font-bold transition-transform transform"
+                        :class="description ? 'rotate-180' : 'rotate-0'"
+                        x-text="description ? '-' : '+'">
+                    </button>
                 </div>
                 <div x-show="description" class="p-2 text-sm text-gray-500" x-transition>
                     {{$product['description']}}
                 </div>
             </div>
 
-            <div x-data="{shipping: false}" class="border border-gray-600">
+            <div x-data="{shipping: false}">
+                <hr class="border border-black"/>
                 <div class="flex justify-between items-center p-3">
                     <h1 class="text-sm font-medium text-gray-800">Thông tin giao hàng</h1>
-                    <button @click="shipping = !shipping" class="text-lg font-bold">+</button>
+                    <button
+                        @click="shipping = !shipping"
+                        class="text-lg font-bold transition-transform transform"
+                        :class="shipping ? 'rotate-180' : 'rotate-0'"
+                        x-text="shipping ? '-' : '+'">
+                    </button>
                 </div>
                 <div x-show="shipping" class="p-2 text-sm text-gray-500" x-transition>
                     {{$product['shipping_info']}}
                 </div>
             </div>
 
-            <div x-data="{sizeInfo: false}" class="border border-gray-600">
+            <div x-data="{sizeInfo: false}" >
+                <hr class="border border-black"/>
                 <div class="flex justify-between items-center p-3">
                     <h1 class="text-sm font-medium text-gray-800">Thông tin size</h1>
-                    <button @click="sizeInfo = !sizeInfo" class="text-lg font-bold">+</button>
+                    <button
+                        @click="sizeInfo = !sizeInfo"
+                        class="text-lg font-bold transition-transform transform"
+                        :class="sizeInfo ? 'rotate-180' : 'rotate-0'"
+                        x-text="sizeInfo ? '-' : '+'">
+                    </button>
                 </div>
                 <div x-show="sizeInfo" class="p-2 text-sm text-gray-500" x-transition>
                     {{$product['size_info']}}
@@ -134,7 +155,34 @@
         </div>
 
     </div>
+    <div >
+        <h1 class="mt-[100px] mb-10 font-semibold text-lg uppercase">Sản phẩm liên quan:</h1>
+        @if(count($productRelated[1]) > 0)
+            <div class="grid grid-cols- sm:grid-cols-4 lg:grid-cols-6 gap-6 mb-[100px]">
+                @foreach ($productRelated[1] as $product)
+                    @if ((int)$product['id'] !== (int)$this->product['id'])
+                        <livewire:components.reusable.product-card :$product :key="$product['id']"/>
+                    @endif
+                @endforeach
+            </div>
+        @else
+            <section class="flex items-center h-full p-16 ">
+                <div class="container flex flex-col items-center justify-center px-5 mx-auto my-8"
+                     bis_skin_checked="1">
+                    <div class="max-w-md text-center" bis_skin_checked="1">
+                        <h2 class="mb-8 font-extrabold text-9xl dark:text-gray-400">
+                            <span class="sr-only">Error</span>OOPS
+                        </h2>
+                        <p class="text-2xl font-semibold md:text-3xl">Sorry, we couldn't find any products
+                            yet.</p>
+                    </div>
+                </div>
+            </section>
+
+        @endif
+    </div>
 </div>
+
 
 
 <script>
