@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Products\Product;
+use Schema;
 
 class ProductRepository
 {
@@ -115,16 +116,15 @@ class ProductRepository
 
 
         if (!empty($orderBy) && $orderBy !== '') {
-            [$field, $direction] = match ($orderBy) {
-                'priceDesc' => ['price', 'desc'],
-                'priceAsc' => ['price', 'asc'],
-                'bestSeller' => ['units_sold', 'desc'],
-                'rating' => ['average_rating', 'desc'],
-                'discount_percent' => ['discount_percent', 'desc'],
-                default => ['created_at', 'desc'],
-            };
 
-            $query->orderBy($field, $direction);
+            [$field, $direction] = explode('-', $orderBy) + [null, 'asc'];
+            $direction = $direction === 'asc' ? 'asc' : 'desc';
+            $model = $query->getModel();
+            $table = $model->getTable();
+            if (Schema::hasColumn($table, $field)) {
+                $query->orderBy($field, $direction);
+            }
+
         }
 
         $offset = max(0, $offset); // Ensure offset is not negative

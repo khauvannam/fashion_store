@@ -6,7 +6,7 @@
     <div class="flex justify-between my-10">
         <div class="w-3/12">
             <div class="">
-                <livewire:components.products.sort :$filters/>
+                <livewire:components.products.sort :$filters :$categoryFilter/>
             </div>
         </div>
         <div id="product-container" class="w-[70%]">

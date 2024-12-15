@@ -21,7 +21,7 @@ new class extends Component {
 
     <!-- Button Group -->
     <div class="flex space-x-4 mt-6">
-        @foreach( $category['collections'] as $item)
+        @foreach( $category['filter']['collections'] as $item)
             <x-button-active
                 wire:click="$dispatch('updated-collection',{ collection: '{{ $collection === $item ? '' : $item }}' } )"
                 :active="$collection == $item"

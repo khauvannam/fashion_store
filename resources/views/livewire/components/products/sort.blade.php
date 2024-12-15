@@ -7,20 +7,8 @@ new class extends Component {
     #[Reactive]
     public array $filters = ['sortData' => '', 'sortSize' => '', 'price' => 0, 'sortColor' => ''];
 
-    public const DATA = [
-        'new' => 'Sản phẩm mới',
-        'bestSeller' => 'Bán chạy nhất',
-        'priceDesc' => 'Giá giảm dần',
-        'priceAsc' => 'Giá tăng dần',
-    ];
+    public array $categoryFilter = [];
 
-    public const SIZE = [
-        'S' => 'Small',
-        'M' => 'Medium',
-        'XL' => 'Large',
-        '2XL' => 'Extra Large',
-    ];
-    public const COLOR = ['#000000', '#ffffff', '#00205c'];
 };
 ?>
 
@@ -33,7 +21,7 @@ new class extends Component {
             <button @click="visible = ! visible " class="text-lg font-bold">+</button>
         </div>
         <div x-show="visible" class="mt-2 space-y-2 text-sm" x-transition>
-            @foreach (self::DATA as $key => $label)
+            @foreach ($categoryFilter['sort_data'] as $key => $label)
                 <label
                     class="flex items-center space-x-2 py-1 rounded-lg cursor-pointer">
                     <input
@@ -63,7 +51,7 @@ new class extends Component {
             <button @click="sortSize = !sortSize" class="text-lg font-bold">+</button>
         </div>
         <div x-show="sortSize" class="mt-2 grid grid-cols-4 gap-2 text-sm text-center" x-transition>
-            @foreach (self::SIZE as $key => $label)
+            @foreach ($categoryFilter['sort_size'] as $key => $label)
                 <p
                     wire:click='$dispatch("updated-filters", { filters: { sortSize: "{{ $key }}" } })'
                     class="border border-gray-700 px-3 py-1 rounded-lg cursor-pointer hover:bg-gray-700 hover:text-white
@@ -83,7 +71,7 @@ new class extends Component {
             <button @click="showColors =  ! showColors" class="text-lg font-bold">+</button>
         </div>
         <div x-show="showColors" class="mt-2 flex gap-2" x-transition>
-            @foreach (self::COLOR as $color)
+            @foreach ($categoryFilter['colors'] as $color)
                 <div
                     wire:click='$dispatch("updated-filters", { filters: { sortColor: "{{ $color }}" } })'
                     class="w-6 h-6 rounded-full border border-gray-700 cursor-pointer"
@@ -114,5 +102,4 @@ new class extends Component {
             </span>
         <span>10000$</span>
     </div>
-</div>
 </div>

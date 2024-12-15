@@ -13,8 +13,8 @@ class Category extends Model
     use HasFactory;
 
     public $timestamps = false;
+
     protected $fillable = ['name', 'description', 'img_url'];
-    protected $casts = ['collections' => 'array'];
 
     public function products(): HasMany
     {

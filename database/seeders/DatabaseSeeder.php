@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         User::factory()->count(10)->create();
 
-        Category::factory()->count(6)->create();
+        Category::factory()->withFilter()->count(6)->create();
 
         Product::factory()->withVariations([
             'Size' => ['S', 'M', 'XL', '2XL'],
