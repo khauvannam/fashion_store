@@ -2,6 +2,7 @@
 
 namespace App\View\Pages;
 
+use App\Services\CartService;
 use App\Services\ProductService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -41,9 +42,19 @@ class Detail extends Component
         $this->reviews = $this->product['reviews'];
     }
 
-    public function addToCart(): void
+    public function addToCart(CartService $cartService): void
     {
         if (auth()->check()) {
+            $user = auth()->user();
+
+            $cartService->add([
+                'user_id' => $user->id,
+                'product_id' => $this->product['id'],
+                'variant_id' => $this->currentVariant['id'],
+                'quantity' => $this->currentVariant['quantity'] ?? 1,
+                'price' => $this->currentVariant['override_price'] ?? $this->product['price'],
+            ]);
+
             return;
         }
 
@@ -52,9 +63,8 @@ class Detail extends Component
             'name' => $this->product['name'],
             'variant' => $this->currentVariant['id'] ?? null,
             'quantity' => $this->currentVariant['quantity'] ?? 1,
-            'price' => $this->currentVariant['override_price'] ?? $this->product['price'], // Adjust as needed
+            'price' => $this->currentVariant['override_price'] ?? $this->product['price'],
         ]);
-
     }
 
     private function processVariants(): void
