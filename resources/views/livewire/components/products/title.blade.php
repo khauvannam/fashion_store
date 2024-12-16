@@ -27,7 +27,7 @@ new class extends Component {
                 <x-button-active
                     wire:click="$dispatch('updated-collection',{ collection: '{{ $collection === $item ? '' : $item }}' } )"
                     :active="$collection == $item"
-                    class="border border-gray-400 w-[150px]">
+                    class="no-spinner border border-gray-400 w-[150px]">
                     <p class="capitalize text-center">{{ $item }}</p>
                 </x-button-active>
             </div>

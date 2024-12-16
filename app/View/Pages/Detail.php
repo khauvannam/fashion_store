@@ -42,6 +42,7 @@ class Detail extends Component
         $this->reviews = $this->product['reviews'];
     }
 
+
     public function addToCart(CartService $cartService): void
     {
         if (auth()->check()) {
@@ -51,19 +52,18 @@ class Detail extends Component
                 'user_id' => $user->id,
                 'product_id' => $this->product['id'],
                 'variant_id' => $this->currentVariant['id'],
-                'quantity' => $this->currentVariant['quantity'] ?? 1,
-                'price' => $this->currentVariant['override_price'] ?? $this->product['price'],
+                'quantity' => 1,
             ]);
-
             return;
         }
 
         $this->dispatch('addToCart', [
             'id' => $this->product['id'],
             'name' => $this->product['name'],
-            'variant' => $this->currentVariant['id'] ?? null,
-            'quantity' => $this->currentVariant['quantity'] ?? 1,
-            'price' => $this->currentVariant['override_price'] ?? $this->product['price'],
+            'variant' => $this->currentVariant['id'],
+            'quantity' => 1,
+            'price' => $this->currentVariant['price_override'] ?? $this->product['price'],
+            'discountPercent' => $this->product['discount_percent'],
         ]);
     }
 

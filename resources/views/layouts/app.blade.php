@@ -18,14 +18,14 @@
 <div class="min-h-screen ">
 
     <!-- Page Heading -->
-    <header>
+    <header class="fixed z-50 w-full">
         <livewire:layout.header/>
+        <x-toast/>
     </header>
 
     <!-- Page Content -->
-    <main>
+    <main class="relative">
         {{ $slot }}
-        <x-toast/>
     </main>
 
     <!-- Page Footer -->

@@ -8,59 +8,64 @@
             <span class="text-gray-600">{{ $product['name'] }}</span>
         </div>
 
-        <div class="flex md:flex-row gap-8"
-             x-data="{ currentIndex: 0, images: {{ json_encode($product['image_urls']) }} }">
-            <div class="product-image flex-shrink-0 w-full md:w-1/2 relative">
-                <!-- Main Image Slider -->
-                <div
-                    class="relative w-full overflow-hidden h-[400px]"
-                    x-show="images.length > 0"
-                    style="clip-path: inset(0);">
-                    @foreach ($product['image_urls'] as $index => $image)
-                        <img
-                            wire:key="main-image-{{ $index }}"
-                            onerror="this.src='https://picsum.photos/640/480?image=625'"
-                            src="{{ $image }}"
-                            alt="Image {{ $index + 1 }}"
-                            loading="lazy"
-                            class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl transition-all duration-700 ease-in-out transform"
-                            :class="{
-                        'opacity-100 scale-100': {{ $index }} === currentIndex,
-                        'opacity-0 scale-75': {{ $index }} !== currentIndex
-                    }"
-                            x-cloak>
-                    @endforeach
+        <div class="flex md:flex-row gap-8">
+            <div class="flex-shrink-0 w-full md:w-1/2 relative">
+                <div class="flex" x-data="{ currentIndex: 0, images: {{ json_encode($product['image_urls']) }} }">
+                    <!-- Thumbnail Image Navigation -->
+                    <div class="grid grid-cols-1 gap-1 w-1/5 h-full mr-2">
+                        @foreach ($product['image_urls'] as $index => $image)
+                            <div
+                                wire:key="thumbnail-image-{{ $index }}"
+                                class="cursor-pointer rounded-2xl transition-all"
+                                x-on:click="currentIndex =  {{$index}} "
+                            >
+                                <img
+                                    onerror="this.src='https://picsum.photos/640/480?image=625'"
+                                    src="{{ $image }}"
+                                    alt=""
+                                    :class="{ 'border-black': {{ $index }} === currentIndex, 'border-gray-300': {{ $index }} !== currentIndex }"
+                                    class="border-[2.5px] h-auto object-cover rounded-2xl"
+                                    loading="lazy"
+                                >
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Main Image Slider -->
+                    <div
+                        class="relative overflow-hidden w-4/5 h-auto"
+                        x-show="images.length > 0"
+                        style="clip-path: inset(0);"
+                    >
+                        <div
+                            class="flex w-full h-full transition-transform duration-700 ease-in-out"
+                            :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+                        >
+                            @foreach ($product['image_urls'] as $index => $image)
+                                <img
+                                    wire:key="main-image-{{ $index }}"
+                                    onerror="this.src='https://picsum.photos/640/480?image=625'"
+                                    src="{{ $image }}"
+                                    alt="Image {{ $index + 1 }}"
+                                    loading="lazy"
+                                    class="h-full object-cover rounded-3xl"
+                                >
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Thumbnail Image Navigation -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
-                    @foreach ($product['image_urls'] as $index => $image)
-                        <div
-                            wire:key="thumbnail-image-{{ $index }}"
-                            class="cursor-pointer rounded-2xl transition-all"
-                            @click="currentIndex = {{ $index }}"
-                        >
-                            <img
-                                onerror="this.src='https://picsum.photos/640/480?image=625'"
-                                src="{{ $image }}"
-                                alt=""
-                                :class="{ 'border-blue-500': {{ $index }} === currentIndex, 'border-gray-500': {{ $index }} !== currentIndex }"
-                                class="w-full border-2 h-auto object-cover rounded-2xl"
-                                loading="lazy"
-                            >
-                        </div>
-                    @endforeach
-                </div>
             </div>
 
-            <div class="product-content w-full md:w-1/2 h-[50rem]">
+            <div class="product-content w-full md:w-1/2">
                 <div class="space-y-3">
                     <h1 class="text-3xl font-bold text-black">{{ $product['name'] }}</h1>
                     <div class="space-x-2 flex items-center">
                         @if ($product['discount_percent'] > 0)
-                            <span class="text-sm text-gray-500 line-through">${{ $product['price'] }}</span>
                             <span
-                                class="text-2xl font-semibold text-black">${{ $currentVariant['price_override'] ?? $product['price'] }}</span>
+                                class="text-sm text-gray-500 line-through">${{$currentVariant['price_override'] ?? $product['price'] }}</span>
+                            <span
+                                class="text-2xl font-semibold text-black">${{ number_format(($currentVariant['price_override'] ?? $product['price']) * (1 - $product['discount_percent'] / 100), 2) }}</span>
                             <span
                                 class="text-sm bg-black text-white p-1 rounded-md">-{{ $product['discount_percent'] }}%</span>
                         @endif
@@ -121,11 +126,11 @@
                                     <li>
                                         <button
                                             wire:click="updateVariantThoroughAttribute('{{ $attribute }}', '{{ $value }}')"
-                                            class="variant-button py-2 px-4 rounded border border-gray-300 text-sm
-                                           {{ $selectedAttributes[$attribute] === $value ? 'bg-black text-white  border border-gray-800' : 'bg-white text-gray-700' }}
+                                            class="variant-button py-2 px-4 rounded border-2 border-gray-300 text-sm
+                                           {{ $selectedAttributes[$attribute] === $value ? 'bg-black text-white  border-2 border-gray-800' : 'bg-white text-gray-700' }}
                                            transition "
                                             @if ($attribute === 'Color')
-                                                style="background-color: {{ $value }}; padding: 20px; border-radius: 50%"
+                                                style="background-color: {{ $value }}; padding: 20px; "
                                             @endif>
                                             @if($attribute === 'Size')
                                                 {{ $value }}
@@ -139,11 +144,20 @@
                 </div>
 
 
-                <div class="action-buttons flex mt-5">
+                <div class="action-buttons flex mt-5 justify-between">
                     <button wire:click="addToCart"
-                            class="bg-black border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded shadow  w-full">
+                            class="w-[48%] bg-black border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-3xl shadow ">
                         Thêm vào giỏ
                     </button>
+                    <div
+                        class=" w-[48%] bg-white border-2 hover:border-black text-gray-500 font-semibold py-2 px-4 rounded-3xl shadow flex items-center justify-center cursor-pointer">
+                        <div class="flex items-center gap-2 group">
+                            <livewire:components.reusable.favorite-product :product_id="$product['id']"/>
+                            <p>
+                                Yêu Thích
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <div x-data="{description: true, shipping: false, sizeInfo: false}" class="mt-5">
@@ -212,30 +226,36 @@
             @endif
         </div>
     </div>
-
 </div>
+
+@script
+
 <script>
     document.addEventListener('livewire:init', () => {
         Livewire.on('addToCart', ([event]) => {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cart = JSON.parse(localStorage.getItem('cart')) || {
+                user_id: `guest-${Math.random().toString(36).slice(2, 9)}`,
+                total: 0,
+                items: []
+            };
 
             // Check if the item already exists in the cart
-            let existingItemIndex = cart.findIndex(item => item.id === event.id && item.variant === event.variant);
+            let existingItemIndex = cart.items.findIndex(item => item.id === event.id && item.variant === event.variant);
 
-            console.log(existingItemIndex);
             if (existingItemIndex !== -1) {
-                // If found, increment the quantity
-                cart[existingItemIndex].quantity += event.quantity;
+                cart.items[existingItemIndex].quantity += event.quantity;
+                cart.total += event.quantity * event.price * (1 - event.discountPercent / 100);
 
             } else {
-                // If not found, add a new item to the cart
-                cart.push({
+                cart.items.push({
                     id: event.id,
                     name: event.name,
                     variant: event.variant,
                     quantity: event.quantity,
+                    discount_percent: event.discountPercent,
                     price: event.price
                 });
+                cart.total += event.quantity * event.price * (1 - event.discountPercent / 100);
             }
 
             // Save the updated cart back to local storage
@@ -243,3 +263,5 @@
         });
     });
 </script>
+
+@endscript

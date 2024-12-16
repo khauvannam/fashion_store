@@ -20,7 +20,7 @@ new #[layout('layouts.app')] class extends component {
     }
 }; ?>
 
-<div class="container mx-auto my-6 flex justify-between items-center">
+<div class="container mx-auto flex justify-between items-center">
     <div class="w-5/12">
 
         <div class="py-6 border-b-gray-300 border-b">

@@ -16,7 +16,7 @@ new class extends Component {
 };
 
 ?>
-<div class="flex justify-center items-center mt-4 gap-5 my-5">
+<div x-data="pagination" class="flex justify-center items-center mt-4 gap-5 my-5">
     <button
         @click=" scrollToId('product-container')"
         wire:click="$dispatch('updated-current-page', { currentPage: {{ 1 }} })"
@@ -67,3 +67,21 @@ new class extends Component {
     </div>
 </div>
 
+@script
+<script>
+    Alpine.data('pagination', () => {
+        return {
+            scrollToId(id) {
+                const elementToScroll = document.querySelector(`#${id}`);
+                if (elementToScroll) {
+                    elementToScroll.scrollIntoView({
+                        behavior: 'smooth', // Smooth scrolling
+                        block: 'start', // Align the element to the top of the viewport
+                    });
+                }
+            }
+        }
+    })
+
+</script>
+@endscript

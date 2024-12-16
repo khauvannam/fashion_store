@@ -27,8 +27,7 @@ new class extends Component {
 
 }; ?>
 
-<div class="fixed z-50 w-full">
-
+<div class=" w-full">
     <!-- Promotion Bar -->
     <div class="bg-black text-white text-sm py-2 text-center">
         Get 25% Off This Summer Sale. <span class="underline font-bold cursor-pointer">Grab It Fast!!</span>
@@ -124,7 +123,7 @@ new class extends Component {
                         @if(auth()->check())
                             {{ auth()->user()->name }}
                         @else
-                            <svg class="w-6 h-6 text-gray-800 " aria-hidden="true"
+                            <svg class="w-6 h-6 text-gray-800  " aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                  viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-width="2"

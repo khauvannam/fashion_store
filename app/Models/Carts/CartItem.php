@@ -21,13 +21,42 @@ class CartItem extends Model
         return $this->belongsTo(Cart::class);
     }
 
+
+    public function mapToCartItemData(): array
+    {
+        $variant = $this->product->variants()->find($this->variant_id);
+
+        if (!$variant) {
+            return [];
+        }
+
+        return [
+            'cart_item_id' => $this->id,
+            'cart_item_quantity' => $this->quantity,
+            'product' => [
+                'name' => $this->product->name,
+                'price' => $this->product->price,
+                'discount_percent' => $this->product->discount_percent,
+                'sku' => $this->product->sku,
+            ],
+            'variant' => [
+                'id' => $variant->id,
+                'quantity' => $variant->quantity,
+                'price_override' => $variant->price_override,
+                'attributes' => json_decode($variant->attribute_values, true), // Decode JSON for usability
+            ],
+        ];
+    }
+
     public static function boot(): void
     {
         parent::boot();
 
-        static::saved(function ($cartItem) {
-            $cartItem->cart->calculateTotalPrice()->save();
+        static::saved(function (CartItem $cartItem) {
+            // Recalculate the total price of the cart associated with this CartItem
+            $cartItem->cart->calculateTotalPrice();
         });
+
     }
 
 }

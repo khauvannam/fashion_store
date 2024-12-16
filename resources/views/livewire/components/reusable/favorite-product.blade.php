@@ -34,11 +34,11 @@ new class extends Component {
 
 }
 ?>
-<div class=""
+<div class="flex items-center"
      x-data="{ isFavorite: @entangle('isFavorite') }">
     <button
         :class="isFavorite ? 'text-red-500 opacity-100' : 'text-gray-500 opacity-0 group-hover:opacity-100'"
-        @click="isFavorite = !isFavorite; $wire.toggleFavorite(); $dispatch('add-favorite')"
+        @click=" $wire.toggleFavorite(); $dispatch('add-favorite')"
         class="focus:outline-none transition-opacity duration-300"
         aria-label="Toggle Favorite"
     >

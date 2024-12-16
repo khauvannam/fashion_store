@@ -15,25 +15,30 @@ export default {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
             animation: {
-                entering: "fadeIn 0.3s ease-out forwards",
+                loadingBorder: "loading-border 3s linear forwards",
+                'loading-border': 'loading-border 3s linear forwards',
+                'fade-in': 'fade-in 0.5s ease-in forwards',
+                'fade-out': 'fade-out 0.5s ease-out forwards',
             },
             keyframes: {
-                fadeIn: {
-                    "0%": {
-                        opacity: "0",
-                        transform: "translateY(16px)",
-                    },
-                    "100%": {
-                        opacity: "1",
-                        transform: "translateY(0)",
-                    },
+                'loading-border': {
+                    '0%': {width: '0'},
+                    '100%': {width: '100%'},
+                },
+                'fade-in': {
+                    '0%': {opacity: '0'},
+                    '100%': {opacity: '1'},
+                },
+                'fade-out': {
+                    '0%': {opacity: '1'},
+                    '100%': {opacity: '0'},
                 },
             },
         },
     },
     plugins: [
         forms,
-        function ({ addUtilities }) {
+        function ({addUtilities}) {
             addUtilities({
                 ".no-spinner": {
                     "-webkit-appearance": "textfield",
