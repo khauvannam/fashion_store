@@ -3,13 +3,12 @@
 namespace App\Repositories;
 
 use App\Models\Categories\Category;
-use LaravelIdea\Helper\App\Models\Category\_IH_Category_C;
 
 class CategoryRepository
 {
-    public function show($id): Category|array|_IH_Category_C
+    public function show($id): ?Category
     {
-        return Category::findOrFail($id);
+        return Category::with('filter')->find($id);
     }
 
     public function store(array $data): bool
@@ -39,15 +38,21 @@ class CategoryRepository
 
     public function showAll(int $limit = 0, int $offset = 4): array
     {
-        return Category::offset($offset)
+        return Category::WhereNull('parent_id')->offset($offset)
             ->limit($limit)
             ->get()
             ->toArray();
     }
+
     public function showAllSubCategories($id): array
     {
         return Category::where('parent_id', $id)
             ->get()
             ->toArray();
+    }
+
+    public function updateDataUsingProductData($id, array $data): void
+    {
+
     }
 }

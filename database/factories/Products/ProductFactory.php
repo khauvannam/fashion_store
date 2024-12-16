@@ -28,7 +28,7 @@ class ProductFactory extends Factory
             'image' => 'https://picsum.photos/640/480?image=' . ($this->faker->numberBetween(1, 1000)),
             'collection' => $this->faker->randomElement(self::COLLECTIONS),
             'units_sold' => $this->faker->numberBetween(900, 1100),
-            'category_id' => Category::inRandomOrder()->first()->id,
+            'category_id' => Category::whereNull('parent_id')->inRandomOrder()->first()->id,
         ];
     }
 

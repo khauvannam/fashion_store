@@ -6,15 +6,15 @@ use App\Models\Products\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Category extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
-    protected $fillable = ['name', 'description', 'img_url', 'collections'];
-    protected $casts = ['collections' => 'array'];
 
+    protected $fillable = ['name', 'description', 'img_url'];
 
     public function products(): HasMany
     {
@@ -27,7 +27,11 @@ class Category extends Model
             'name' => 'All',
             'description' => 'Khám phá tất cả sản phẩm',
             'img_url' => '',
-            'collections' => ["tshirt", "jacket", "pants", "hoodies", "short"]
         ]);
+    }
+
+    public function filter(): HasOne
+    {
+        return $this->hasOne(CategoryFilter::class);
     }
 }

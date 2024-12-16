@@ -6,6 +6,7 @@ use Livewire\Volt\Component;
 
 new class extends Component {
     public array $category;
+    public array $categoryFilter;
 
     #[Reactive]
     public string $collection = '';
@@ -21,13 +22,15 @@ new class extends Component {
 
     <!-- Button Group -->
     <div class="flex space-x-4 mt-6">
-        @foreach( $category['collections'] as $item)
-            <x-button-active
-                wire:click="$dispatch('updated-collection',{ collection: '{{ $collection === $item ? '' : $item }}' } )"
-                :active="$collection == $item"
-                class="border border-gray-400 w-[150px]">
-                <p class="capitalize text-center">{{ $item }}</p>
-            </x-button-active>
+        @foreach($categoryFilter['collections'] as $item)
+            <div class="" wire:key="collection_{{ $loop->index }}">
+                <x-button-active
+                    wire:click="$dispatch('updated-collection',{ collection: '{{ $collection === $item ? '' : $item }}' } )"
+                    :active="$collection == $item"
+                    class="border border-gray-400 w-[150px]">
+                    <p class="capitalize text-center">{{ $item }}</p>
+                </x-button-active>
+            </div>
         @endforeach
     </div>
 </div>

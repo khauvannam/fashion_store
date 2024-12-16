@@ -33,11 +33,28 @@ class Detail extends Component
     public function mount(ProductService $service): void
     {
         $this->product = $service->show($this->id)->toArray();
-        $this->productRelated = $service->showAllByFilter($this->product['category_id'], $this->product['collection']);
+        $this->productRelated = $service->showAllByFilter($this->product['category_id'], $this->product['collection'], limit: 10);
+
         $this->processVariants();
         $this->initializeDefaultAttributes();
         $this->setCurrentVariant();
         $this->reviews = $this->product['reviews'];
+    }
+
+    public function addToCart(): void
+    {
+        if (auth()->check()) {
+            return;
+        }
+
+        $this->dispatch('addToCart', [
+            'id' => $this->product['id'],
+            'name' => $this->product['name'],
+            'variant' => $this->currentVariant['id'] ?? null,
+            'quantity' => $this->currentVariant['quantity'] ?? 1,
+            'price' => $this->currentVariant['override_price'] ?? $this->product['price'], // Adjust as needed
+        ]);
+
     }
 
     private function processVariants(): void
@@ -102,21 +119,6 @@ class Detail extends Component
         $this->currentVariant = null; // No matching variant
     }
 
-    public function addToCart(): void
-    {
-        if (auth()->check()) {
-            return;
-        }
-
-        $this->dispatch('addToCart', [
-            'id' => $this->product['id'],
-            'name' => $this->product['name'],
-            'variant' => $this->currentVariant['id'] ?? null,
-            'quantity' => $this->currentVariant['quantity'] ?? 1,
-            'price' => $this->currentVariant['override_price'] ?? $this->product['price'], // Adjust as needed
-        ]);
-
-    }
 
 //    public function addToCart(): void
 //    {
