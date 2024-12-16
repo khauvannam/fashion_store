@@ -6,9 +6,9 @@ use App\Models\Categories\Category;
 
 class CategoryRepository
 {
-    public function show($id): Category|array
+    public function show($id): ?Category
     {
-        return Category::with('filter')->findOrFail($id);
+        return Category::with('filter')->find($id);
     }
 
     public function store(array $data): bool
@@ -38,7 +38,7 @@ class CategoryRepository
 
     public function showAll(int $limit = 0, int $offset = 4): array
     {
-        return Category::offset($offset)
+        return Category::WhereNull('parent_id')->offset($offset)
             ->limit($limit)
             ->get()
             ->toArray();

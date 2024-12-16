@@ -12,7 +12,7 @@ new class extends Component {
 };
 ?>
 
-<div class="bg-white text-black w-80 p-6 rounded-lg space-y-4">
+<div class="bg-white text-black w-80 px-6 rounded-lg space-y-4">
     <!-- Sort Options -->
 
     <div x-data="{ visible: false, sortData: '' }" class="border-2 border-gray-700 p-4 rounded-lg">

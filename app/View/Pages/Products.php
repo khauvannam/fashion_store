@@ -2,6 +2,8 @@
 
 namespace App\View\Pages;
 
+use App\Models\Categories\Category;
+use App\Models\Categories\CategoryFilter;
 use App\Services\CategoryService;
 use App\Services\ProductService;
 use Illuminate\Contracts\View\Factory;
@@ -77,11 +79,9 @@ class Products extends Component
 
     public function mount(CategoryService $categoryService, ProductService $productService): void
     {
+        $this->category = ($categoryService->show((int)$this->id) ?? Category::default())->toArray();
 
-        if ($this->id) {
-            $this->category = $categoryService->show((int)$this->id)->toArray();
-            $this->categoryFilter = $this->category['filter'];
-        }
+        $this->categoryFilter = $this->category['filter'] ?? categoryFilter::default()->toArray();
 
         $this->loadProducts($productService);
         $this->getPagination();

@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[layout('layouts.guest')] class extends component {
+new #[layout('layouts.app')] class extends component {
     public LoginForm $form;
 
     public function login(): void
@@ -61,11 +61,11 @@ new #[layout('layouts.guest')] class extends component {
                     <span class="ms-2 text-sm text-gray-600">{{ __('Ghi nhớ đăng nhập') }}</span>
                 </label>
                 @if (Route::has('password.request'))
-                <a class="text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                   href="{{ route('password.request') }}" wire:navigate>
-                    {{ __('Quên mật khẩu?') }}
-                </a>
-            @endif
+                    <a class="text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                       href="{{ route('password.request') }}" wire:navigate>
+                        {{ __('Quên mật khẩu?') }}
+                    </a>
+                @endif
             </div>
 
             <div class="flex items-center justify-end mt-4">

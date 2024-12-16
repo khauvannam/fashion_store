@@ -33,7 +33,8 @@ class Detail extends Component
     public function mount(ProductService $service): void
     {
         $this->product = $service->show($this->id)->toArray();
-        $this->productRelated = $service->showAllByFilter($this->product['category_id'], $this->product['collection']);
+        $this->productRelated = $service->showAllByFilter($this->product['category_id'], $this->product['collection'], limit: 10);
+
         $this->processVariants();
         $this->initializeDefaultAttributes();
         $this->setCurrentVariant();

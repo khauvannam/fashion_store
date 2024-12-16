@@ -23,4 +23,16 @@ class CategoryFactory extends Factory
             CategoryFilter::default()->fill(['category_id' => $category->id])->save();
         });
     }
+
+    public function withChildren(): self
+    {
+        return $this->afterCreating(function (Category $category) {
+            Category::factory()
+                ->count(5)
+                ->create(['parent_id' => $category->id])
+                ->each(function (Category $child) {
+                    Category::factory()->count(3)->create(['parent_id' => $child->id]);
+                });
+        });
+    }
 }
