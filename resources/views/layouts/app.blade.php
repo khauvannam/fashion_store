@@ -25,6 +25,7 @@
     <!-- Page Content -->
     <main>
         {{ $slot }}
+        <x-toast/>
     </main>
 
     <!-- Page Footer -->

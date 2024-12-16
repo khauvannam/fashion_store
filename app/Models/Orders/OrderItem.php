@@ -2,4 +2,6 @@
 
 namespace App\Models\Orders;
 
-class OrderItem {}
+class OrderItem
+{
+}

@@ -7,16 +7,14 @@ new class extends Component {
     #[Reactive]
     public array $product;
 
-
-
-
 }
 ?>
 <div class="relative group">
     <a href="{{route('product', ['id' => $product['id']])}}"
        class="product-card max-w-base overflow-hidden duration-300">
         <div class="product-image relative group rounded-3xl overflow-hidden">
-            <img onerror="this.src='https://picsum.photos/640/480?image=625'" src="{{ $product['image'] }}"
+            <img loading="lazy" onerror="this.src='https://picsum.photos/640/480?image=625'"
+                 src="{{ $product['image'] }}"
                  alt="{{ $product['name'] }}"
                  class="w-full h-[50%]  rounded-3xl object-cover transition-transform duration-300 group-hover:scale-105">
         </div>
@@ -42,7 +40,7 @@ new class extends Component {
             </p>
         </div>
     </a>
-    <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    <div class="absolute top-3 right-3 ">
         @livewire('components.reusable.favorite-product', ['productId' => $product['id']])
     </div>
 </div>
