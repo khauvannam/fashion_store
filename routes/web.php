@@ -18,4 +18,5 @@ Route::view('profile', 'pages.profile')
 
 Volt::route('product', 'pages.detail')->name('product');
 
+
 require __DIR__ . '/auth.php';

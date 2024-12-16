@@ -36,7 +36,7 @@ new #[Layout('layouts.guest')] class extends Component {
 }; ?>
 
 <div>
-    <form wire:submit="register">
+    <form wire:submit="register" class="container mx-auto pt-[150px]">
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')"/>

@@ -28,4 +28,13 @@ Route::middleware('auth')->group(function () {
 
     Volt::route('confirm-password', 'pages.auth.confirm-password')
         ->name('password.confirm');
+
+    Volt::route('favourites', 'pages.auth.product-favourite')->name('favourites');
+
+    Route::post('logout', function () {
+        Auth::logout();
+        Session::flush();
+        return redirect()->route('login');
+    })->middleware('auth')->name('logout');
+
 });

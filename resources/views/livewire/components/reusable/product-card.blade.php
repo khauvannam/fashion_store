@@ -7,19 +7,23 @@ new class extends Component {
     #[Reactive]
     public array $product;
 
+
+
+
 }
 ?>
-
-<a href="{{route('product', ['id' => $product['id']])}}" class="product-card max-w-base overflow-hidden duration-300">
-    <div class="product-image relative group rounded-3xl overflow-hidden">
-        <img onerror="this.src='https://picsum.photos/640/480?image=625'" src="{{ $product['image'] }}"
-             alt="{{ $product['name'] }}"
-             class="w-full h-[50%]  rounded-3xl object-cover transition-transform duration-300 group-hover:scale-105">
-    </div>
-    <div class="product-info p-4">
-        <div class="flex justify-between">
-            <h3 class="product-title text-lg font-semibold text-gray-800 truncate">{{ $product['name'] }}</h3>
-            <span class="font-semibold text-sm flex justify-center items-center">
+<div class="relative group">
+    <a href="{{route('product', ['id' => $product['id']])}}"
+       class="product-card max-w-base overflow-hidden duration-300">
+        <div class="product-image relative group rounded-3xl overflow-hidden">
+            <img onerror="this.src='https://picsum.photos/640/480?image=625'" src="{{ $product['image'] }}"
+                 alt="{{ $product['name'] }}"
+                 class="w-full h-[50%]  rounded-3xl object-cover transition-transform duration-300 group-hover:scale-105">
+        </div>
+        <div class="product-info p-4">
+            <div class="flex justify-between">
+                <h3 class="product-title text-lg font-semibold text-gray-800 truncate">{{ $product['name'] }}</h3>
+                <span class="font-semibold text-sm flex justify-center items-center">
                 <svg class="w-3 h-3 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                      width="30" height="30" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-width="2"
@@ -27,15 +31,19 @@ new class extends Component {
                 </svg>
                 <span class="ml-0.5">{{ $product['avg_rating'] }}</span>
             </span>
-        </div>
+            </div>
 
-        <p class="product-description text-sm text-gray-600 mt-2 line-clamp-1">
-            {{ $product['short_description'] }}
-        </p>
-        <p class="text-base text-black mt-3">Sold: {{ $product['units_sold']}}</p>
-        <p class="product-price text-lg font-bold text-black mt-4">
-            ${{ number_format($product['price'], 2) }}
-        </p>
+            <p class="product-description text-sm text-gray-600 mt-2 line-clamp-1">
+                {{ $product['short_description'] }}
+            </p>
+            <p class="text-base text-black mt-3">Sold: {{ $product['units_sold']}}</p>
+            <p class="product-price text-lg font-bold text-black mt-4">
+                ${{ number_format($product['price'], 2) }}
+            </p>
+        </div>
+    </a>
+    <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        @livewire('components.reusable.favorite-product', ['productId' => $product['id']])
     </div>
-</a>
+</div>
 

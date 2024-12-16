@@ -8,9 +8,11 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('favourite_products', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->timestamps();
-            $table->unsignedBigInteger('user_id');
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');  // 'product_id' field, references products
+
+            // Khóa chính tổng hợp
             $table->primary(['user_id', 'product_id']);
         });
     }

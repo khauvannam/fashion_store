@@ -1,17 +1,29 @@
 <?php
 
 use App\Services\CategoryService;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Reactive;
 use Livewire\Volt\Component;
 
 new class extends Component {
 
     public array $categories = [];
 
+    public int $favoriteCount = 0;
+
+
     public function mount(CategoryService $service): void
     {
         $this->categories = $service->showAll(6, 0);
+        $this->countFavorite();
     }
 
+    #[On('add-favorite')]
+    public function countFavorite(): void
+    {
+        $this->favoriteCount = auth()->check() ? auth()->user()->favorites()->count() : 0;
+
+    }
 
 }; ?>
 
@@ -60,6 +72,17 @@ new class extends Component {
 
             <!-- Right Icons -->
             <div class="flex space-x-4 md:space-x-6 items-center w-5/12 justify-end">
+                @if(auth()->check())
+                    <a href="{{ route('favourites') }}" wire:navigate class="relative">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"/>
+                        </svg>
+                        <div
+                            class="absolute w-5 h-5 text-xs text-center font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{{$favoriteCount}}</div>
+                    </a>
+                @endif
                 <button
                     aria-label="Search"
                     class="text-gray-600 hover:text-gray-900"
@@ -97,7 +120,18 @@ new class extends Component {
                     </svg>
                 </button>
                 <button aria-label="Login" class="text-gray-600 hover:text-gray-900">
-                    <a href="/login" wire:navigate> Login</a>
+                    <a href="/login" wire:navigate>
+                        @if(auth()->check())
+                            {{ auth()->user()->name }}
+                        @else
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                 viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-width="2"
+                                      d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            </svg>
+                        @endif
+                    </a>
                 </button>
             </div>
         </div>
