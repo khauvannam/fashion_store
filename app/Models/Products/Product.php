@@ -13,7 +13,11 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'price', 'sku', 'discount_percent', 'units_sold', 'description', 'short_description', 'size_info', 'shipping_info', 'collection', 'image', 'category_id', 'avg_rating'];
+    protected $fillable = ['name', 'price', 'sku', 'discount_percent', 'units_sold', 'description', 'short_description', 'size_info', 'shipping_info', 'collection', 'image_urls', 'category_id', 'avg_rating'];
+
+    protected $casts = [
+        'image_urls' => 'array',
+    ];
 
     protected static function boot(): void
     {
@@ -38,6 +42,7 @@ class Product extends Model
     {
         return $this->hasMany(ProductReview::class);
     }
+
     public function calculateAverageRating(): float|null
     {
         $average = $this->reviews()->avg('rating');

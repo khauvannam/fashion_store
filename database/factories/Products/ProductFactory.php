@@ -25,7 +25,12 @@ class ProductFactory extends Factory
             'short_description' => $this->faker->sentence(10),
             'size_info' => $this->faker->sentence(50),
             'shipping_info' => $this->faker->sentence(50),
-            'image' => 'https://picsum.photos/640/480?image=' . ($this->faker->numberBetween(1, 1000)),
+            'image_urls' => [
+                'https://picsum.photos/640/480?image=' . ($this->faker->numberBetween(1, 1000)),
+                'https://picsum.photos/640/480?image=' . ($this->faker->numberBetween(1, 1000)),
+                'https://picsum.photos/640/480?image=' . ($this->faker->numberBetween(1, 1000)),
+                'https://picsum.photos/640/480?image=' . ($this->faker->numberBetween(1, 1000))
+            ],
             'collection' => $this->faker->randomElement(self::COLLECTIONS),
             'units_sold' => $this->faker->numberBetween(900, 1100),
             'category_id' => Category::whereNull('parent_id')->inRandomOrder()->first()->id,
@@ -54,7 +59,6 @@ class ProductFactory extends Factory
                     'product_id' => $product->id,
                     'attribute_values' => $attributeValues,
                     'price_override' => fake()->randomFloat(2, 500, 5000),
-                    'image_override' => $this->faker->randomElement(['https://picsum.photos/640/480?image=' . ($this->faker->numberBetween(1, 1000)), null]),
                     'quantity' => fake()->numberBetween(50, 1000),
                 ]);
             }

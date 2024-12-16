@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->text('short_description')->nullable();
             $table->text('size_info')->nullable();
             $table->text('shipping_info')->nullable();
-            $table->string('image');
+            $table->json('image_urls');
             $table->string('sku', 40)->unique(); // 50 characters is a reasonable max length
             $table->string('collection')->nullable();  // 'name' field
             $table->float('avg_rating')->nullable()->default(null);

@@ -14,7 +14,7 @@ new class extends Component {
        class="product-card max-w-base overflow-hidden duration-300">
         <div class="product-image relative group rounded-3xl overflow-hidden">
             <img loading="lazy" onerror="this.src='https://picsum.photos/640/480?image=625'"
-                 src="{{ $product['image'] }}"
+                 src="{{ $product['image_urls'][0] }}"
                  alt="{{ $product['name'] }}"
                  class="w-full h-[50%]  rounded-3xl object-cover transition-transform duration-300 group-hover:scale-105">
         </div>

@@ -33,8 +33,8 @@ class Detail extends Component
     public function mount(ProductService $service): void
     {
         $this->product = $service->show($this->id)->toArray();
+        $this->currentVariant['image'] = $this->product['image_urls'][0];
         $this->productRelated = $service->showAllByFilter($this->product['category_id'], $this->product['collection'], limit: 10);
-
         $this->processVariants();
         $this->initializeDefaultAttributes();
         $this->setCurrentVariant();
@@ -77,15 +77,6 @@ class Detail extends Component
     {
         foreach ($this->variants as $attribute => $values) {
             $this->selectedAttributes[$attribute] = $values[0] ?? null; // Ensure default is set safely
-        }
-    }
-
-    public function updateVariantThroughImage(string $imageUrl): void
-    {
-        foreach ($this->product['variants'] as $variant) {
-            if ($variant['image_override'] === $imageUrl) {
-                $this->currentVariant = $variant;
-            }
         }
     }
 

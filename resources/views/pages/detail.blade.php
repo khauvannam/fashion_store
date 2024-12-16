@@ -7,32 +7,48 @@
             /
             <span class="text-gray-600">{{ $product['name'] }}</span>
         </div>
-        <div class="flex flex-col md:flex-row gap-8 ">
 
-            <div class="product-image flex-shrink-0 w-full md:w-1/2">
-                @if ($currentVariant['image_override'] !== null)
-                    <img loading="lazy" onerror="this.src='https://picsum.photos/640/480?image=625'"
-                         src="{{ $currentVariant['image_override'] }}"
-                         alt="{{ $product['name'] }}"
-                         class="img-fluid w-full h-auto object-cover rounded-3xl">
-                @else
-                    <img loading="lazy" onerror="this.src='https://picsum.photos/640/480?image=625'"
-                         src="{{ $product['image'] }}"
-                         alt="{{ $product['name'] }}"
-                         class="img-fluid w-full h-auto object-cover rounded-3xl">
-                @endif
+        <div class="flex md:flex-row gap-8"
+             x-data="{ currentIndex: 0, images: {{ json_encode($product['image_urls']) }} }">
+            <div class="product-image flex-shrink-0 w-full md:w-1/2 relative">
+                <!-- Main Image Slider -->
+                <div
+                    class="relative w-full overflow-hidden h-[400px]"
+                    x-show="images.length > 0"
+                    style="clip-path: inset(0);">
+                    @foreach ($product['image_urls'] as $index => $image)
+                        <img
+                            wire:key="main-image-{{ $index }}"
+                            onerror="this.src='https://picsum.photos/640/480?image=625'"
+                            src="{{ $image }}"
+                            alt="Image {{ $index + 1 }}"
+                            loading="lazy"
+                            class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl transition-all duration-700 ease-in-out transform"
+                            :class="{
+                        'opacity-100 scale-100': {{ $index }} === currentIndex,
+                        'opacity-0 scale-75': {{ $index }} !== currentIndex
+                    }"
+                            x-cloak>
+                    @endforeach
+                </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 mt-4">
-                    @foreach($product['variants'] as $variant)
-                        @if($variant['image_override'] !== null)
-                            <div class="cursor-pointer"
-                                 wire:click="updateVariantThroughImage('{{$variant['image_override']}}')">
-                                <img onerror="this.src='https://picsum.photos/640/480?image=625'"
-                                     src="{{$variant['image_override']}}"
-                                     alt=""
-                                     class="w-full h-auto object-cover border border-gray-300 rounded-2xl shadow">
-                            </div>
-                        @endif
+                <!-- Thumbnail Image Navigation -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+                    @foreach ($product['image_urls'] as $index => $image)
+                        <div
+                            wire:key="thumbnail-image-{{ $index }}"
+                            class="cursor-pointer rounded-2xl transition-all"
+                            @click="currentIndex = {{ $index }}"
+                        >
+                            <img
+                                onerror="this.src='https://picsum.photos/640/480?image=625'"
+                                src="{{ $image }}"
+                                alt=""
+                                :class="{ 'border-blue-500': {{ $index }} === currentIndex, 'border-gray-500': {{ $index }} !== currentIndex }"
+                                class="w-full border-2 h-auto object-cover rounded-2xl"
+                                loading="lazy"
+                            >
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -45,7 +61,8 @@
                             <span class="text-sm text-gray-500 line-through">${{ $product['price'] }}</span>
                             <span
                                 class="text-2xl font-semibold text-black">${{ $currentVariant['price_override'] ?? $product['price'] }}</span>
-                            <span class="text-sm bg-black text-white p-1 rounded-md">-{{ $product['discount_percent'] }}%</span>
+                            <span
+                                class="text-sm bg-black text-white p-1 rounded-md">-{{ $product['discount_percent'] }}%</span>
                         @endif
                     </div>
                     <div class="flex items-center justify-between text-sm">
@@ -129,7 +146,6 @@
                     </button>
                 </div>
 
-
                 <div x-data="{description: true, shipping: false, sizeInfo: false}" class="mt-5">
                     <div>
                         <hr class="border-0"/>
@@ -196,6 +212,7 @@
             @endif
         </div>
     </div>
+
 </div>
 <script>
     document.addEventListener('livewire:init', () => {

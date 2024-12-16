@@ -17,8 +17,8 @@ new class extends Component {
 
     public function toggleFavorite(): void
     {
-        if (Auth::check()) {
-            $user = Auth::user();
+        if (auth()->check()) {
+            $user = \auth()->user();
             if ($user->favorites()->where('product_id', $this->productId)->exists()) {
                 $user->favorites()->detach($this->productId);
                 $this->isFavorite = false;
