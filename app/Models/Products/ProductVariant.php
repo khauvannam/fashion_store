@@ -2,8 +2,8 @@
 
 namespace App\Models\Products;
 
-use App\ValueObject\Attribute;
-use App\ValueObject\AttributeValue;
+use App\ValueObject\ProductAttribute\Attribute;
+use App\ValueObject\ProductAttribute\AttributeValue;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,7 +26,7 @@ class ProductVariant extends Model
     /**
      * Set the attribute values as Value Objects.
      *
-     * @param AttributeValue[] $attributeValues
+     * @param \App\ValueObject\ProductAttribute\AttributeValue[] $attributeValues
      */
 
     public function setAttributeValues(array $attributeValues): void
