@@ -9,11 +9,14 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Liên kết với bảng users
+            $table->foreignId('cart_id')->constrained()->onDelete('cascade'); // Liên kết với bảng carts
+            $table->decimal('total_price', 10, 2)->default(0.00); // Defaults to 0.00
             $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])
                 ->default('pending');
-
-
+            $table->json('information')->nullable();
             $table->timestamps();
+
         });
     }
 

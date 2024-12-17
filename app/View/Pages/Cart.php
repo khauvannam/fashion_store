@@ -13,6 +13,7 @@ use Livewire\Component;
 class Cart extends Component
 {
     public array $cart = [];
+    public int $cartId;
 
     public function mount(CartService $service): void
     {
@@ -35,7 +36,7 @@ class Cart extends Component
                 'variant_attributes' => $variant ? $this->formatAttributes($variant['attribute_values']) : null,
             ];
         }
-        dd($this->cart);
+        $this->cartId = $cartData['id'];
     }
 
     private function formatAttributes($attributeValues): string

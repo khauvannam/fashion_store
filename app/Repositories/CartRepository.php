@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enum\Status\CartStatus;
 use App\Models\Carts\Cart;
 
 class CartRepository
@@ -9,7 +10,7 @@ class CartRepository
     public function add(array $data): void
     {
         // Retrieve or create a cart for the user
-        $cart = Cart::where('user_id', $data['user_id'])->first();
+        $cart = Cart::where('user_id', $data['user_id'])->where('status', CartStatus::Pending)->first();
         if (!$cart) {
             $cart = Cart::create(['user_id' => $data['user_id']]);
         }
@@ -48,8 +49,15 @@ class CartRepository
             }
         ])
             ->where('user_id', $userId)
+            ->where('status', CartStatus::Pending)
             ->first();
     }
 
+    public function changeStatus($cartId, $userId, $status): void
+    {
+        Cart::where('id', $cartId)
+            ->where('user_id', $userId)
+            ->update(['status' => $status]);
+    }
 
 }

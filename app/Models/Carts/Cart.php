@@ -2,13 +2,14 @@
 
 namespace App\Models\Carts;
 
+use App\Enum\Status\CartStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cart extends Model
 {
-    protected $fillable = ['user_id', 'total_price'];
-
+    protected $fillable = ['user_id', 'total_price', 'status'];
+    protected $casts = ['status' => CartStatus::class];
     public function items(): HasMany
     {
         return $this->hasMany(CartItem::class);

@@ -1,6 +1,7 @@
 <?php
 
 use App\View\Pages\Cart;
+use App\View\Pages\Order;
 use App\View\Pages\Products;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -19,5 +20,6 @@ Route::view('profile', 'pages.profile')
 
 Volt::route('product', 'pages.detail')->name('product');
 Volt::route('cart', Cart::class)->name('cart');
+Volt::route('checkout/{cartId}', Order::class)->name('checkout');
 
 require __DIR__ . '/auth.php';
