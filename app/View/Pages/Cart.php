@@ -9,20 +9,21 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use function Symfony\Component\Translation\t;
 
 class Cart extends Component
 {
     public array $cart = [];
     public int $cartId;
+    public float $totalPrice = 0;
 
     public function mount(CartService $service): void
     {
         if (auth()->check()) {
-            $cartData = $service->show(auth()->user()->id)->toArray();
+            $cartData = $service->showAllCartItems(auth()->user()->id)->toArray();
         } else {
             $cartData = $this->dispatch('getCartData', []);
         }
-
         if (!$cartData) return;
 
         $this->cart = [];
@@ -45,6 +46,8 @@ class Cart extends Component
         }
 
         $this->cartId = $cartData['id'];
+        $this->totalPrice = $cartData['total_price'];
+
     }
 
     private function formatAttributes($attributeValues): string

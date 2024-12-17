@@ -35,7 +35,7 @@ class CartRepository
         }
     }
 
-    public function show($userId): Cart
+    public function showAllCartItems($userId): Cart
     {
         $cart = Cart::with([
             'items' => function ($query) {
@@ -63,6 +63,14 @@ class CartRepository
         Cart::where('id', $cartId)
             ->where('user_id', $userId)
             ->update(['status' => $status]);
+    }
+
+    public function show($userId): Cart{
+        $cart = Cart::where('user_id', $userId)->where('status', CartStatus::Pending)->first();
+        if (!$cart) {
+            $cart = Cart::create(['user_id' => $userId]);
+        }
+        return $cart;
     }
 
 }
