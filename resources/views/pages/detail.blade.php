@@ -145,15 +145,15 @@
 
 
                 <div class="action-buttons flex mt-5 justify-between">
-                    <button wire:click="addToCart"
+                    <button @click=" $wire.addToCart(); $dispatch('add-cart-count')"
                             class="w-[48%] bg-black border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-3xl shadow ">
                         Thêm vào giỏ
                     </button>
                     <div
-                        class=" w-[48%] bg-white border-2 hover:border-black text-gray-500 font-semibold py-2 px-4 rounded-3xl shadow flex items-center justify-center cursor-pointer">
+                        wire:click="$dispatch('toggle-favorite', { productId: {{ $product['id'] }} })"
+                        class=" w-[48%] bg-white border-2 border-red-400 hover:bg-red-400 group font-semibold py-2 px-4 rounded-3xl shadow flex items-center justify-center cursor-pointer">
                         <div class="flex items-center gap-2 group">
-                            <livewire:components.reusable.favorite-product :product_id="$product['id']"/>
-                            <p>
+                            <p class="text-red-400 group-hover:text-white">
                                 Yêu Thích
                             </p>
                         </div>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 
 
@@ -15,8 +16,10 @@ new class extends Component {
         $this->isFavorite = Auth::user() && Auth::user()->favorites()->where('product_id', $this->productId)->exists();
     }
 
-    public function toggleFavorite(): void
+    #[On('toggle-favorite')]
+    public function toggleFavorite($productId): void
     {
+        $this->productId = $productId;
         if (auth()->check()) {
             $user = auth()->user();
             if ($user->favorites()->where('product_id', $this->productId)->exists()) {
@@ -30,6 +33,8 @@ new class extends Component {
         } else {
             $this->dispatch('toast', message: 'Bạn cần đăng nhập để sử dụng tính năng này.');
         }
+
+        $this->dispatch('add-favorite');
     }
 
 }
@@ -38,7 +43,7 @@ new class extends Component {
      x-data="{ isFavorite: @entangle('isFavorite') }">
     <button
         :class="isFavorite ? 'text-red-500 opacity-100' : 'text-gray-500 opacity-0 group-hover:opacity-100'"
-        @click=" $wire.toggleFavorite(); $dispatch('add-favorite')"
+        @click=" $wire.toggleFavorite($wire.productId)"
         class="focus:outline-none transition-opacity duration-300"
         aria-label="Toggle Favorite"
     >

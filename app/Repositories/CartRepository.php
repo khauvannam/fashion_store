@@ -35,14 +35,14 @@ class CartRepository
         }
     }
 
-    public function show($userId): Cart
+    public function showAllCartItems($userId): Cart
     {
         $cart = Cart::with([
             'items' => function ($query) {
                 $query->select('id', 'cart_id', 'product_id', 'variant_id', 'quantity'); // Select only needed fields from items table
             },
             'items.product' => function ($query) {
-                $query->select('id', 'name'); // Select only needed fields from products table
+                $query->select('id', 'name', 'image_urls'); // Select only needed fields from products table
             },
             'items.variant' => function ($query) {
                 $query->select('id', 'quantity', 'price_override', 'attribute_values'); // Fetch related variants directly from cart_items
@@ -63,6 +63,14 @@ class CartRepository
         Cart::where('id', $cartId)
             ->where('user_id', $userId)
             ->update(['status' => $status]);
+    }
+
+    public function show($userId): Cart{
+        $cart = Cart::where('user_id', $userId)->where('status', CartStatus::Pending)->first();
+        if (!$cart) {
+            $cart = Cart::create(['user_id' => $userId]);
+        }
+        return $cart;
     }
 
 }
