@@ -228,8 +228,6 @@
     </div>
 </div>
 
-@script
-
 <script>
     document.addEventListener('livewire:init', () => {
         Livewire.on('addToCart', ([event]) => {
@@ -264,4 +262,4 @@
     });
 </script>
 
-@endscript
+
