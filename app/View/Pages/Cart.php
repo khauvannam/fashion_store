@@ -36,6 +36,7 @@ class Cart extends Component
                 'quantity' => $item['quantity'],
                 'product_id' => $item['product_id'],
                 'product_name' => $product['name'],
+                'product_image' => $product['image_urls'][0],
                 'variant_id' => $item['variant_id'],
                 'variant_quantity' => $variant['quantity'],
                 'price' => $variant['price_override'] ?? $product['price'],

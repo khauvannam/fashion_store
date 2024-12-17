@@ -11,7 +11,45 @@
     }
 
     document.addEventListener('livewire:init', () => {
-        Livewire.on('toast', ({message}) => {
+        Livewire.on('toast', ({message, type = 'error'}) => {
+
+            let color;
+            let svg;
+
+            switch (type) {
+                case 'success': {
+                    color = 'bg-green-500';
+                    svg = `<svg class="w-5 h-5 text-blue-600 dark:text-blue-500 rotate-45"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 18 20">
+                    <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m9 17 8 2L9 1 1 19l8-2Zm0 0V9" />
+                </svg>`;
+                    break;
+                }
+
+                case 'error': {
+                    color = 'bg-red-500';
+                    svg = `<svg class="w-5 h-5 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                   <path d="M12 2L2 22h20L12 2zm0 16v2h-2v-2h2zm0-8v6h-2V10h2z" fill="currentColor"/>
+               </svg>`;
+                    break;
+                }
+
+                case 'message': {
+                    color = 'bg-blue-500';
+                    svg = `<svg class="w-5 h-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                   <path d="M4 4h16v14H5.17L4 20.17V4z" stroke="currentColor" stroke-width="2"/>
+               </svg>`;
+                    break;
+                }
+            }
 
             // Push the new message to the queue
             toastQueue.push(message);
@@ -29,11 +67,7 @@
             // Toast content
             newToast.innerHTML = `
                 <div class="flex justify-between items-center w-full p-4">
-                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-500 rotate-45" aria-hidden="true"
-                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="m9 17 8 2L9 1 1 19l8-2Zm0 0V9"/>
-                    </svg>
+                    ${type}
                     <div class="ps-4 text-sm font-normal">${message}</div>
                 </div>`;
 
@@ -41,7 +75,7 @@
 
             const progress = document.createElement('div');
             progress.innerHTML = `
-              <div class="toast-loading-progress w-full h-1 bg-blue-400 rounded-b-lg z-50 animate-loadingBorder"></div>
+              <div class="toast-loading-progress w-full h-1 ${color} rounded-b-lg z-50 animate-loadingBorder"></div>
             `;
             // Add toast to the container
             newToast.appendChild(progress);
