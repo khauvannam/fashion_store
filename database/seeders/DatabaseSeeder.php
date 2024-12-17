@@ -15,11 +15,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        User::factory()->count(10)->create();
         Category::factory()->withChildren()->withFilter()->count(6)->create();
 
         Product::factory()->withVariations([
             'Size' => ['S', 'M', 'XL', '2XL'],
             'Color' => ['#000000', '#00205c', '#ffffff'],
         ])->count(100)->create();
+
     }
 }

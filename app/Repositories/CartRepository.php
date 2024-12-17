@@ -33,4 +33,8 @@ class CartRepository
             ]);
         }
     }
+    public function showAll(int $userId): Cart
+    {
+        return Cart::with(['items.product.variants'])->where('user_id', $userId)->firstOrFail();
+    }
 }

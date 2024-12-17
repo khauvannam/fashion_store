@@ -17,4 +17,8 @@ class CartService
     {
         $this->repository->add($data);
     }
+    public function showAll($userId)
+    {
+        return $this->repository->showAll($userId);
+    }
 }
