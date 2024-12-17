@@ -1,40 +1,44 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 
 
 new class extends Component {
-
     public int $productId;
     public bool $isFavorite;
 
-    public function mount($productId): void
+    public function mount(int $productId): void
     {
         $this->productId = $productId;
-        $this->isFavorite = Auth::user() && Auth::user()->favorites()->where('product_id', $this->productId)->exists();
+        $this->isFavorite = $this->isProductFavorite();
     }
 
     #[On('toggle-favorite')]
     public function toggleFavorite($productId): void
     {
-        $this->productId = $productId;
-        if (auth()->check()) {
-            $user = auth()->user();
-            if ($user->favorites()->where('product_id', $this->productId)->exists()) {
-                $user->favorites()->detach($this->productId);
-                $this->isFavorite = false;
-                return;
-            }
+        $this->$productId = $productId;
+        if (!auth()->check()) {
+            $this->dispatch('toast', message: 'Bạn cần đăng nhập để sử dụng tính năng này.');
+            return;
+        }
 
+        $user = auth()->user();
+
+        if ($this->isProductFavorite()) {
+            $user->favorites()->detach($this->productId);
+            $this->isFavorite = false;
+        } else {
             $user->favorites()->attach($this->productId);
             $this->isFavorite = true;
-        } else {
-            $this->dispatch('toast', message: 'Bạn cần đăng nhập để sử dụng tính năng này.');
         }
 
         $this->dispatch('add-favorite');
+    }
+
+    private function isProductFavorite(): bool
+    {
+        return auth()->check() && auth()->user()->favorites()->where('product_id', $this->productId)->exists();
     }
 
 }

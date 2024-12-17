@@ -18,6 +18,8 @@ new #[layout('layouts.app')] class extends Component {
     }
 }
 ?>
+
+
 <div class="pt-[150px] container mx-auto">
     @if(count($productFavorite) > 0)
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -1,112 +1,115 @@
-<div class="fixed top-100 right-0 left-0 z-50 container mx-auto flex justify-end  ">
-    <div id="toast-container">
-        <!-- Container for the toasts -->
+<div class="fixed top-100 right-0 left-0 z-50 container mx-auto flex justify-end">
+    <div id="toast-container" x-data="toastHandler()">
+        <!-- Toasts will be dynamically rendered here -->
+        <template x-for="toast in toasts" :key="toast.id">
+            <div
+                class="flex flex-col mt-3 justify-center w-full overflow-hidden max-w-xs text-gray-500 bg-white divide-x divide-gray-200 rounded-lg shadow-2xl animate-fade-in"
+                x-show="toast.visible"
+                x-transition:leave="animate-fade-out"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+            >
+                <div class="flex justify-between items-center w-full p-4">
+                    <svg class="w-5 h-5"
+                         :class="toast.iconColor"
+                         :xmlns="'http://www.w3.org/2000/svg'"
+                         fill="none"
+                         viewBox="0 0 24 24"
+                         aria-hidden="true">
+                        <path d="" :d="toast.iconPath" stroke="currentColor" stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"></path>
+                    </svg>
+                    <div class="ps-4 text-sm font-normal" :class="toast.textColor" x-text="toast.message"></div>
+                </div>
+                <div
+                    class="animate-loading-border w-full h-1 rounded-b-lg z-50"
+                    :class="toast.borderColor"
+                    x-show="toast.visible">
+                </div>
+            </div>
+        </template>
     </div>
 </div>
 
 <script>
-    let toastQueue;
-    if (!window.toastQueue) {
-        toastQueue = [];
-    }
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('toastHandler', () => ({
+            toasts: [],
+            toastId: 0,
 
-    document.addEventListener('livewire:init', () => {
-        Livewire.on('toast', ({message, type = 'error'}) => {
+            init() {
+                Livewire.on('toast', ({message, type = 'error'}) => {
+                    this.addToast(message, type);
+                });
+            },
 
-            let color;
-            let svg;
+            addToast(message, type) {
+                const id = this.toastId++;
+                const toastDetails = this.getToastDetails(type);
 
-            switch (type) {
-                case 'success': {
-                    color = 'bg-green-500';
-                    svg = `<svg class="w-5 h-5 text-blue-600 dark:text-blue-500 rotate-45"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 18 20">
-                    <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="m9 17 8 2L9 1 1 19l8-2Zm0 0V9" />
-                </svg>`;
-                    break;
+                this.toasts.push({
+                    id,
+                    message,
+                    visible: true,
+                    textColor: toastDetails.textColor,
+                    borderColor: toastDetails.borderColor,
+                    iconColor: toastDetails.iconColor,
+                    iconPath: toastDetails.iconPath, // Add the dynamically rendered path for the SVG
+                });
+
+                // Ensure no more than 3 toasts
+                if (this.toasts.length > 3) {
+                    this.removeToast(this.toasts[0].id);
                 }
 
-                case 'error': {
-                    color = 'bg-red-500';
-                    svg = `<svg class="w-5 h-5 text-red-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-                   <path d="M12 2L2 22h20L12 2zm0 16v2h-2v-2h2zm0-8v6h-2V10h2z" fill="currentColor"/>
-               </svg>`;
-                    break;
+                // Automatically remove toast after 3 seconds
+                setTimeout(() => this.removeToast(id), 3000);
+            },
+
+            removeToast(id) {
+                const toast = this.toasts.find(t => t.id === id);
+                if (toast) {
+                    toast.visible = false; // Start fade-out transition
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 500); // Allow fade-out animation to finish
                 }
+            },
 
-                case 'message': {
-                    color = 'bg-blue-500';
-                    svg = `<svg class="w-5 h-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-                   <path d="M4 4h16v14H5.17L4 20.17V4z" stroke="currentColor" stroke-width="2"/>
-               </svg>`;
-                    break;
+            getToastDetails(type) {
+                // Define styles and icon paths based on the type
+                switch (type) {
+                    case 'success':
+                        return {
+                            textColor: 'text-green-600',
+                            borderColor: 'bg-green-400',
+                            iconColor: 'text-green-600',
+                            iconPath: 'M5 13l4 4L19 7', // Checkmark icon
+                        };
+                    case 'error':
+                        return {
+                            textColor: 'text-red-600',
+                            borderColor: 'bg-red-400',
+                            iconColor: 'text-red-600',
+                            iconPath: 'M6 18L18 6M6 6l12 12', // Cross icon
+                        };
+                    case 'warning':
+                        return {
+                            textColor: 'text-yellow-600',
+                            borderColor: 'bg-yellow-400',
+                            iconColor: 'text-yellow-600',
+                            iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.054 0 1.502-1.275.732-2L13.732 4c-.523-.697-1.94-.697-2.464 0L3.34 17c-.77.725-.322 2 .732 2z', // Warning triangle icon
+                        };
+                    default: // Default to info
+                        return {
+                            textColor: 'text-blue-600',
+                            borderColor: 'bg-blue-400',
+                            iconColor: 'text-blue-600',
+                            iconPath: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', // Info circle icon
+                        };
                 }
-            }
-
-            // Push the new message to the queue
-            toastQueue.push(message);
-
-            // Get the toast container element
-            const toastContainer = document.getElementById('toast-container');
-
-            // Re-render only the newly pushed messages
-            const newToast = document.createElement('div');
-            newToast.classList.add('flex', 'flex-col', 'mt-3', 'justify-center', 'w-full', 'max-w-xs',
-                'text-gray-500', 'bg-white', 'divide-x',
-                'divide-gray-200', 'rounded-lg', 'shadow-2xl');
-            newToast.setAttribute('data-message', message); // Unique identifier for the toast
-
-            // Toast content
-            newToast.innerHTML = `
-                <div class="flex justify-between items-center w-full p-4">
-                    ${type}
-                    <div class="ps-4 text-sm font-normal">${message}</div>
-                </div>`;
-
-            toastContainer.appendChild(newToast);
-
-            const progress = document.createElement('div');
-            progress.innerHTML = `
-              <div class="toast-loading-progress w-full h-1 ${color} rounded-b-lg z-50 animate-loadingBorder"></div>
-            `;
-            // Add toast to the container
-            newToast.appendChild(progress);
-
-            // Apply fade-in effect
-            newToast.classList.add('animate-fade-in');
-
-            // Ensure no more than 3 toasts are visible
-            if (toastQueue.length > 3) {
-                const oldestToast = toastContainer.querySelector('[data-message="' + toastQueue[0] + '"]');
-                if (oldestToast) {
-                    toastContainer.removeChild(oldestToast);
-                    toastQueue.shift(); // Remove the oldest toast from the queue
-                }
-            }
-
-            // Automatically hide the toast after 3 seconds and remove from the DOM
-            setTimeout(() => {
-
-                newToast.classList.add('animate-fade-out');
-                // Wait for the fade-out animation to finish before removing the toast
-                setTimeout(() => {
-                    toastContainer.removeChild(newToast);
-
-                    // Shift the toastQueue to maintain up-to-date messages
-                    toastQueue.shift();
-                }, 500); // Match the duration of the fade-out animation
-
-            }, 3000);
-        });
+            },
+        }));
     });
 </script>
-
-

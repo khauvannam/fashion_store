@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\CartService;
 use App\Services\CategoryService;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Reactive;
@@ -13,7 +14,7 @@ new class extends Component {
     public int $cartCount = 0;
 
 
-    public function mount(CategoryService $service, \App\Services\CartService $cartService): void
+    public function mount(CategoryService $service, CartService $cartService): void
     {
         $this->categories = $service->showAll(6, 0);
         $this->countFavorite();
@@ -25,10 +26,11 @@ new class extends Component {
     {
         $this->favoriteCount = auth()->check() ? auth()->user()->favorites()->count() : 0;
     }
+
     #[On('add-cart-count')]
-    public function countCart(\App\Services\CartService $service): void
+    public function countCart(CartService $service): void
     {
-       $this->cartCount = auth()->check() ? $service->show(auth()->user()->id)->items->count() : 0;
+        $this->cartCount = auth()->check() ? $service->show(auth()->user()->id)->items->count() : 0;
     }
 
 }; ?>
@@ -108,26 +110,28 @@ new class extends Component {
                         />
                     </svg>
                 </button>
+
                 <button aria-label="Cart" class="text-gray-600 hover:text-gray-900">
                     <a href="{{ route('cart') }}" wire:navigate class="relative">
-                    <svg
-                        class="w-6 h-6"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M9 10V6a3 3 0 013-3v0a3 3 0 013 3v4m3-2 .917 11.923A1 1 0 0117.92 21H6.08a1 1 0 01-.997-1.077L6 8h12z"
-                        />
-                    </svg>
-                    <div
-                        class="absolute w-5 h-5 text-xs text-center font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{{$cartCount}}</div>
+                        <svg
+                            class="w-6 h-6"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 10V6a3 3 0 013-3v0a3 3 0 013 3v4m3-2 .917 11.923A1 1 0 0117.92 21H6.08a1 1 0 01-.997-1.077L6 8h12z"
+                            />
+                        </svg>
+                        <div
+                            class="absolute w-5 h-5 text-xs text-center font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{{$cartCount}}</div>
                     </a>
                 </button>
+
                 <button aria-label="Login" class="text-gray-600 hover:text-gray-900">
                     <a href="/login" wire:navigate>
                         @if(auth()->check())
