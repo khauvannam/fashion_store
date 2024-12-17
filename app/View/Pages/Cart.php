@@ -17,7 +17,13 @@ class Cart extends Component
 
     public function mount(CartService $service): void
     {
-        $cartData = $service->show(1)->toArray();
+        if (auth()->check()) {
+            $cartData = $service->show(auth()->user()->id)->toArray();
+        } else {
+            $cartData = $this->dispatch('getCartData', []);
+        }
+
+        if (!$cartData) return;
 
         $this->cart = [];
 
@@ -36,6 +42,7 @@ class Cart extends Component
                 'variant_attributes' => $variant ? $this->formatAttributes($variant['attribute_values']) : null,
             ];
         }
+
         $this->cartId = $cartData['id'];
     }
 

@@ -19,7 +19,7 @@ class CartService
         $this->repository->add($data);
     }
 
-    public function show(int $userId): ?Cart
+    public function show(int $userId): Cart
     {
         return $this->repository->show($userId);
     }

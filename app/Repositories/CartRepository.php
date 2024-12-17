@@ -35,9 +35,9 @@ class CartRepository
         }
     }
 
-    public function show($userId): ?Cart
+    public function show($userId): Cart
     {
-        return Cart::with([
+        $cart = Cart::with([
             'items' => function ($query) {
                 $query->select('id', 'cart_id', 'product_id', 'variant_id', 'quantity'); // Select only needed fields from items table
             },
@@ -51,6 +51,11 @@ class CartRepository
             ->where('user_id', $userId)
             ->where('status', CartStatus::Pending)
             ->first();
+
+        if (!$cart) {
+            $cart = Cart::create(['user_id' => $userId]);
+        }
+        return $cart;
     }
 
     public function changeStatus($cartId, $userId, $status): void

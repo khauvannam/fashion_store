@@ -5,8 +5,10 @@
 </div>
 
 <script>
-    // Array to keep track of the messages
-    let toastQueue = [];
+    let toastQueue;
+    if (!window.toastQueue) {
+        toastQueue = [];
+    }
 
     document.addEventListener('livewire:init', () => {
         Livewire.on('toast', ({message}) => {
