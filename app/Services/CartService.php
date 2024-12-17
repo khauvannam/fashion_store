@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Carts\Cart;
 use App\Repositories\CartRepository;
 
 class CartService
@@ -17,8 +18,9 @@ class CartService
     {
         $this->repository->add($data);
     }
-    public function showAll($userId)
+
+    public function show(int $userId): ?Cart
     {
-        return $this->repository->showAll($userId);
+        return $this->repository->show($userId);
     }
 }

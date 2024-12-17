@@ -33,8 +33,23 @@ class CartRepository
             ]);
         }
     }
-    public function showAll(int $userId): Cart
+
+    public function show($userId): ?Cart
     {
-        return Cart::with(['items.product.variants'])->where('user_id', $userId)->firstOrFail();
+        return Cart::with([
+            'items' => function ($query) {
+                $query->select('id', 'cart_id', 'product_id', 'variant_id', 'quantity'); // Select only needed fields from items table
+            },
+            'items.product' => function ($query) {
+                $query->select('id', 'name'); // Select only needed fields from products table
+            },
+            'items.variant' => function ($query) {
+                $query->select('id', 'quantity', 'price_override', 'attribute_values'); // Fetch related variants directly from cart_items
+            }
+        ])
+            ->where('user_id', $userId)
+            ->first();
     }
+
+
 }

@@ -4,7 +4,6 @@ namespace App\View\Pages;
 
 
 use App\Services\CartService;
-
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -13,23 +12,40 @@ use Livewire\Component;
 
 class Cart extends Component
 {
-
     public array $cart = [];
-    public array $product = [];
-    public array $productVariant = [];
 
     public function mount(CartService $service): void
     {
-        $cartData = $service->showAll(auth()->id())->load(['items.product.variants'])->toArray();
+        $cartData = $service->show(1)->toArray();
 
-        $this->cart = $cartData;
+        $this->cart = [];
 
-        // Map product and variant data for easy access
         foreach ($cartData['items'] as $item) {
-            $this->product[$item['product_id']] = $item['product'];
-            $this->productVariant[$item['variant_id']] = collect($item['product']['variants'])
-                ->firstWhere('id', $item['variant_id']);
+            $product = $item['product'];
+            $variant = $item['variant'];
+
+            $this->cart[] = [
+                'cart_item_id' => $item['id'],
+                'quantity' => $item['quantity'],
+                'product_id' => $item['product_id'],
+                'product_name' => $product['name'],
+                'variant_id' => $item['variant_id'],
+                'variant_quantity' => $variant['quantity'],
+                'price' => $variant['price_override'] ?? $product['price'],
+                'variant_attributes' => $variant ? $this->formatAttributes($variant['attribute_values']) : null,
+            ];
         }
+        dd($this->cart);
+    }
+
+    private function formatAttributes($attributeValues): string
+    {
+        // Map through each attribute and format it as "Attribute: Value"
+        return implode(' - ', array_map(function ($attribute) {
+            // Convert color values (e.g., hex code) to color name or keep hex code
+            $value = $attribute['value'];
+            return "{$attribute['attribute']}: {$value}";
+        }, $attributeValues));
     }
 
     #[Layout('layouts.app')]

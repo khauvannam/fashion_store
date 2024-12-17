@@ -26,7 +26,7 @@ class ProductVariant extends Model
     /**
      * Set the attribute values as Value Objects.
      *
-     * @param \App\ValueObject\ProductAttribute\AttributeValue[] $attributeValues
+     * @param AttributeValue[] $attributeValues
      */
 
     public function setAttributeValues(array $attributeValues): void
