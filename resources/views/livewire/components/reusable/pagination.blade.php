@@ -16,6 +16,7 @@ new class extends Component {
 };
 
 ?>
+
 <div x-data="pagination" class="flex justify-center items-center mt-4 gap-5 my-5">
     <button
         @click=" scrollToId('product-container')"
