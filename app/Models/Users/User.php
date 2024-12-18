@@ -3,8 +3,10 @@
 namespace App\Models\Users;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Articles\Article;
 use App\Models\Products\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -45,9 +47,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function favorites()
+
+    public function favorites(): HasMany
     {
         return $this->belongsToMany(Product::class, 'favourite_products', 'user_id', 'product_id')
             ->withTimestamps();
+    }
+
+    public function articles(): HasMany
+    {
+        return $this->hasMany(Article::class);
     }
 }
