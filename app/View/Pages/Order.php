@@ -3,6 +3,7 @@
 namespace App\View\Pages;
 
 use App\Services\OrderService;
+use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -12,10 +13,8 @@ use Livewire\Component;
 class Order extends Component
 {
     protected OrderService $orderService;
-    public string $address, $phone, $city, $note;
-    public float $totalPrice = 0;
-    public int $cartId;
 
+    // Validation rules
     protected array $rules = [
         'address' => 'required|string|max:255',
         'phone' => 'required|string|max:20',
@@ -23,45 +22,71 @@ class Order extends Component
         'note' => 'nullable|string',
     ];
 
+    // User input properties
+    public string $address;
+    public string $phone;
+    public string $city;
+    public string $note;
+    public float $totalPrice = 0;
+    public int $cartId;
+
+    // Flash message keys
+    private const SUCCESS_MESSAGE = 'success';
+    private const ERROR_MESSAGE = 'error';
+
     public function boot(): void
     {
+        // Dependency injection through the service container
         $this->orderService = app(OrderService::class);
     }
+
     public function mount(int $cartId): void
     {
         $this->cartId = $cartId;
-        $this->updatedCartId();
+        $this->loadCart();
     }
 
-    public function updatedCartId(): void
+    public function loadCart(): void
     {
-        if ($this->cartId) {
-            $cart = \App\Models\Carts\Cart::find($this->cartId)->toArray();
-            $this->totalPrice = $cart ? $cart['total_price'] : 0;
-        }
+        // Load cart and update the total price if the cart exists
+        $cartData = \App\Models\Carts\Cart::find($this->cartId)->toArray() ?? null;
+        $this->totalPrice = $cartData['total_price'] ?? 0;
     }
-
 
     public function save(): void
     {
         $this->validate();
 
         try {
-            $userId = auth()->id();
-            $information = [
-                'address' => $this->address,
-                'phone' => $this->phone,
-                'city' => $this->city,
-                'note' => $this->note,
-            ];
+            $this->orderService->createFromCart(
+                auth()->id(),
+                $this->cartId,
+                $this->totalPrice,
+                $this->prepareOrderInformation()
+            );
 
-            $this->orderService->createFromCart($userId, $this->cartId, $this->totalPrice, $information);
-
-            session()->flash('success', 'Order has been created successfully!');
-            $this->reset(['address', 'phone', 'city', 'note', 'totalPrice']);
-        } catch (\Exception $e) {
-            session()->flash('error', 'Something went wrong: ' . $e->getMessage());
+            session()->flash(self::SUCCESS_MESSAGE, 'Order has been created successfully!');
+            $this->resetOrderProperties();
+        } catch (Exception $e) {
+            session()->flash(self::ERROR_MESSAGE, 'Something went wrong: ' . $e->getMessage());
         }
+    }
+
+    private function prepareOrderInformation(): array
+    {
+        // Extracted preparation of order information for reuse
+        return [
+            'address' => $this->address,
+            'phone' => $this->phone,
+            'city' => $this->city,
+            'note' => $this->note,
+        ];
+    }
+
+    private function resetOrderProperties(): void
+    {
+        // Reset relevant class properties
+        $this->reset(['address', 'phone', 'city', 'note', 'totalPrice']);
     }
 
     #[Layout('layouts.app')]
