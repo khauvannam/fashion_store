@@ -1,21 +1,25 @@
 <?php
 
-use Livewire\Volt\Component;
 use App\Services\ProductService;
+use Livewire\Volt\Component;
 
 new class extends component {
     public string $search = '';
-    public array $products = [0 => 0, 1 => [], 2 => 0];
+    public array $searchResults = [0, 1 => [], 0];
 
     public function setSearch($search): void
     {
-        if(strlen($search) < 2) {$this->products = [0 => 0, 1 => [], 2 => 0] ; return;};
+        if (strlen($search) < 2) {
+            $this->searchResults = [0 => 0, 1 => [], 2 => 0];
+            return;
+        };
         $this->search = $search;
         $this->getProducts(app(ProductService::class));
     }
+
     public function getProducts(ProductService $productService): void
     {
-        $this->products = $productService->showAllByFilter(null, '', $this->search, limit: 5);
+        $this->searchResults = $productService->showAllByFilter(null, '', $this->search, limit: 5);
     }
 
 }
@@ -73,13 +77,13 @@ new class extends component {
             </svg>
         </button>
     </div>
-    @if($products[0] > 0)
+    @if($searchResults[0] > 0)
         <div class="flex justify-between mt-3">
-            <h1 class="font-bold text-base">Sản phẩm tìm được: {{$products[0]}}</h1>
+            <h1 class="font-bold text-base">Sản phẩm tìm được: {{$searchResults[0]}}</h1>
             <a href="{{ route('products', ['search' => $search]) }}" class="text-sm underline">Xem tất cả</a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-6">
-            @foreach ($products[1] as $product)
+            @foreach ($searchResults[1] as $product)
                 @livewire('components.reusable.product-card', ['product' => $product], key($product['id']))
             @endforeach
         </div>

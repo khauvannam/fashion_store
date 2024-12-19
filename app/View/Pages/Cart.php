@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use function Symfony\Component\Translation\t;
 
 class Cart extends Component
 {
@@ -63,6 +62,6 @@ class Cart extends Component
     #[Layout('layouts.app')]
     public function render(): View|Factory|Application
     {
-        return view('pages.cart');
+        return view('livewire.pages.cart');
     }
 }

@@ -149,6 +149,6 @@ class Products extends Component
     #[Layout('layouts.app')]
     public function render(): View|Factory|Application
     {
-        return view('pages.products');
+        return view('livewire.pages.products');
     }
 }
