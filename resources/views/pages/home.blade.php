@@ -10,7 +10,6 @@
         {{-- Categories --}}
         <livewire:components.home.categories/>
 
-        <livewire:components.reusable.ckeditor5/>
     </div>
 
 </x-app-layout>

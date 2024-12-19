@@ -6,24 +6,22 @@ use Livewire\Volt\Component;
 new class extends component {
 
     #[Modelable]
-    public string $message = ''
+    public string $content = '';
 }
-
 
 ?>
 
 <div class="">
     <div wire:ignore>
-        <textarea wire:model.lazy="message" id="message" wire:key="wysiwyg-message">{{$message}}</textarea>
+        <textarea wire:model.lazy="content" id="message" wire:key="wysiwyg-message">{{$content}}</textarea>
     </div>
 
-    <p>{{$message}}</p>
+    <p>{{$content}}</p>
 </div>
 
 
 @push('scripts')
     <script type="module">
-
         import {
             Bold,
             ClassicEditor,
@@ -61,7 +59,7 @@ new class extends component {
             .then(editor => {
                 editor.model.document.on('change:data', () => {
                     @this.
-                    set('message', editor.getData());
+                    set('content', editor.getData());
                 })
             })
             .catch(error => {
