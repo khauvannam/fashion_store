@@ -5,6 +5,7 @@ use Livewire\Volt\Component;
 
 
 new class extends Component {
+
     public int $productId;
     public bool $isFavorite;
 

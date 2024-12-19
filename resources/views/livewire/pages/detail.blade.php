@@ -1,12 +1,7 @@
 <div class="container mx-auto">
     <div class="p-4 space-y-6 ">
-        <div class="flex mt-[150px] gap-3">
-            <a href="/" class="hover:underline">Trang chủ</a>
-            /
-            <a href="{{ route('products') }}" class="hover:underline">Tất cả sản phẩm</a>
-            /
-            <span class="text-gray-600">{{ $product['name'] }}</span>
-        </div>
+
+        <livewire:components.reusable.breadcump :name="$product['name']"/>
 
         <div class="flex md:flex-row gap-8">
             <div class="flex-shrink-0 w-full md:w-1/2 relative">
@@ -150,7 +145,7 @@
                         Thêm vào giỏ
                     </button>
                     <div
-                        wire:click="$dispatch('toggle-favorite', { productId: {{ $product['id'] }} })"
+                        @click="$wire.dispatch('toggle-favorite', { productId: {{ $product['id'] }} })"
                         class=" w-[48%] bg-white border-2 border-red-400 hover:bg-red-400 group font-semibold py-2 px-4 rounded-3xl shadow flex items-center justify-center cursor-pointer">
                         <div class="flex items-center gap-2 group">
                             <p class="text-red-400 group-hover:text-white">

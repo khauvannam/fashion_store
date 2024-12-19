@@ -1,8 +1,7 @@
 <x-app-layout>
 
-
-        {{-- Banner --}}
-        <livewire:components.home.banner/>
+    {{-- Banner --}}
+    <livewire:components.home.banner/>
     <div class="container mx-auto">
         {{-- BestSeller --}}
         <livewire:components.home.best-sellers/>

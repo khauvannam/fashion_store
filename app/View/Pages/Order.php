@@ -92,6 +92,6 @@ class Order extends Component
     #[Layout('layouts.app')]
     public function render(): View|Factory|Application
     {
-        return view('pages.order');
+        return view('livewire.pages.order');
     }
 }

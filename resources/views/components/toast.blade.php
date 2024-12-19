@@ -68,7 +68,9 @@
             },
 
             removeToast(id) {
+                console.log(this.toasts);
                 const toast = this.toasts.find(t => t.id === id);
+
                 if (toast) {
                     toast.visible = false; // Start fade-out transition
                     setTimeout(() => {

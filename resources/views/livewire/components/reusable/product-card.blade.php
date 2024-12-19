@@ -1,13 +1,9 @@
 <?php
 
-use Livewire\Attributes\Reactive;
-use Livewire\Volt\Component;
+use function Livewire\Volt\{state};
 
-new class extends Component {
-    #[Reactive]
-    public array $product;
+state(['product'])
 
-}
 ?>
 <div class="relative group">
     <a href="{{route('product', ['id' => $product['id']])}}"

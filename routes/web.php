@@ -19,6 +19,7 @@ Route::view('profile', 'pages.profile')
     ->name('profile');
 
 Volt::route('product', 'pages.detail')->name('product');
+Volt::route('article', 'pages.admin.article')->name('article');
 Volt::route('cart', Cart::class)->name('cart');
 Volt::route('checkout/{cartId}', Order::class)->name('checkout');
 

@@ -118,7 +118,8 @@
 
                     </div>
                     <div class="flex justify-center mt-5 ">
-                        <a href="{{ route('checkout', ['cartId' => $cartId ]) }}" class="text-center bg-black text-white py-2 w-full border-2 border-black rounded-2xl hover:bg-white hover:text-black">
+                        <a href="{{ route('checkout', ['cartId' => $cartId ]) }}"
+                           class="text-center bg-black text-white py-2 w-full border-2 border-black rounded-2xl hover:bg-white hover:text-black">
                             <button>
                                 Checkout
                             </button>
@@ -129,3 +130,13 @@
         </div>
     </section>
 </div>
+
+<script>
+    const isAuth = @js(Auth::check());
+
+    if (!isAuth) {
+        let cart = JSON.parse('cart') ?? [];
+        @this.set('cart', cart);
+    }
+
+</script>

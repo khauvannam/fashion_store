@@ -9,10 +9,8 @@ use Livewire\Volt\Component;
 new class extends Component {
 
     public array $categories = [];
-
     public int $favoriteCount = 0;
     public int $cartCount = 0;
-
 
     public function mount(CategoryService $service, CartService $cartService): void
     {
@@ -37,9 +35,7 @@ new class extends Component {
 
 <div class=" w-full">
     <!-- Promotion Bar -->
-    <div class="bg-black text-white text-sm py-2 text-center">
-        Get 25% Off This Summer Sale. <span class="underline font-bold cursor-pointer">Grab It Fast!!</span>
-    </div>
+    <x-promotion/>
 
     <!-- Navigation Bar -->
     <header class="bg-white border-b" x-data="{ showMenu: false, visibility: false }">
@@ -90,6 +86,7 @@ new class extends Component {
                             class="absolute w-5 h-5 text-xs text-center font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{{$favoriteCount}}</div>
                     </a>
                 @endif
+
                 <button
                     aria-label="Search"
                     class="text-gray-600 hover:text-gray-900"
@@ -150,27 +147,7 @@ new class extends Component {
         </div>
 
         <!-- Mobile Navigation Menu -->
-
-        <nav id="mobileMenu"
-             class="md:hidden space-y-2 px-4 py-2 border-y absolute z-50 bg-white w-full transition-all duration-300"
-             x-show="showMenu"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             x-cloak>
-            <div class="container mx-auto flex flex-col">
-                @foreach($categories as $category)
-                    <div class="" wire:key="mobile_{{ $category['id'] }}">
-                        <a href="{{ route('products', ['id' => $category['id']]) }}"
-                           class="my-1.5 text-sm font-medium text-gray-600 hover:text-gray-900"
-                           wire:navigate>{{$category['name']}}</a>
-                    </div>
-                @endforeach
-            </div>
-        </nav>
+        <livewire:components.reusable.mobile-menu :$categories/>
 
     </header>
 

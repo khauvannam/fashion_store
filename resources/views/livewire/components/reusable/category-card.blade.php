@@ -1,10 +1,10 @@
 <?php
 
-use Livewire\Volt\Component;
 
-new class extends Component {
-    public array $category;
-}
+use function Livewire\Volt\{state};
+
+state(['category' => ['img_url' => '', 'name' => '']]);
+
 ?>
 
 <div class="relative group rounded-3xl overflow-hidden shadow-lg my-10">
