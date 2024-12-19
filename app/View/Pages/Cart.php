@@ -18,12 +18,11 @@ class Cart extends Component
 
     public function mount(CartService $service): void
     {
-        if (auth()->check()) {
-            $cartData = $service->showAllCartItems(auth()->user()->id)->toArray();
-        } else {
-            $cartData = $this->dispatch('getCartData', []);
+        if (!auth()->check()) {
+            return;
         }
-        if (!$cartData) return;
+
+        $cartData = $service->showAllCartItems(auth()->user()->id)->toArray();
 
         $this->cart = [];
 
@@ -45,6 +44,7 @@ class Cart extends Component
         }
 
         $this->cartId = $cartData['id'];
+
         $this->totalPrice = $cartData['total_price'];
 
     }

@@ -133,7 +133,8 @@
 
 <script>
     const isAuth = @js(Auth::check());
-    if (isAuth) {
+
+    if (!isAuth) {
         let cart = JSON.parse('cart') ?? [];
         @this.set('cart', cart);
     }
