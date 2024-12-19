@@ -6,7 +6,7 @@ state(['product'])
 
 ?>
 <div class="relative group">
-    <a href="{{route('product', ['id' => $product['id']])}}"
+    <a href="{{route('product', ['id' => $product['id']])}}" wire:navigate
        class="product-card max-w-base overflow-hidden duration-300">
         <div class="product-image relative group rounded-3xl overflow-hidden">
             <img loading="lazy" onerror="this.src='https://picsum.photos/640/480?image=625'"

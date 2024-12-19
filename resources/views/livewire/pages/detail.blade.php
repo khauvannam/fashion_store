@@ -145,7 +145,7 @@
                         Thêm vào giỏ
                     </button>
                     <div
-                        @click="$wire.dispatch('toggle-favorite', { productId: {{ $product['id'] }} })"
+                        @click="$dispatch('toggle-favorite', { productId: {{ $product['id'] }} })"
                         class=" w-[48%] bg-white border-2 border-red-400 hover:bg-red-400 group font-semibold py-2 px-4 rounded-3xl shadow flex items-center justify-center cursor-pointer">
                         <div class="flex items-center gap-2 group">
                             <p class="text-red-400 group-hover:text-white">
