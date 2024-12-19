@@ -46,8 +46,6 @@ class Products extends Component
         $this->loadProducts(app(ProductService::class));
     }
 
-
-    #[On('updated-collection')]
     public function updateCollection(string $collection): void
     {
         $this->collection = $collection;
