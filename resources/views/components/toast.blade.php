@@ -1,7 +1,7 @@
 <div class="fixed top-100 right-0 left-0 z-50 container mx-auto flex justify-end">
     <div id="toast-container" x-data="toastHandler()">
         <!-- Toasts will be dynamically rendered here -->
-        <template x-for="toast in toasts" :key="toast.id">
+        <template x-for="toast in toasts" wire:key="'toast_' + toast.id" :key="'toast_' + toast.id">
             <div
                 class="flex flex-col mt-3 justify-center w-full overflow-hidden max-w-xs text-gray-500 bg-white divide-x divide-gray-200 rounded-lg shadow-2xl animate-fade-in"
                 x-show="toast.visible"
@@ -35,13 +35,22 @@
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('toastHandler', () => ({
+            listeners: [],
             toasts: [],
             toastId: 0,
 
             init() {
-                Livewire.on('toast', ({message, type = 'error'}) => {
-                    this.addToast(message, type);
-                });
+                this.listeners.push(
+                    Livewire.on('toast', ({message, type = 'error'}) => {
+                        this.addToast(message, type);
+
+                    })
+                )
+            },
+            destroy() {
+                this.listeners.forEach(listener => {
+                    listener();
+                })
             },
 
             addToast(message, type) {

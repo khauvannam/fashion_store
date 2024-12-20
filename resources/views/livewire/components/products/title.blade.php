@@ -25,7 +25,7 @@ new class extends Component {
         @foreach($categoryFilter['collections'] as $item)
             <div class="" wire:key="collection_{{ $loop->index }}">
                 <x-button-active
-                    wire:click="$dispatch('updated-collection',{ collection: '{{ $collection === $item ? '' : $item }}' } )"
+                    wire:click="$parent.updateCollection('{{ $item === $collection ? '' : $item }}')"
                     :active="$collection == $item"
                     class="no-spinner border border-gray-400 w-[150px]">
                     <p class="capitalize text-center">{{ $item }}</p>

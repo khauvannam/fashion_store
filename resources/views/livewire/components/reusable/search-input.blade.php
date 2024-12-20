@@ -59,7 +59,6 @@ new class extends component {
                 placeholder="Search for products..."
                 wire:model="search"
                 wire:input.debounce.500ms="setSearch($event.target.value)"
-                x-bind:value="visibility ? $event.target.value : ''"
                 class="bg-transparent w-full border-none placeholder:text-gray-500 text-black rounded-lg py-2 px-4 focus:outline-none focus:ring-0 focus:ring-transparent focus:border-transparent"
             />
         </form>

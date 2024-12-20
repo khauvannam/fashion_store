@@ -1,68 +1,70 @@
 <?php
 
-use function Livewire\Volt\{state};
+use Livewire\Attributes\Modelable;
+use Livewire\Volt\Component;
 
-state(['message']);
+new class extends component {
+
+    #[Modelable]
+    public string $content = '';
+}
 
 ?>
 
-<div wire:ignore>
-    <textarea wire:model.lazy="message" id="message" wire:key="wysiwyg-message">{{$message}}</textarea>
+<div class="">
+    <div wire:ignore>
+        <textarea wire:model.lazy="content" id="message" wire:key="wysiwyg-message">{{$content}}</textarea>
+    </div>
+
+    <p>{{$content}}</p>
 </div>
 
-<script type="module">
-    import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
-    import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
-    import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
-    import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
-    import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
-    import Heading from '@ckeditor/ckeditor5-heading/src/heading';
-    import Link from '@ckeditor/ckeditor5-link/src/link';
-    import List from '@ckeditor/ckeditor5-list/src/list';
-    import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 
-    document.addEventListener('livewire:load', () => {
-        const messageElement = document.querySelector('#message');
-        if (messageElement && !messageElement.classList.contains('ckeditor-initialized')) {
-            ClassicEditor
-                .create(messageElement, {
-                    plugins: [
-                        Essentials,
-                        Autoformat,
-                        Bold,
-                        Italic,
-                        BlockQuote,
-                        Heading,
-                        Link,
-                        List,
-                        Paragraph,
-                    ],
-                    toolbar: {
-                        items: [
-                            'heading',
-                            '|',
-                            'bold',
-                            'italic',
-                            'link',
-                            'bulletedList',
-                            'numberedList',
-                            'blockQuote',
-                            'undo',
-                            'redo',
-                        ]
-                    },
-                    language: 'en'
+@push('scripts')
+    <script type="module">
+        import {
+            Bold,
+            ClassicEditor,
+            Essentials,
+            Font,
+            GeneralHtmlSupport,
+            Italic,
+            Paragraph,
+            Style,
+        } from '{{asset('assets/vendor/ckeditor5.js')}}';
+
+        ClassicEditor
+            .create(document.querySelector('#message'), {
+                plugins: [Style, Essentials, Paragraph, Bold, Italic, Font, GeneralHtmlSupport],
+                toolbar: [
+                    'undo', 'redo', '|', 'bold', 'italic', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'style',
+                ],
+                licenseKey: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3MzU4NjIzOTksImp0aSI6IjU5OGNmYzk3LTcwNzMtNDA0My05NTgyLWUyZjVkNmQxYjRlYSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6ImFjYmYwZGJhIn0.gk0TLH8QK4kT__FRuPSpdFBKCPdgttkVymMvD1VA-vD_ycMjHSwB81Se8gUtdcZaJSFPafnwgwaLDX1AU-lk6w',
+                style: {
+                    definitions: [
+                        {
+                            name: 'Article category',
+                            element: 'h3',
+                            classes: ['category']
+                        },
+                        {
+                            name: 'Info box',
+                            element: 'p',
+                            classes: ['info-box']
+                        },
+                    ]
+                }
+            })
+            .then(editor => {
+                editor.model.document.on('change:data', () => {
+                    @this.
+                    set('content', editor.getData());
                 })
-                .then(editor => {
-                    editor.model.document.on('change:data', () => {
-                        @this.set('message', editor.getData());
-                    });
-                    messageElement.classList.add('ckeditor-initialized');
-                })
-                .catch(error => {
-                    console.error('Editor initialization failed:', error);
-                    alert('Failed to initialize the editor. Please try again or contact support.');
-                });
-        }
-    });
-</script>
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
+@endpush

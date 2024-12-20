@@ -9,6 +9,7 @@
         <livewire:components.home.wear-to-wedding/>
         {{-- Categories --}}
         <livewire:components.home.categories/>
+
     </div>
 
 </x-app-layout>

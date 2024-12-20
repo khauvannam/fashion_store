@@ -11,13 +11,16 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
 
+    <link rel="stylesheet" href="{{asset('assets/vendor/ckeditor5.css')}}">
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans ">
 <div class="min-h-screen ">
     <div class="antialiased bg-gray-50 dark:bg-gray-900" x-data="{ open: true }">
-        <nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
+        <nav
+            class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
             <livewire:layout.nav-admin/>
         </nav>
         <livewire:layout.aside-admin/>
@@ -26,5 +29,7 @@
         </main>
     </div>
 </div>
+@stack('scripts')
+
 </body>
 </html>

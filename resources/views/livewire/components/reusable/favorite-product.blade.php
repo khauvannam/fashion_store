@@ -16,10 +16,11 @@ new class extends Component {
     }
 
     #[On('toggle-favorite')]
-    public function toggleFavorite($productId): void
+    public function toggleFavorite(int $productId): void
     {
-        $this->$productId = $productId;
+        $this->productId = $productId;
         if (!auth()->check()) {
+            Log::info('Toast dispatched'); // Log for debugging
             $this->dispatch('toast', message: 'Bạn cần đăng nhập để sử dụng tính năng này.');
             return;
         }
@@ -48,7 +49,7 @@ new class extends Component {
      x-data="{ isFavorite: @entangle('isFavorite') }">
     <button
         :class="isFavorite ? 'text-red-500 opacity-100' : 'text-gray-500 opacity-0 group-hover:opacity-100'"
-        @click=" $wire.toggleFavorite($wire.productId)"
+        @click="$wire.toggleFavorite($wire.productId)"
         class="focus:outline-none transition-opacity duration-300"
         aria-label="Toggle Favorite"
     >
