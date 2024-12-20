@@ -57,14 +57,22 @@ class Detail extends Component
             return;
         }
 
-        $this->dispatch('addToCart', [
-            'id' => $this->product['id'],
-            'name' => $this->product['name'],
-            'variant' => $this->currentVariant['id'],
+        $this->dispatch('addToCart', ([
             'quantity' => 1,
-            'price' => $this->currentVariant['price_override'] ?? $this->product['price'],
-            'discountPercent' => $this->product['discount_percent'],
-        ]);
+            'discountPercent' => $this->product['discount_percent'] ?? 0,
+            'productId' => $this->product['id'],
+            'productName' => $this->product['name'] ?? 'Unknown',
+            'productImage' => $this->product['image_urls'][0] ?? null,
+            'variantId' => $this->currentVariant['id'] ?? null,
+            'variantQuantity' => $this->currentVariant['quantity'] ?? 0,
+            'price' => $this->currentVariant['price_override'] ?? $this->product['price'] ?? 0,
+            'variantAttributes' => $this->formatVariantAttributes($this->currentVariant['attribute_values'] ?? []),
+        ]));
+    }
+
+    private function formatVariantAttributes(array $attributeValues): string
+    {
+        return implode(' - ', array_map(fn($attribute) => "{$attribute['attribute']}: {$attribute['value']}", $attributeValues));
     }
 
     private function processVariants(): void

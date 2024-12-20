@@ -1,6 +1,6 @@
 <div class="container mx-auto pt-[150px]" id="product-container">
     <livewire:components.products.title :$category :$collection :$categoryFilter/>
-    {{-- Product --}}
+    {{-- AdminProductFromHandler --}}
     <div class="flex justify-between my-10">
         <div class="w-3/12">
             <div class="">

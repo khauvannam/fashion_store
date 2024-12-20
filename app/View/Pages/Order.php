@@ -2,7 +2,9 @@
 
 namespace App\View\Pages;
 
+use App\Services\CartService;
 use App\Services\OrderService;
+use App\Services\ProductService;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -13,6 +15,9 @@ use Livewire\Component;
 class Order extends Component
 {
     protected OrderService $orderService;
+    protected ProductService $productService;
+
+    protected CartService $cartService;
 
     // Validation rules
     protected array $rules = [
@@ -29,6 +34,7 @@ class Order extends Component
     public string $note;
     public float $totalPrice = 0;
     public int $cartId;
+    public array $cartItems = [];
 
     // Flash message keys
     private const SUCCESS_MESSAGE = 'success';
@@ -38,21 +44,23 @@ class Order extends Component
     {
         // Dependency injection through the service container
         $this->orderService = app(OrderService::class);
+        $this->cartService = app(CartService::class);
+        $this->productService = app(ProductService::class);
     }
 
-    public function mount(int $cartId): void
+    public function mount(): void
     {
-        $this->cartId = $cartId;
         $this->loadCart();
     }
 
     public function loadCart(): void
     {
-        // Load cart and update the total price if the cart exists
-        $cartData = \App\Models\Carts\Cart::find($this->cartId)->toArray() ?? null;
-        $this->totalPrice = $cartData['total_price'] ?? 0;
-    }
+        $cartData = $this->cartService->showAllCartItems(auth()->id())->toArray();
 
+        $this->cartId = $cartData['id'] ?? 0;
+        $this->totalPrice = $cartData['total_price'] ?? 0;
+        $this->cartItems = $cartData['items'] ?? [];
+    }
     public function save(): void
     {
         $this->validate();
@@ -65,6 +73,13 @@ class Order extends Component
                 $this->prepareOrderInformation()
             );
 
+            foreach ($this->cartItems as $item) {
+                $productId = $item['product_id'];
+                $quantity = $item['quantity'];
+
+                $this->productService->updateUnitsSold($productId, $quantity);
+            }
+
             session()->flash(self::SUCCESS_MESSAGE, 'Order has been created successfully!');
             $this->resetOrderProperties();
         } catch (Exception $e) {
@@ -74,7 +89,6 @@ class Order extends Component
 
     private function prepareOrderInformation(): array
     {
-        // Extracted preparation of order information for reuse
         return [
             'address' => $this->address,
             'phone' => $this->phone,

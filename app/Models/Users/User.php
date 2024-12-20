@@ -7,6 +7,7 @@ use App\Models\Articles\Article;
 use App\Models\Products\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -48,7 +49,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function favorites(): HasMany
+
+    public function favorites(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'favourite_products', 'user_id', 'product_id')
             ->withTimestamps();

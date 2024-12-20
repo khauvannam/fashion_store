@@ -224,37 +224,39 @@
 </div>
 
 
+@script
 <script>
-    document.addEventListener('livewire:init', () => {
-        Livewire.on('addToCart', ([event]) => {
-            let cart = JSON.parse(localStorage.getItem('cart')) || {
-                user_id: `guest-${Math.random().toString(36).slice(2, 9)}`,
-                total: 0,
-                items: []
-            };
+    Livewire.on('addToCart', ([event]) => {
+        let cart = JSON.parse(localStorage.getItem('cart')) || {
+            id: `guest-${Math.random().toString(36).slice(2, 9)}`,
+            total_price: 0,
+            items: []
+        };
 
-            // Check if the item already exists in the cart
-            let existingItemIndex = cart.items.findIndex(item => item.id === event.id && item.variant === event.variant);
+        // Check if the item already exists in the cart
+        let existingItemIndex = cart.items.findIndex(item => item.product_id === event.productId && item.variant_id === event.variantId);
 
-            if (existingItemIndex !== -1) {
-                cart.items[existingItemIndex].quantity += event.quantity;
-                cart.total += event.quantity * event.price * (1 - event.discountPercent / 100);
+        if (existingItemIndex !== -1) {
+            cart.items[existingItemIndex].quantity += event.quantity;
+            cart.total_price += event.quantity * event.price * (1 - event.discountPercent / 100);
 
-            } else {
-                cart.items.push({
-                    id: event.id,
-                    name: event.name,
-                    variant: event.variant,
-                    quantity: event.quantity,
-                    discount_percent: event.discountPercent,
-                    price: event.price
-                });
-                cart.total += event.quantity * event.price * (1 - event.discountPercent / 100);
-            }
+        } else {
+            cart.items.push({
+                quantity: event.quantity || 1,
+                product_id: event.productId,
+                product_name: event.productName || 'Unknown',
+                product_image: event.productImage || null,
+                variant_id: event.variantId || null,
+                variant_quantity: event.variantQuantity || 0,
+                price: event.price || 0,
+                variant_attributes: event.variantAttributes || [],
+            });
+            cart.total_price += event.quantity * event.price * (1 - event.discountPercent / 100);
+        }
 
-            // Save the updated cart back to local storage
-            localStorage.setItem('cart', JSON.stringify(cart));
-        });
+        // Save the updated cart back to local storage
+        localStorage.setItem('cart', JSON.stringify(cart));
     });
 </script>
+@endscript
 

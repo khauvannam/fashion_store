@@ -9,58 +9,60 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use function Symfony\Component\Translation\t;
 
 class Cart extends Component
 {
     public array $cart = [];
-    public int $cartId;
-    public float $totalPrice = 0;
+    private const ITEMS = 'items';
+    private const ID = 'id';
+    private const TOTAL_PRICE = 'total_price';
 
-    public function mount(CartService $service): void
+    public function mount(CartService $cartService): void
     {
-        if (!auth()->check()) {
+        if (!$this->isUserAuthenticated()) {
             return;
         }
 
-        $cartData = $service->showAllCartItems(auth()->user()->id)->toArray();
-
-        $this->cart = [];
-
-        foreach ($cartData['items'] as $item) {
-            $product = $item['product'];
-            $variant = $item['variant'];
-
-            $this->cart[] = [
-                'cart_item_id' => $item['id'],
-                'quantity' => $item['quantity'],
-                'product_id' => $item['product_id'],
-                'product_name' => $product['name'],
-                'product_image' => $product['image_urls'][0],
-                'variant_id' => $item['variant_id'],
-                'variant_quantity' => $variant['quantity'],
-                'price' => $variant['price_override'] ?? $product['price'],
-                'variant_attributes' => $variant ? $this->formatAttributes($variant['attribute_values']) : null,
-            ];
-        }
-
-        $this->cartId = $cartData['id'];
-
-        $this->totalPrice = $cartData['total_price'];
-
+        $this->initializeCart($cartService->showAllCartItems(auth()->id())->toArray());
     }
 
-    private function formatAttributes($attributeValues): string
+    private function isUserAuthenticated(): bool
     {
-        // Map through each attribute and format it as "Attribute: Value"
-        return implode(' - ', array_map(function ($attribute) {
-            // Convert color values (e.g., hex code) to color name or keep hex code
-            $value = $attribute['value'];
-            return "{$attribute['attribute']}: {$value}";
-        }, $attributeValues));
+        return auth()->check();
+    }
+
+    private function initializeCart(array $cartDetails): void
+    {
+        $this->cart[self::ITEMS] = $this->getFormattedCartItems($cartDetails[self::ITEMS] ?? []);
+        $this->cart[self::ID] = $cartDetails[self::ID] ?? null;
+        $this->cart[self::TOTAL_PRICE] = $cartDetails[self::TOTAL_PRICE] ?? 0;
+    }
+
+    private function getFormattedCartItems(array $cartItems): array
+    {
+        return array_map(function ($item) {
+            return [
+                'cart_item_id' => $item[self::ID],
+                'quantity' => $item['quantity'],
+                'product_id' => $item['product_id'],
+                'product_name' => $item['product']['name'] ?? 'Unknown',
+                'product_image' => $item['product']['image_urls'][0] ?? null,
+                'variant_id' => $item['variant_id'] ?? null,
+                'variant_quantity' => $item['variant']['quantity'] ?? 0,
+                'price' => $item['variant']['price_override'] ?? $item['product']['price'] ?? 0,
+                'variant_attributes' => $this->formatVariantAttributes($item['variant']['attribute_values'] ?? []),
+            ];
+        }, $cartItems);
+    }
+
+    private function formatVariantAttributes(array $attributeValues): string
+    {
+        return implode(' - ', array_map(fn($attribute) => "{$attribute['attribute']}: {$attribute['value']}", $attributeValues));
     }
 
     #[Layout('layouts.app')]
-    public function render(): View|Factory|Application
+    public function render(): View
     {
         return view('livewire.pages.cart');
     }

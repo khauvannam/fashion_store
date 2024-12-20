@@ -11,11 +11,14 @@ class OrderCheckoutEvent
 
     public int $cartId;
     public int $userId;
+
     public function __construct(int $cartId, int $userId)
     {
         $this->cartId = $cartId;
         $this->userId = $userId;
+
     }
+
 
 
 }

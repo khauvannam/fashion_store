@@ -5,6 +5,9 @@ namespace App\Providers;
 
 use App\Events\OrderCheckoutEvent;
 use App\Subscribers\CheckoutSubscriber;
+use App\View\Admin\Product\AdminProduct;
+use App\View\Admin\Product\AdminProductFromHandler;
+use App\View\Admin\Product\AdminProductVariantFromHandler;
 use App\View\Pages\Detail;
 use App\View\Pages\Order;
 use App\View\Pages\Products;
@@ -27,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
         Livewire::component('pages.products', Products::class);
         Livewire::component('pages.detail', Detail::class);
         Livewire::component('pages.order', Order::class);
+        Livewire::component('pages.admin.admin-product-handler', AdminProductFromHandler::class);
+        Livewire::component('pages.admin.admin-product', AdminProduct::class);
+        Livewire::component('pages.admin.admin-product-variant-handler', AdminProductVariantFromHandler::class);
         Event::listen(OrderCheckoutEvent::class, CheckoutSubscriber::class);
     }
 

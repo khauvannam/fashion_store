@@ -11,6 +11,5 @@
         <livewire:components.home.categories/>
 
     </div>
-
 </x-app-layout>
 

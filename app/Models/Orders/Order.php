@@ -12,11 +12,4 @@ class Order extends Model
     protected $casts = ['information' => 'array',
         'status' => OrderStatus::class];
 
-    public function setInformationAttribute($value): void
-    {
-        $this->attributes['information'] = json_encode(
-            $value instanceof Information ? $value->toArray() : $value
-        );
-    }
-
 }

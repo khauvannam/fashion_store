@@ -108,26 +108,39 @@ new class extends Component {
                     </svg>
                 </button>
 
-                <button aria-label="Cart" class="text-gray-600 hover:text-gray-900">
-                    <a href="{{ route('cart') }}" wire:navigate class="relative">
-                        <svg
-                            class="w-6 h-6"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 10V6a3 3 0 013-3v0a3 3 0 013 3v4m3-2 .917 11.923A1 1 0 0117.92 21H6.08a1 1 0 01-.997-1.077L6 8h12z"
-                            />
-                        </svg>
-                        <div
-                            class="absolute w-5 h-5 text-xs text-center font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{{$cartCount}}</div>
-                    </a>
-                </button>
+                    <div x-data="{
+                   cartCount: $wire.entangle('cartCount'),
+                   initCart() {
+                        if (!@js(Auth::check())) {
+                            const cart = JSON.parse(localStorage.getItem('cart')) || { id: null, items: [], total_price: 0 };
+                            this.cartCount = cart.items.length;
+                            }
+                        }
+                      }"
+                         x-init="initCart"
+                         aria-label="Cart"
+                         class="text-gray-600 hover:text-gray-900">
+                        <a href="{{ route('cart') }}" wire:navigate class="relative">
+                            <svg
+                                class="w-6 h-6"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 10V6a3 3 0 013-3v0a3 3 0 013 3v4m3-2 .917 11.923A1 1 0 0117.92 21H6.08a1 1 0 01-.997-1.077L6 8h12z"
+                                />
+                            </svg>
+                            <div
+                                class="absolute w-5 h-5 text-xs text-center font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                                <span x-text="cartCount"></span>
+                            </div>
+                        </a>
+                    </div>
 
                 <button aria-label="Login" class="text-gray-600 hover:text-gray-900">
                     <a href="/login" wire:navigate>

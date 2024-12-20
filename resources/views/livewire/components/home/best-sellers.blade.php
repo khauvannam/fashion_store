@@ -1,15 +1,18 @@
 <?php
 
 use App\Services\ProductService;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Volt\Component;
 
 new class extends Component {
 
-    public array $products = [];
+    public array $products;
 
     public function mount(ProductService $service): void
     {
-        $this->products = $service->showAll(false, true, 0, 6);
+        $products = $service->showAll(false, true, 6);
+        $productItems = $products->items();
+        $this->products = $productItems;
     }
 }
 ?>

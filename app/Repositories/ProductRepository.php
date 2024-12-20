@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Products\Product;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Schema;
 
 class ProductRepository
@@ -41,33 +42,37 @@ class ProductRepository
 
     public function destroy(int $id): int
     {
-        return Product::destroy($id);
+        return Product::with('variants')->findOrFail($id)->delete();
     }
 
 
-    public function showAll(bool $orderBy, bool $bestSeller, int $offset = 0, int $limit = 12): array
+    public function showAll(bool $orderBy = false, bool $bestSeller = false, int $limit = 12): LengthAwarePaginator
     {
-        $productsQuery = Product::offset($offset * $limit)
-            ->limit($limit);
+        // Khởi tạo query
+        $productsQuery = Product::with('category');
 
-        // Apply ordering if the $orderBy flag is true
+        // Sắp xếp theo ngày tạo nếu $orderBy là true
         if ($orderBy) {
-            $productsQuery->orderBy('created_at', 'desc'); // You can adjust the column and order as needed
+            $productsQuery->orderBy('created_at', 'desc');
         }
+
+        // Sắp xếp theo sản phẩm bán chạy nếu $bestSeller là true
         if ($bestSeller) {
             $productsQuery->orderBy('units_sold', 'desc');
         }
 
-        $products = $productsQuery->get();
+        // Phân trang
+        $products = $productsQuery->paginate($limit);
 
-        // Map over the products and add the first variant's ID to each product
-        $productsArray = $products->map(function ($product) {
-            $productArray = $product->toArray();
-            $productArray['variants_id'] = $product->variants()->pluck('id')->toArray();
-            return $productArray;
+        // Thêm thông tin variants vào từng sản phẩm
+        $products->getCollection()->transform(function ($product) {
+            return array_merge(
+                $product->toArray(),
+                ['variants_id' => $product->variants()->pluck('id')->toArray()]
+            );
         });
 
-        return $productsArray->toArray();
+        return $products;
     }
 
 
@@ -140,5 +145,10 @@ class ProductRepository
             $products->toArray(),
             $limit
         ];
+    }
+
+    public function updateUnitsSold(int $productId, int $quantity): void
+    {
+        Product::where('id', $productId)->increment('units_sold', $quantity);
     }
 }

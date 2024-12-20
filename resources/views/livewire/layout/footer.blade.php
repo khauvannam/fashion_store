@@ -29,7 +29,7 @@ new class extends Component {
 
         <!-- Links Section -->
         <div class=" md:w-2/3 md:ml-[500px] grid grid-cols-3 gap-[100px] md:gap-6 text-sm">
-            <!-- Product Links -->
+            <!-- AdminProductFromHandler Links -->
             <div>
                 <h3 class="font-bold text-black">Collections</h3>
                 <ul class="mt-4 space-y-2">
