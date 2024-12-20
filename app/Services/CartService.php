@@ -23,8 +23,10 @@ class CartService
     {
         return $this->repository->showAllCartItems($userId);
     }
+
     public function show(int $userId): Cart
     {
         return $this->repository->show($userId);
     }
+
 }

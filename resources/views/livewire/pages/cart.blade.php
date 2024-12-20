@@ -4,17 +4,22 @@
         initCart() {
             if (!@js(Auth::check())) {
                 this.cart = JSON.parse(localStorage.getItem('cart')) || { id: null, items: [], total_price: 0 };
+                console.log(this.cart);
             }
+        },
+        saveCartToLocalStorage() {
+            localStorage.setItem('cart', JSON.stringify(this.cart));
         },
         calculateTotalPrice() {
             this.cart.total_price = this.cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            this.saveCartToLocalStorage(); // Save changes to localStorage
         },
         removeItem(productId) {
-            this.cart.items = this.cart.items.filter(item => item.product_id !== productId);
+            this.cart.items = this.cart.items.filter(item => item.product_id !== productId && item.variant_id);
             this.calculateTotalPrice();
         },
         updateQuantity(productId, quantity) {
-            const item = this.cart.items.find(item => item.product_id === productId);
+            const item = this.cart.items.find(item => item.product_id === productId && item.variant_id);
             if (item) {
                 item.quantity = Math.max(1, quantity);
                 this.calculateTotalPrice();
@@ -109,7 +114,7 @@
                             <dl class="flex items-center justify-between gap-4">
                                 <dt class="text-base font-normal text-gray-500">Tổng giá</dt>
                                 <dd class="text-base font-medium text-gray-900">$<span
-                                        x-text="cart.total_price.toFixed(2) ?? 0"></span>
+                                        x-text="(cart.total_price ?? 0)"></span>
                                 </dd>
                             </dl>
                         </div>

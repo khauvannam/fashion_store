@@ -65,7 +65,8 @@ class CartRepository
             ->update(['status' => $status]);
     }
 
-    public function show($userId): Cart{
+    public function show($userId): Cart
+    {
         $cart = Cart::where('user_id', $userId)->where('status', CartStatus::Pending)->first();
         if (!$cart) {
             $cart = Cart::create(['user_id' => $userId]);
