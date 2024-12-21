@@ -37,7 +37,7 @@ state(['product'])
         </div>
     </a>
     <div class="absolute top-3 right-3 ">
-        @livewire('components.reusable.favorite-product', ['productId' => $product['id']])
+        <livewire:components.reusable.favorite-svg :productId="$product['id']"/>
     </div>
 </div>
 

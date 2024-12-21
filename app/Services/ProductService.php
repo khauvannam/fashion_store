@@ -52,6 +52,11 @@ class ProductService
 
     public function toggleFavoriteProduct(int $userId, int $productId): void
     {
+        $this->repository->toggleFavoriteProduct($userId, $productId);
+    }
 
+    public function checkFavoriteProduct(int $userId, int $productId): bool
+    {
+        return $this->repository->checkFavoriteProduct($userId, $productId);
     }
 }

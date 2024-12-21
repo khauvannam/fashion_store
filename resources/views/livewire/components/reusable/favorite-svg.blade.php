@@ -1,13 +1,13 @@
 <?php
 
-use Livewire\Attributes\On;
+use App\Services\ProductService;
 use Livewire\Volt\Component;
 
 
 new class extends Component {
 
-    public int $productId;
     public bool $isFavorite;
+    public int $productId;
 
     public function mount(int $productId): void
     {
@@ -15,27 +15,15 @@ new class extends Component {
         $this->isFavorite = $this->isProductFavorite();
     }
 
-    #[On('toggle-favorite')]
-    public function toggleFavorite(int $productId): void
+    public function toggleFavorite(): void
     {
-        $this->productId = $productId;
-        if (!auth()->check()) {
-            Log::info('Toast dispatched'); // Log for debugging
-            $this->dispatch('toast', message: 'Bạn cần đăng nhập để sử dụng tính năng này.');
+        if (auth()->check()) {
+            app(ProductService::class)->toggleFavoriteProduct($this->productId, auth()->id());
             return;
         }
 
-        $user = auth()->user();
+        $this->dispatch('toast', message: 'Bạn cần đăng nhập để sử dụng tính năng này.');
 
-        if ($this->isProductFavorite()) {
-            $user->favorites()->detach($this->productId);
-            $this->isFavorite = false;
-        } else {
-            $user->favorites()->attach($this->productId);
-            $this->isFavorite = true;
-        }
-
-        $this->dispatch('add-favorite');
     }
 
     private function isProductFavorite(): bool
@@ -49,7 +37,7 @@ new class extends Component {
      x-data="{ isFavorite: @entangle('isFavorite') }">
     <button
         :class="isFavorite ? 'text-red-500 opacity-100' : 'text-gray-500 opacity-0 group-hover:opacity-100'"
-        @click="$wire.toggleFavorite($wire.productId)"
+        @click="$wire.toggleFavorite(); $wire.dispatch('add-favorite');"
         class="focus:outline-none transition-opacity duration-300"
         aria-label="Toggle Favorite"
     >

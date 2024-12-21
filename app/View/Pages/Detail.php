@@ -39,9 +39,21 @@ class Detail extends Component
         $this->processVariants();
         $this->initializeDefaultAttributes();
         $this->setCurrentVariant();
+
+        $this->product['is_favorite'] = auth()->check() && $service->checkFavoriteProduct($this->product['id'], auth()->id());
+
         $this->reviews = $this->product['reviews'];
     }
 
+    public function toggleFavorite(): void
+    {
+        if (auth()->check()) {
+            app(ProductService::class)->toggleFavoriteProduct($this->product['id'], auth()->id());
+            return;
+        }
+
+        $this->dispatch('toast', message: 'Bạn cần đăng nhập để sử dụng tính năng này.');
+    }
 
     public function addToCart(CartService $cartService): void
     {
@@ -128,25 +140,6 @@ class Detail extends Component
         $this->currentVariant = null; // No matching variant
     }
 
-
-//    public function addToCart(): void
-//    {
-//        if (auth()->check()) {
-//            // User is logged in; handle add-to-cart logic via backend
-//            if ($this->currentVariant) {
-//                session()->push('cart.items', [
-//                    'product_id' => $this->product['id'],
-//                    'variant_id' => $this->currentVariant['id'],
-//                    'quantity' => 1,
-//                ]);
-//        } else {
-//            // Dispatch to cart.js with product and variant details
-//            $this->dispatchBrowserEvent('addToCart', [
-//                'product_id' => $this->product['id'],
-//                'variant_id' => $this->currentVariant['id'] ?? null,
-//            ]);
-//        }
-//    }
     #[Layout('layouts.app')]
     public function render(): View|Factory|Application
     {

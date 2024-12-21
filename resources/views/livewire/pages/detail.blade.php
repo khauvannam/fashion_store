@@ -144,15 +144,21 @@
                             class="w-[48%] bg-black border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-3xl shadow ">
                         Thêm vào giỏ
                     </button>
-                    <div
-                        @click="$dispatch('toggle-favorite', { productId: {{ $product['id'] }} })"
-                        class=" w-[48%] bg-white border-2 border-red-400 hover:bg-red-400 group font-semibold py-2 px-4 rounded-3xl shadow flex items-center justify-center cursor-pointer">
-                        <div class="flex items-center gap-2 group">
-                            <p class="text-red-400 group-hover:text-white">
-                                Yêu Thích
-                            </p>
+                    <div x-data="{isFavorite: $wire.entangle('product.is_favorite')}" class=" w-[48%]">
+                        <div @click="
+                                if (@js(Auth::check())) {
+                                isFavorite = !isFavorite;}
+                                $wire.toggleFavorite(); $wire.dispatch('add-favorite')"
+                             class=" border-2 border-red-400  group font-semibold py-2 px-4 rounded-3xl shadow flex items-center justify-center cursor-pointer"
+                             :class="!isFavorite ? 'bg-white hover:bg-red-400' : 'bg-red-400'">
+                            <div class="flex items-center gap-2 group">
+                                <p class="" :class="isFavorite ? 'text-white' : 'group-hover:text-white text-red-400'">
+                                    Yêu Thích
+                                </p>
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div x-data="{description: true, shipping: false, sizeInfo: false}" class="mt-5">

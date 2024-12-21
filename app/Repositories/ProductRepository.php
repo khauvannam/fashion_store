@@ -140,10 +140,9 @@ class ProductRepository
         $offset = max(0, $offset); // Ensure offset is not negative
         $limit = max(1, min($limit, 100)); // Ensure limit is between 1 and 100
 
-        $products = $query
-            ->skip($offset)
-            ->take($limit)
-            ->get();
+        $query->skip($offset)->take($limit);
+
+        $products = $query->get();
 
         return [
             $totalProducts,
@@ -157,7 +156,15 @@ class ProductRepository
         Product::where('id', $productId)->increment('units_sold', $quantity);
     }
 
-    public function toggleFavoriteProduct(int $userId, int $productId): void {
+    public function toggleFavoriteProduct(int $userId, int $productId): void
+    {
+        $product = Product::find($productId);
+        $product->favorites()->toggle($userId);
+    }
 
+    public function checkFavoriteProduct(int $userId, int $productId): bool
+    {
+        $product = Product::find($productId);
+        return $product->favorites()->where('user_id', $userId)->exists();
     }
 }

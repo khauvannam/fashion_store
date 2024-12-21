@@ -3,9 +3,11 @@
 namespace App\Models\Products;
 
 use App\Models\Categories\Category;
+use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
@@ -61,5 +63,11 @@ class Product extends Model
         $type = strtoupper($collection);
 
         return "{$categoryCode}-{$productCode}-{$type}";
+    }
+
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'favourite_products', 'product_id', 'user_id')
+            ->withTimestamps();
     }
 }
