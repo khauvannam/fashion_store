@@ -1,4 +1,9 @@
 <div class="p-6 bg-gray-50 rounded-lg shadow-md">
+    <div class="flex items-center gap-2 text-sm text-gray-600 my-4">
+        <a href="#" class="text-blue-600 font-medium hover:text-blue-800">Admin</a>
+        <span class="text-gray-400">/</span>
+        <a href="#" class="font-bold text-gray-800 pointer-events-none">Products</a>
+    </div>
     <div class="flex justify-between items-center">
         <h2 class="text-xl font-semibold text-gray-700">Manage Products</h2>
         <a href="{{route('admin.products.create')}}"
@@ -36,7 +41,6 @@
                             class="border-red-500 border bg-red-500 hover:text-red-500 hover:bg-white text-white text-sm font-medium py-1 px-3 rounded-md shadow">
                             Xóa
                         </button>
-
                     </td>
                 </tr>
             @endforeach

@@ -1,5 +1,8 @@
 <?php
 
+use App\View\Admin\Category\AdminCategory;
+use App\View\Admin\Category\AdminCategoryFormHandler;
+use App\View\Admin\Category\AdminSubCategoryHandler;
 use App\View\Admin\Product\AdminProduct;
 use App\View\Admin\Product\AdminProductFromHandler;
 use App\View\Admin\Product\AdminProductVariantFromHandler;
@@ -29,4 +32,8 @@ Volt::route('admin/products/create', AdminProductFromHandler::class)->name('admi
 Volt::route('admin/products/{productId}', AdminProductFromHandler::class)->name('admin.products.edit');
 Volt::route('admin/products', AdminProduct::class)->name('admin.products');
 Volt::route('admin/products/variants/{productId}', AdminProductVariantFromHandler::class)->name('admin.products.variants');
+Volt::route('admin/categories/create', AdminCategoryFormHandler::class)->name('admin.categories.create');
+Volt::route('admin/categories/{categoryId}', AdminCategoryFormHandler::class)->name('admin.categories.edit');
+Volt::route('admin/categories', AdminCategory::class)->name('admin.categories');
+Volt::route('admin/categories/subs/{categoryId}/', AdminSubCategoryHandler::class)->name('admin.categories.sub-categories');
 require __DIR__ . '/auth.php';

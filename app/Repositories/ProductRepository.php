@@ -42,7 +42,13 @@ class ProductRepository
 
     public function destroy(int $id): int
     {
-        return Product::with('variants')->findOrFail($id)->delete();
+        $product = Product::with('variants', 'reviews')->findOrFail($id);
+
+        // Delete related reviews
+        $product->reviews()->delete();
+
+        // Delete the product
+        return $product->delete();
     }
 
 

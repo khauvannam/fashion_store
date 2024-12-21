@@ -14,7 +14,7 @@ class Category extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'description', 'img_url'];
+    protected $fillable = ['name', 'description', 'img_url', 'parent_id'];
 
     public function products(): HasMany
     {
