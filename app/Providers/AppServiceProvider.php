@@ -10,6 +10,7 @@ use App\View\Admin\Category\AdminSubCategoryHandler;
 use App\View\Admin\Product\AdminProduct;
 use App\View\Admin\Product\AdminProductFromHandler;
 use App\View\Admin\Product\AdminProductVariantFromHandler;
+use App\View\Pages\Cart;
 use App\View\Pages\Detail;
 use App\View\Pages\Order;
 use App\View\Pages\Products;
@@ -29,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Livewire::component('pages.cart', Cart::class);
         Livewire::component('pages.products', Products::class);
         Livewire::component('pages.detail', Detail::class);
         Livewire::component('pages.order', Order::class);

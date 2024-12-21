@@ -68,21 +68,23 @@ new class extends Component {
     {{--    </div>--}}
 </div>
 
-@script
-<script>
-    Alpine.data('pagination', () => {
-        return {
-            scrollToId(id) {
-                const elementToScroll = document.querySelector(`#${id}`);
-                if (elementToScroll) {
-                    elementToScroll.scrollIntoView({
-                        behavior: 'smooth', // Smooth scrolling
-                        block: 'start', // Align the element to the top of the viewport
-                    });
+@push('scripts')
+    @script
+    <script>
+        Alpine.data('pagination', () => {
+            return {
+                scrollToId(id) {
+                    const elementToScroll = document.querySelector(`#${id}`);
+                    if (elementToScroll) {
+                        elementToScroll.scrollIntoView({
+                            behavior: 'smooth', // Smooth scrolling
+                            block: 'start', // Align the element to the top of the viewport
+                        });
+                    }
                 }
             }
-        }
-    })
+        })
 
-</script>
-@endscript
+    </script>
+    @endscript
+@endpush

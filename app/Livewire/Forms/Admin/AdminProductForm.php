@@ -1,9 +1,9 @@
 <?php
 
-namespace App\View\Admin\Product;
+namespace App\Livewire\Forms\Admin;
 
-use Livewire\Form;
 use Livewire\Attributes\Validate;
+use Livewire\Form;
 
 
 class AdminProductForm extends Form

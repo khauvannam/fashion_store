@@ -35,6 +35,24 @@ class CartRepository
         }
     }
 
+    public function updateCart(int $userId, array $items, float $totalPrice): void
+    {
+        $cart = Cart::firstOrCreate(['user_id' => $userId]);
+        $cart->update([
+            'total_price' => $totalPrice,
+        ]);
+
+        $cart->items()->delete(); // Clear existing items
+        foreach ($items as $item) {
+            $cart->items()->create([
+                'product_id' => $item['product_id'],
+                'variant_id' => $item['variant_id'] ?? null,
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+            ]);
+        }
+    }
+
     public function showAllCartItems($userId): Cart
     {
         $cart = Cart::with([
@@ -42,7 +60,7 @@ class CartRepository
                 $query->select('id', 'cart_id', 'product_id', 'variant_id', 'quantity'); // Select only needed fields from items table
             },
             'items.product' => function ($query) {
-                $query->select('id', 'name', 'image_urls'); // Select only needed fields from products table
+                $query->select('id', 'name', 'image_urls', 'discount_percent'); // Select only needed fields from products table
             },
             'items.variant' => function ($query) {
                 $query->select('id', 'quantity', 'price_override', 'attribute_values'); // Fetch related variants directly from cart_items

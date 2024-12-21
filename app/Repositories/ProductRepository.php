@@ -8,7 +8,6 @@ use Schema;
 
 class ProductRepository
 {
-
     public function show(int $id): ?Product
     {
         return Product::with('variants', 'reviews')->findOrFail($id);
@@ -156,5 +155,9 @@ class ProductRepository
     public function updateUnitsSold(int $productId, int $quantity): void
     {
         Product::where('id', $productId)->increment('units_sold', $quantity);
+    }
+
+    public function toggleFavoriteProduct(int $userId, int $productId): void {
+
     }
 }

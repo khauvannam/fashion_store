@@ -2,6 +2,7 @@
 
 namespace App\View\Admin\Product;
 
+use App\Livewire\Forms\Admin\AdminProductForm;
 use App\Models\Products\Product;
 use App\Services\CategoryService;
 use Illuminate\View\View;

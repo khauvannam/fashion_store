@@ -19,9 +19,10 @@ new class extends component {
     <p>{{$content}}</p>
 </div>
 
-
 @push('scripts')
+    @script
     <script type="module">
+
         import {
             Bold,
             ClassicEditor,
@@ -31,7 +32,8 @@ new class extends component {
             Italic,
             Paragraph,
             Style,
-        } from '{{asset('assets/vendor/ckeditor5.js')}}';
+
+        } from "{{ asset('assets/vendor/ckeditor5.js') }}";
 
         ClassicEditor
             .create(document.querySelector('#message'), {
@@ -66,5 +68,5 @@ new class extends component {
                 console.error(error);
             });
     </script>
-
+    @endscript
 @endpush

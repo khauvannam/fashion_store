@@ -29,4 +29,8 @@ class CartService
         return $this->repository->show($userId);
     }
 
+    public function updateCart(int $userId, array $items, float $totalPrice): void
+    {
+        $this->repository->updateCart($userId, $items, $totalPrice);
+    }
 }

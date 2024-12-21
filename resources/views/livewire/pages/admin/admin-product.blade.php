@@ -7,7 +7,8 @@
     <div class="flex justify-between items-center">
         <h2 class="text-xl font-semibold text-gray-700">Manage Products</h2>
         <a href="{{route('admin.products.create')}}"
-           class="px-4 py-2 bg-black border-2 border-black text-white rounded-md hover:bg-white hover:text-black transition">
+           class="px-4 py-2 bg-black border-2 border-black text-white rounded-md hover:bg-white hover:text-black transition"
+           wire:navigate>
             Create Product</a>
     </div>
     <div class="mt-5">

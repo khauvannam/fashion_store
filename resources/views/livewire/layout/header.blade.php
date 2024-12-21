@@ -29,6 +29,7 @@ new class extends Component {
     public function countCart(CartService $service): void
     {
         if (!auth()->check()) return;
+
         $this->cartCount = $service->show(auth()->user()->id)->items->count();
     }
 
@@ -115,6 +116,7 @@ new class extends Component {
                         if (!@js(Auth::check())) {
                             const cart = JSON.parse(localStorage.getItem('cart')) || { id: null, items: [], total_price: 0 };
                             this.cartCount = cart.items.length;
+
                             }
                         }
                       }"

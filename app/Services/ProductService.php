@@ -15,7 +15,6 @@ class ProductService
         $this->repository = $repository;
     }
 
-
     public function show(int $id): ?Product
     {
         return $this->repository->show($id);
@@ -45,8 +44,14 @@ class ProductService
     {
         return $this->repository->showAllByFilter($categoryId, $collection, $search, $orderBy, $priceRange, $size, $color, $bestSeller, $offset, $limit);
     }
+
     public function updateUnitsSold(int $productId, int $quantity): void
     {
         $this->repository->updateUnitsSold($productId, $quantity);
+    }
+
+    public function toggleFavoriteProduct(int $userId, int $productId): void
+    {
+
     }
 }
