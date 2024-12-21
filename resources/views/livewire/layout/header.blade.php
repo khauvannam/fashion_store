@@ -16,21 +16,23 @@ new class extends Component {
     {
         $this->categories = $service->showAll(6, 0);
         $this->countFavorite();
-        $this->countCart($cartService);
+        $this->countCart();
     }
 
     #[On('add-favorite')]
     public function countFavorite(): void
     {
+        if (!auth()->check()) return;
+
         $this->favoriteCount = auth()->check() ? auth()->user()->favorites()->count() : 0;
     }
 
     #[On('add-cart-count')]
-    public function countCart(CartService $service): void
+    public function countCart(): void
     {
         if (!auth()->check()) return;
 
-        $this->cartCount = $service->show(auth()->user()->id)->items->count();
+        $this->cartCount = app(CartService::class)->show(auth()->user()->id)->items->count();
     }
 
 }; ?>
@@ -116,7 +118,6 @@ new class extends Component {
                         if (!@js(Auth::check())) {
                             const cart = JSON.parse(localStorage.getItem('cart')) || { id: null, items: [], total_price: 0 };
                             this.cartCount = cart.items.length;
-
                             }
                         }
                       }"

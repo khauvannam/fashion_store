@@ -9,7 +9,7 @@
         },
         saveCartToLocalStorage() {
              if (@js(Auth::check())) {
-                $wire.updateCart();
+
                 return;
              }
             localStorage.setItem('cart', JSON.stringify(this.cart));
@@ -19,7 +19,7 @@
             this.saveCartToLocalStorage(); // Save changes to localStorage
         },
         removeItem(productId, variantId) {
-            this.cart.items = this.cart.items.filter(item => item.product_id !== productId && item.variant_id === variantId);
+            this.cart.items = this.cart.items.filter(item => item.product_id !== productId && item.variant_id !== variantId);
             this.calculateTotalPrice();
         },
         updateQuantity(productId, variantId, quantity) {

@@ -14,6 +14,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans ">
+
 <div class="min-h-screen">
 
     <!-- Page Heading -->

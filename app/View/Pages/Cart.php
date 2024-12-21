@@ -70,7 +70,6 @@ class Cart extends Component
 
     public function removeItem(int $productId, ?int $variantId): void
     {
-
         if (!auth()->check()) return;
         $this->cart[self::ITEMS] = array_filter($this->cart[self::ITEMS], function ($item) use ($productId, $variantId) {
             return !($item['product_id'] === $productId && $item['variant_id'] === $variantId);

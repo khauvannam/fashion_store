@@ -55,12 +55,12 @@ class Detail extends Component
         $this->dispatch('toast', message: 'Bạn cần đăng nhập để sử dụng tính năng này.');
     }
 
-    public function addToCart(CartService $cartService): void
+    public function addToCart(): void
     {
         if (auth()->check()) {
             $user = auth()->user();
 
-            $cartService->add([
+            app(CartService::class)->add([
                 'user_id' => $user->id,
                 'product_id' => $this->product['id'],
                 'variant_id' => $this->currentVariant['id'],
@@ -69,7 +69,7 @@ class Detail extends Component
             return;
         }
 
-        $this->dispatch('addToCart', ([
+        $this->dispatch('addToCartLocal', ([
             'quantity' => 1,
             'discountPercent' => $this->product['discount_percent'] ?? 0,
             'productId' => $this->product['id'],

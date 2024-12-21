@@ -114,11 +114,11 @@
                 </div>
                 <div class="product-attributes space-y-4">
                     @foreach ($variants as $attribute => $values)
-                        <div class="attribute-group">
+                        <div class="attribute-group" wire:key="variant-attribute-{{ $attribute }}">
                             <h3 class="text-lg font-semibold text-black">{{ ucfirst($attribute) }}</h3>
                             <ul class="attribute-list flex flex-wrap gap-2 mt-3">
                                 @foreach ($values as $value)
-                                    <li>
+                                    <li wire:key="{{ $attribute }}-{{ $value }}_{{$loop->index}}">
                                         <button
                                             wire:click="updateVariantThoroughAttribute('{{ $attribute }}', '{{ $value }}')"
                                             class="variant-button py-2 px-4 rounded border-2 border-gray-300 text-sm
@@ -137,13 +137,14 @@
                         </div>
                     @endforeach
                 </div>
-
+                <button wire:click=" addToCart(); $wire.dispatch('add-cart-count')"
+                        class="w-[48%] bg-black border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-3xl shadow ">
+                    Thêm vào giỏ
+                </button>
 
                 <div class="action-buttons flex mt-5 justify-between">
-                    <button @click=" $wire.addToCart(); $dispatch('add-cart-count')"
-                            class="w-[48%] bg-black border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-3xl shadow ">
-                        Thêm vào giỏ
-                    </button>
+
+
                     <div x-data="{isFavorite: $wire.entangle('product.is_favorite')}" class=" w-[48%]">
                         <div @click="
                                 if (@js(Auth::check())) {
@@ -229,10 +230,10 @@
     </div>
 </div>
 
-@push('scripts')
+@pushonce('scripts')
     @script
     <script>
-        Livewire.on('addToCart', ([event]) => {
+        Livewire.on('addToCartLocal', ([event]) => {
             let cart = JSON.parse(localStorage.getItem('cart')) || {
                 id: `guest-${Math.random().toString(36).slice(2, 9)}`,
                 total_price: 0,
@@ -249,7 +250,7 @@
             } else {
                 cart.items.push({
                     discount_percent: event.discountPercent || 0,
-                    quantity: event.quantity || 1,
+                    quantity: 1,
                     product_id: event.productId,
                     product_name: event.productName || 'Unknown',
                     product_image: event.productImage || null,
@@ -261,10 +262,8 @@
                 cart.total_price += event.quantity * event.price * (1 - event.discountPercent / 100);
 
             }
-
-            // Save the updated cart back to local storage
             localStorage.setItem('cart', JSON.stringify(cart));
         });
     </script>
     @endscript
-@endpush
+@endpushonce
