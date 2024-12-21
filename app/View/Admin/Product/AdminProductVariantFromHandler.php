@@ -71,7 +71,9 @@ class AdminProductVariantFromHandler extends Component
     }
     public function addAttribute($index): void
     {
-        $this->variants[$index]['attribute_values'][] = ['attribute' => '', 'value' => ''];
+        if (isset($this->variants[$index]['attribute_values'])) {
+            array_unshift($this->variants[$index]['attribute_values'], ['attribute' => '', 'value' => '']);
+        }
     }
 
 

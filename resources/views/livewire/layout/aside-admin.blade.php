@@ -75,8 +75,8 @@
                 </button>
             </li>
             <li>
-                <button
-                    type="button"
+                <a
+                    href = "{{ route('admin.categories') }}"
                     class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 >
                     <svg
@@ -92,7 +92,7 @@
 
                     >Categories</span
                     >
-                </button>
+                </a>
             </li>
             <li>
                 <a
