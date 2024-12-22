@@ -1,4 +1,4 @@
-<div class="container mx-auto">
+<div class="container mx-auto" x-data="addToCart">
     <div class="p-4 space-y-6 ">
 
         <livewire:components.reusable.breadcump :name="$product['name']"/>
@@ -137,19 +137,16 @@
                         </div>
                     @endforeach
                 </div>
-                <button wire:click=" addToCart(); $wire.dispatch('add-cart-count')"
-                        class="w-[48%] bg-black border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-3xl shadow ">
-                    Thêm vào giỏ
-                </button>
-
-                <div class="action-buttons flex mt-5 justify-between">
 
 
-                    <div x-data="{isFavorite: $wire.entangle('product.is_favorite')}" class=" w-[48%]">
-                        <div @click="
-                                if (@js(Auth::check())) {
-                                isFavorite = !isFavorite;}
-                                $wire.toggleFavorite(); $wire.dispatch('add-favorite')"
+                <div class="action-buttons flex mt-5 justify-between" x-data="buttonHandler">
+                    <button @click="addToCartClick"
+                            class="w-[48%] bg-black border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-3xl shadow ">
+                        Thêm vào giỏ
+                    </button>
+
+                    <div class=" w-[48%]">
+                        <div @click="favoritesClick"
                              class=" border-2 border-red-400  group font-semibold py-2 px-4 rounded-3xl shadow flex items-center justify-center cursor-pointer"
                              :class="!isFavorite ? 'bg-white hover:bg-red-400' : 'bg-red-400'">
                             <div class="flex items-center gap-2 group">
@@ -230,40 +227,72 @@
     </div>
 </div>
 
-@pushonce('scripts')
+@push('scripts')
     @script
     <script>
-        Livewire.on('addToCartLocal', ([event]) => {
-            let cart = JSON.parse(localStorage.getItem('cart')) || {
-                id: `guest-${Math.random().toString(36).slice(2, 9)}`,
-                total_price: 0,
-                items: []
-            };
-
-            // Check if the item already exists in the cart
-            let existingItemIndex = cart.items.findIndex(item => item.product_id === event.productId && item.variant_id === event.variantId);
-
-            if (existingItemIndex !== -1) {
-                cart.items[existingItemIndex].quantity += event.quantity;
-                cart.total_price += event.quantity * event.price * (1 - event.discountPercent / 100);
-
-            } else {
-                cart.items.push({
-                    discount_percent: event.discountPercent || 0,
-                    quantity: 1,
-                    product_id: event.productId,
-                    product_name: event.productName || 'Unknown',
-                    product_image: event.productImage || null,
-                    variant_id: event.variantId || null,
-                    variant_quantity: event.variantQuantity || 0,
-                    price: event.price || 0,
-                    variant_attributes: event.variantAttributes || [],
-                });
-                cart.total_price += event.quantity * event.price * (1 - event.discountPercent / 100);
-
+        Alpine.data('buttonHandler', () => ({
+            listeners: [],
+            isFavorite: $wire.entangle('product.is_favorite'),
+            addToCartClick() {
+                $wire.addToCart();
+                $wire.dispatch('add-cart-count');
+            },
+            favoritesClick() {
+                if (!@js(Auth::check())) {
+                    $wire.toggleFavorite();
+                    return;
+                }
+                $wire.dispatch('add-favorite')
+                this.isFavorite = !isFavorite;
             }
-            localStorage.setItem('cart', JSON.stringify(cart));
-        });
+        }))
+
+        Alpine.data('addToCart', () => ({
+            listeners: [],
+
+            init() {
+                this.listeners.push(
+                    $wire.on('addToCartLocal', ([event]) => {
+                        let cart = JSON.parse(localStorage.getItem('cart')) || {
+                            id: `guest-${Math.random().toString(36).slice(2, 9)}`,
+                            total_price: 0,
+                            items: []
+                        };
+
+                        // Check if the item already exists in the cart
+                        let existingItemIndex = cart.items.findIndex(item => item.product_id === event.productId && item.variant_id === event.variantId);
+
+                        if (existingItemIndex !== -1) {
+                            cart.items[existingItemIndex].quantity += event.quantity;
+                            cart.total_price += event.quantity * event.price * (1 - event.discountPercent / 100);
+
+                        } else {
+                            cart.items.unshift({
+                                discount_percent: event.discountPercent || 0,
+                                quantity: 1,
+                                product_id: event.productId,
+                                product_name: event.productName || 'Unknown',
+                                product_image: event.productImage || null,
+                                variant_id: event.variantId || null,
+                                variant_quantity: event.variantQuantity || 0,
+                                price: event.price || 0,
+                                variant_attributes: event.variantAttributes || [],
+                            });
+                            cart.total_price += event.quantity * event.price * (1 - event.discountPercent / 100);
+
+                        }
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                    })
+                )
+            },
+            destroy() {
+                this.listeners.forEach(listener => {
+                    listener()
+                });
+            },
+        }))
+
     </script>
+
     @endscript
-@endpushonce
+@endpush

@@ -1,35 +1,5 @@
 <div
-    x-data="{
-        cart: $wire.entangle('cart'),
-        initCart() {
-            if (@js(Auth::check())) return;
-                this.cart = JSON.parse(localStorage.getItem('cart')) || { id: null, items: [], total_price: 0 };
-                console.log(this.cart);
-
-        },
-        saveCartToLocalStorage() {
-             if (@js(Auth::check())) {
-
-                return;
-             }
-            localStorage.setItem('cart', JSON.stringify(this.cart));
-        },
-        calculateTotalPrice() {
-            this.cart.total_price = this.cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            this.saveCartToLocalStorage(); // Save changes to localStorage
-        },
-        removeItem(productId, variantId) {
-            this.cart.items = this.cart.items.filter(item => item.product_id !== productId && item.variant_id !== variantId);
-            this.calculateTotalPrice();
-        },
-        updateQuantity(productId, variantId, quantity) {
-            const item = this.cart.items.find(item => item.product_id === productId && item.variant_id === variantId);
-            if (item) {
-                item.quantity = Math.max(1, quantity);
-                this.calculateTotalPrice();
-            }
-        }
-    }"
+    x-data="cartState"
     x-init="initCart"
     class="pt-[150px]">
     <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
@@ -67,8 +37,7 @@
                                                            class="w-12 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0"
                                                            x-model.number="item.quantity"/>
                                                     <button type="button"
-                                                            @click="updateQuantity(item.product_id,item.variant_id, item.quantity + 1)"
-                                                            public function updateQuantity(int $productId, ?int $variantId, int $quantity): void
+                                                            @click="updateQuantity(item.product_id, item.variant_id, item.quantity + 1)"
                                                             class="h-8 w-8 flex items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none">
                                                         <svg class="h-4 w-4 text-gray-900" aria-hidden="true"
                                                              xmlns="http://www.w3.org/2000/svg"
@@ -139,3 +108,44 @@
         </div>
     </section>
 </div>
+
+@push('scripts')
+    @script
+    <script>
+        Alpine.data('cartState', () => ({
+                cart: $wire.entangle('cart'),
+                initCart() {
+                    if ((@js(Auth::check()))) return;
+                    this.cart = JSON.parse(localStorage.getItem('cart')) || {id: null, items: [], total_price: 0};
+                    console.log(this.cart);
+
+                }
+                ,
+                saveCartToLocalStorage() {
+                    if ((@js(Auth::check()))) return;
+
+                    localStorage.setItem('cart', JSON.stringify(this.cart));
+                }
+                ,
+                calculateTotalPrice() {
+                    this.cart.total_price = this.cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    this.saveCartToLocalStorage(); // Save changes to localStorage
+                }
+                ,
+                removeItem(productId, variantId) {
+                    this.cart.items = this.cart.items.filter(item => item.product_id !== productId && item.variant_id !== variantId);
+                    this.calculateTotalPrice();
+                }
+                ,
+                updateQuantity(productId, variantId, quantity) {
+                    const item = this.cart.items.find(item => item.product_id === productId && item.variant_id === variantId);
+                    if (item) {
+                        item.quantity = Math.max(1, quantity);
+                        this.calculateTotalPrice();
+                    }
+                }
+            }
+        ))
+    </script>
+    @endscript
+@endpush

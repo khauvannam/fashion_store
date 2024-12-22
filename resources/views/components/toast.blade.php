@@ -1,5 +1,5 @@
 <div class="fixed top-100 right-0 left-0 z-50 container mx-auto flex justify-end">
-    <div id="toast-container" x-data="toastHandler()">
+    <div id="toast-container" x-data="toastHandler">
         <!-- Toasts will be dynamically rendered here -->
         <template x-for="toast in toasts" :key="'toast_' + toast.id">
             <div
@@ -43,7 +43,6 @@
                 this.listeners.push(
                     Livewire.on('toast', ({message, type = 'error'}) => {
                         this.addToast(message, type);
-
                     })
                 )
             },
