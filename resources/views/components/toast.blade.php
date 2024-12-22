@@ -32,94 +32,95 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('toastHandler', () => ({
-            listeners: [],
-            toasts: [],
-            toastId: 0,
+@push('scripts')
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('toastHandler', () => ({
+                listeners: [],
+                toasts: [],
+                toastId: 0,
 
-            init() {
-                this.listeners.push(
-                    Livewire.on('toast', ({message, type = 'error'}) => {
-                        this.addToast(message, type);
+                init() {
+                    this.listeners.push(
+                        Livewire.on('toast', ({message, type = 'error'}) => {
+                            this.addToast(message, type);
+                        })
+                    )
+                },
+                destroy() {
+                    this.listeners.forEach(listener => {
+                        listener();
                     })
-                )
-            },
-            destroy() {
-                this.listeners.forEach(listener => {
-                    listener();
-                })
-            },
+                },
 
-            addToast(message, type) {
-                const id = this.toastId++;
-                const toastDetails = this.getToastDetails(type);
+                addToast(message, type) {
+                    const id = this.toastId++;
+                    const toastDetails = this.getToastDetails(type);
 
-                this.toasts.push({
-                    id,
-                    message,
-                    visible: true,
-                    textColor: toastDetails.textColor,
-                    borderColor: toastDetails.borderColor,
-                    iconColor: toastDetails.iconColor,
-                    iconPath: toastDetails.iconPath, // Add the dynamically rendered path for the SVG
-                });
+                    this.toasts.push({
+                        id,
+                        message,
+                        visible: true,
+                        textColor: toastDetails.textColor,
+                        borderColor: toastDetails.borderColor,
+                        iconColor: toastDetails.iconColor,
+                        iconPath: toastDetails.iconPath, // Add the dynamically rendered path for the SVG
+                    });
 
-                // Ensure no more than 3 toasts
-                if (this.toasts.length > 3) {
-                    this.removeToast(this.toasts[0].id);
-                }
+                    // Ensure no more than 3 toasts
+                    if (this.toasts.length > 3) {
+                        this.removeToast(this.toasts[0].id);
+                    }
 
-                // Automatically remove toast after 3 seconds
-                setTimeout(() => this.removeToast(id), 3000);
-            },
+                    // Automatically remove toast after 3 seconds
+                    setTimeout(() => this.removeToast(id), 3000);
+                },
 
-            removeToast(id) {
-                console.log(this.toasts);
-                const toast = this.toasts.find(t => t.id === id);
+                removeToast(id) {
+                    const toast = this.toasts.find(t => t.id === id);
 
-                if (toast) {
-                    toast.visible = false; // Start fade-out transition
-                    setTimeout(() => {
-                        this.toasts = this.toasts.filter(t => t.id !== id);
-                    }, 500); // Allow fade-out animation to finish
-                }
-            },
+                    if (toast) {
+                        toast.visible = false; // Start fade-out transition
+                        setTimeout(() => {
+                            this.toasts = this.toasts.filter(t => t.id !== id);
+                        }, 500); // Allow fade-out animation to finish
+                    }
+                },
 
-            getToastDetails(type) {
-                // Define styles and icon paths based on the type
-                switch (type) {
-                    case 'success':
-                        return {
-                            textColor: 'text-green-600',
-                            borderColor: 'bg-green-400',
-                            iconColor: 'text-green-600',
-                            iconPath: 'M5 13l4 4L19 7', // Checkmark icon
-                        };
-                    case 'error':
-                        return {
-                            textColor: 'text-red-600',
-                            borderColor: 'bg-red-400',
-                            iconColor: 'text-red-600',
-                            iconPath: 'M6 18L18 6M6 6l12 12', // Cross icon
-                        };
-                    case 'warning':
-                        return {
-                            textColor: 'text-yellow-600',
-                            borderColor: 'bg-yellow-400',
-                            iconColor: 'text-yellow-600',
-                            iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.054 0 1.502-1.275.732-2L13.732 4c-.523-.697-1.94-.697-2.464 0L3.34 17c-.77.725-.322 2 .732 2z', // Warning triangle icon
-                        };
-                    default: // Default to info
-                        return {
-                            textColor: 'text-blue-600',
-                            borderColor: 'bg-blue-400',
-                            iconColor: 'text-blue-600',
-                            iconPath: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', // Info circle icon
-                        };
-                }
-            },
-        }));
-    });
-</script>
+                getToastDetails(type) {
+                    // Define styles and icon paths based on the type
+                    switch (type) {
+                        case 'success':
+                            return {
+                                textColor: 'text-green-600',
+                                borderColor: 'bg-green-400',
+                                iconColor: 'text-green-600',
+                                iconPath: 'M5 13l4 4L19 7', // Checkmark icon
+                            };
+                        case 'error':
+                            return {
+                                textColor: 'text-red-600',
+                                borderColor: 'bg-red-400',
+                                iconColor: 'text-red-600',
+                                iconPath: 'M6 18L18 6M6 6l12 12', // Cross icon
+                            };
+                        case 'warning':
+                            return {
+                                textColor: 'text-yellow-600',
+                                borderColor: 'bg-yellow-400',
+                                iconColor: 'text-yellow-600',
+                                iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.054 0 1.502-1.275.732-2L13.732 4c-.523-.697-1.94-.697-2.464 0L3.34 17c-.77.725-.322 2 .732 2z', // Warning triangle icon
+                            };
+                        default: // Default to info
+                            return {
+                                textColor: 'text-blue-600',
+                                borderColor: 'bg-blue-400',
+                                iconColor: 'text-blue-600',
+                                iconPath: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z', // Info circle icon
+                            };
+                    }
+                },
+            }));
+        });
+    </script>
+@endpush

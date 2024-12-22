@@ -75,7 +75,7 @@ new class extends Component {
             </a>
             <!-- Search Input -->
 
-            <livewire:components.reusable.search-input/>
+            <livewire:components.reusable.inputs.search-input/>
 
             <!-- Right Icons -->
             <div class="flex space-x-4 md:space-x-6 items-center w-5/12 justify-end">
@@ -151,7 +151,7 @@ new class extends Component {
                         @if(auth()->check())
                             {{ auth()->user()->name }}
                         @else
-                            <svg class="w-6 h-6 text-gray-800  " aria-hidden="true"
+                            <svg class="w-6 h-6 text-gray-600 " aria-hidden="true"
                                  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                                  viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-width="2"
@@ -164,7 +164,7 @@ new class extends Component {
         </div>
 
         <!-- Mobile Navigation Menu -->
-        <livewire:components.reusable.mobile-menu :$categories/>
+        <livewire:components.reusable.navigation.mobile-menu :$categories/>
 
     </header>
 

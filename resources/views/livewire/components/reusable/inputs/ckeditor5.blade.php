@@ -33,7 +33,7 @@ new class extends component {
             Paragraph,
             Style,
 
-        } from "{{ asset('assets/vendor/ckeditor5.js') }}";
+        } from ".{{ asset('assets/vendor/ckeditor5.js') }}";
 
         ClassicEditor
             .create(document.querySelector('#message'), {

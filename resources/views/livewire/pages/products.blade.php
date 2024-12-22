@@ -11,7 +11,7 @@
             @if(count($products) > 0)
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($products as $product)
-                        <livewire:components.reusable.product-card :$product :key="'product_'. $product['id']"/>
+                        <livewire:components.reusable.cards.product-card :$product :key="'product_'. $product['id']"/>
                     @endforeach
                 </div>
             @else
@@ -35,7 +35,7 @@
 
     @if($totalPages > 1)
         <div class="">
-            <livewire:components.reusable.pagination :$totalPages :$pagination :$currentPage/>
+            <livewire:components.reusable.navigation.pagination :$totalPages :$pagination :$currentPage/>
         </div>
     @endif
 

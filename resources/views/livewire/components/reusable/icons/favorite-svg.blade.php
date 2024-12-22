@@ -56,6 +56,7 @@ new class extends Component {
             isFavorite: $wire.entangle('isFavorite'),
             toggleFavorite() {
                 $wire.toggleFavorite();
+
                 if ((@js(Auth::check()))) {
                     this.isFavorite = !isFavorite
                     $wire.dispatch('add-favorite');

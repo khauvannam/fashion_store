@@ -4,6 +4,7 @@ use App\Services\ProductService;
 use Livewire\Volt\Component;
 
 new class extends component {
+
     public string $search = '';
     public array $searchResults = [0, 1 => [], 0];
 
