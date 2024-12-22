@@ -19,10 +19,10 @@ new class extends component {
     <p>{{$content}}</p>
 </div>
 
-@push('scripts')
-    @script
-    <script type="module">
 
+@push('scripts')
+
+    <script type="module">
         import {
             Bold,
             ClassicEditor,
@@ -33,7 +33,9 @@ new class extends component {
             Paragraph,
             Style,
 
-        } from ".{{ asset('assets/vendor/ckeditor5.js') }}";
+        } from "{{ asset('assets/vendor/ckeditor5.js') }}";
+
+        const component = @this
 
         ClassicEditor
             .create(document.querySelector('#message'), {
@@ -60,13 +62,13 @@ new class extends component {
             })
             .then(editor => {
                 editor.model.document.on('change:data', () => {
-                    @this.
-                    set('content', editor.getData());
+                    component.set('content', editor.getData());
                 })
             })
             .catch(error => {
                 console.error(error);
             });
+
     </script>
-    @endscript
+
 @endpush

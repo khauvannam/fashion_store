@@ -2,7 +2,7 @@
 
 namespace App\Models\Gemini;
 
-class GeminiQuestion
+class GeminiRequest
 {
 
 }

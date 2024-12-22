@@ -11,7 +11,7 @@ new #[Layout('layouts.admin')] class extends component {
 
 <div class="py-10">
     <div class="">
-        <livewire:components.inputs.reusable.ckeditor5 :$content/>
+        <livewire:components.reusable.inputs.ckeditor5 :$content/>
     </div>
     <p>{{$content}}</p>
 </div>

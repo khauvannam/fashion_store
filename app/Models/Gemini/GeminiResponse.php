@@ -2,7 +2,7 @@
 
 namespace App\Models\Gemini;
 
-class GeminiAnswer
+class GeminiResponse
 {
 
 }
