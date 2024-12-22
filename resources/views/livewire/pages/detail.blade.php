@@ -41,9 +41,27 @@
 
 
                 <div class="action-buttons flex mt-5 justify-between" x-data="buttonHandler">
+
                     <button @click="addToCartClick"
-                            class="w-[48%] bg-black border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-3xl shadow ">
-                        Thêm vào giỏ
+                            class="w-[48%] h-12 bg-black border-2 hover:border-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-3xl shadow relative">
+                        <!-- Loading spinner displayed when addToCart action is in progress -->
+                        <span
+                            class="hidden absolute inset-0 place-items-center bg-black rounded-3xl h-full"
+                            wire:loading.class.remove="hidden"
+                            wire:loading.class="grid "
+                            wire:target="addToCart">
+                             <div
+                                 class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] text-white"
+                                 role="status">
+                            <span
+                                class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                            >Loading...</span
+                            >
+                            </div>
+                        </span>
+
+                        <!-- Button text that shows while the action is not loading -->
+                        <span wire:loading.class="hidden">Thêm vào giỏ</span>
                     </button>
 
                     <div class=" w-[48%]">
